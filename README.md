@@ -2,23 +2,30 @@
 
 A fast, mobile-first, SEO-friendly **Coupon Website** built with **Astro (SSR)**, **Tailwind CSS v4**, **TypeScript**, and **Cloudflare D1**, designed for deployment on **Cloudflare Workers / Pages**.
 
-Visitors can browse, search, filter, reveal/copy coupon codes, and vote on coupon accuracy. Authorized admins can log in securely and add, edit, activate/deactivate, delete, or bulk-import coupons via CSV — with changes reflected live immediately without redeploying.
+Visitors can browse, search, filter, reveal/copy coupon codes, vote on coupon accuracy, and **sign up to upload their own working discount coupons**. Authorized admins can log in securely and add, edit, activate/deactivate, delete, or bulk-import coupons via CSV — with changes reflected live immediately without redeploying.
 
 ---
 
 ## Features Implemented
 
-### Public Side (Visitors)
-- **Home Page (`/`)**: Displays active deals, **Top Coupons Today** (ranked by click count), category shortcuts, and popular stores.
+### Public Side (Visitors & Community)
+- **Home Page (`/`)**: Displays active deals, **Top Coupons Today** (ranked by click count), category shortcuts, popular stores, and community submission callout.
 - **Browse & Search (`/coupons`)**: Search by store name, title, description, or coupon code; filter by category/store; sort by newest, most popular, or expiring soon; toggle expired coupons.
 - **Categories (`/categories`, `/categories/[slug]`)** & **Stores (`/stores`, `/stores/[slug]`)**: Dedicated SEO-friendly pages per category and store.
 - **Coupon Details (`/coupons/[id]`)**: Full title, store info, discount badge, code, expiry date, terms & conditions, related deals, and community voting.
 - **Reveal & Copy Flow**: Clicking **Reveal & Copy** reveals the code, copies it to clipboard, increments `click_count` in D1, opens the store/affiliate link in a new tab, and displays a quick feedback modal.
 - **Automatic Expiry Handling**: Expired coupons (`expiry_date < today`) are automatically hidden from active feeds and clearly marked with an **EXPIRED** badge when viewed in archive/detail pages.
+- **Visitor Account & Coupon Upload (`/register`, `/login`, `/submit-coupon`, `/my-coupons`)**:
+  - Visitors **must create an account / sign in** before they can upload a coupon.
+  - PBKDF2 password hashing with 100,000 iterations and cryptographic random salt.
+  - Secure signed session cookies (`couponhub_user_session`) with server-side protection in `middleware.ts`.
+  - Logged-in visitors can share working coupons via `/submit-coupon` (store, category, title, code, discount, store link, expiry, terms).
+  - Users can track their submitted coupons, click counts, and upvotes on `/my-coupons`.
 
 ### Admin Panel (Authorized Team)
 - **Server-Side Protected Routes (`src/middleware.ts`)**: All `/admin/*` pages and `/api/admin/*` routes verify a signed `HttpOnly` HMAC-SHA256 session cookie on the server (never UI-only).
 - **Coupon CRUD (`/admin`, `/admin/coupons/new`, `/admin/coupons/[id]/edit`)**: Create, edit, delete, search, filter by status/store/category, and toggle **Active / Inactive** live.
+- **User Submission Visibility**: Admin dashboard displays whether a coupon was added by an Admin or submitted by a community user (`👤 User: Name`).
 - **Store & Category Management (`/admin/stores`, `/admin/categories`)**: Add and delete stores and categories without touching code.
 - **Live Updates**: Every change writes directly to Cloudflare D1 and invalidates optional KV cache immediately — no redeploy required.
 
@@ -48,43 +55,17 @@ Visitors can browse, search, filter, reveal/copy coupon codes, and vote on coupo
 
 ---
 
-## Database Schema & Improvements
+## Database Schema & Migrations
 
-Defined in [`db/migrations/0001_initial_schema.sql`](./db/migrations/0001_initial_schema.sql):
+Defined in `db/migrations/`:
 
-1. **`categories`**: `id, name, slug, icon, created_at`
-2. **`stores`**: `id, name, slug, logo_url, website_url, description, created_at`
-3. **`coupons`**: `id, title, code, description, terms, discount_text, store_id, category_id, affiliate_or_store_url, expiry_date, is_active, click_count, worked_count, didnt_work_count, created_at, updated_at`
-
-### Changes Made Beyond Suggested Schema
-- Added `terms` to `coupons` so visitors can read full Terms & Conditions on `/coupons/[id]`.
-- Added `worked_count` and `didnt_work_count` to `coupons` to power the bonus "Coupon worked / didn't work" voting feature.
-- Added `icon` to `categories` and `description` to `stores` for richer category/store cards.
-- Added indexes on `store_id`, `category_id`, `(is_active, expiry_date)`, `click_count DESC`, and slugs for fast filtering and sorting.
-- Enforced `FOREIGN KEY ... ON DELETE CASCADE` and `CHECK (is_active IN (0, 1))` for data integrity.
-
----
-
-## Folder Structure
-
-```text
-coupon-website/
-├── db/
-│   ├── migrations/0001_initial_schema.sql
-│   ├── seed.sql
-│   └── reset.sql
-├── public/
-├── src/
-│   ├── components/    # Navbar, Footer, CouponCard, CategoryCard, StoreCard, SearchBar, AdminCouponForm
-│   ├── layouts/       # MainLayout, AdminLayout
-│   ├── lib/           # types, cloudflare, db, auth, validation, format
-│   ├── pages/         # Public routes, Admin routes, API routes
-│   ├── styles/        # global.css (Tailwind v4 + dark mode)
-│   └── middleware.ts  # Server-side admin route protection
-├── .dev.vars.example
-├── astro.config.mjs
-└── wrangler.jsonc
-```
+1. **`0001_initial_schema.sql`**:
+   - `categories`: `id, name, slug, icon, created_at`
+   - `stores`: `id, name, slug, logo_url, website_url, description, created_at`
+   - `coupons`: `id, title, code, description, terms, discount_text, store_id, category_id, affiliate_or_store_url, expiry_date, is_active, click_count, worked_count, didnt_work_count, created_at, updated_at`
+2. **`0002_user_auth_and_submissions.sql`**:
+   - `users`: `id, name, email, password_hash, password_salt, role, created_at`
+   - `coupons.user_id`: Foreign key link identifying which registered user submitted the coupon.
 
 ---
 
@@ -118,7 +99,6 @@ npx wrangler secret put SESSION_SECRET
 2. **Create `.dev.vars`**
    ```bash
    cp .dev.vars.example .dev.vars
-   # Edit .dev.vars with your local admin credentials and session secret
    ```
 
 3. **Run D1 Migrations & Seed Data (Local)**
@@ -126,13 +106,14 @@ npx wrangler secret put SESSION_SECRET
    npm run db:migrate:local
    npm run db:seed:local
    ```
-   *(If upgrading from an older test schema on local D1, run `npx wrangler d1 execute coupon-db --local --file=./db/reset.sql` first.)*
 
 4. **Start the Development Server**
    ```bash
    npm run dev
    ```
    - Public site: `http://localhost:4321`
+   - Submit coupon (requires sign-in): `http://localhost:4321/submit-coupon`
+   - My submitted coupons: `http://localhost:4321/my-coupons`
    - Admin panel: `http://localhost:4321/admin`
 
 ---
@@ -144,12 +125,11 @@ npx wrangler secret put SESSION_SECRET
    npx wrangler login
    ```
 
-2. **Apply D1 Migrations & Optional Seed to Remote Database**
+2. **Apply D1 Migrations to Remote Database**
    ```bash
    npm run db:migrate:remote
    npm run db:seed:remote
    ```
-   *(If your remote D1 database has an older test table, run `npx wrangler d1 execute coupon-db --remote --file=./db/reset.sql` before migrating.)*
 
 3. **Set Production Secrets**
    ```bash
@@ -162,16 +142,3 @@ npx wrangler secret put SESSION_SECRET
    ```bash
    npm run deploy
    ```
-
-### Enabling Optional KV Cache & R2 Logo Storage
-1. Create a KV namespace: `npx wrangler kv namespace create COUPON_CACHE` and uncomment the `kv_namespaces` block in `wrangler.jsonc`.
-2. Create an R2 bucket: `npx wrangler r2 bucket create coupon-store-logos` and uncomment the `r2_buckets` block in `wrangler.jsonc`.
-3. Redeploy with `npm run deploy`.
-
----
-
-## Known Limitations & Future Improvements
-- **Rate Limiting**: Public `/click` and `/vote` endpoints use browser `localStorage` for repeat-vote checks; adding Cloudflare Rate Limiting / Turnstile or IP hashing in KV can further harden against automated spam.
-- **Multi-Admin Accounts & Roles**: Currently supports a single team admin login via environment secrets; can be extended with a `users` table + PBKDF2 password hashing or Cloudflare Access Zero Trust.
-- **Sitemap & Dynamic OG Images**: Adding `@astrojs/sitemap` and auto-generated store OG cards can boost organic SEO further.
-- **Scheduled Click Analytics**: Tracking daily click buckets (`coupon_daily_clicks`) would make "Top Coupons Today" strictly rolling 24-hour clicks rather than cumulative clicks.

@@ -110,6 +110,9 @@ export function validateCouponInput(raw: Record<string, unknown>): ValidationRes
       ? 1
       : 0;
 
+  const user_id_raw = Number(raw.user_id);
+  const user_id = Number.isInteger(user_id_raw) && user_id_raw > 0 ? user_id_raw : null;
+
   if (errors.length > 0) {
     return { ok: false, errors };
   }
@@ -128,6 +131,7 @@ export function validateCouponInput(raw: Record<string, unknown>): ValidationRes
       affiliate_or_store_url,
       expiry_date,
       is_active,
+      user_id,
     },
   };
 }
@@ -248,4 +252,61 @@ export function parseCsv(csvText: string): Record<string, string>[] {
     });
     return obj;
   });
+}
+
+export function validateEmail(email: unknown): { email: string; error?: string } {
+  const clean = sanitizeText(email, 120).toLowerCase();
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!clean || !emailRegex.test(clean)) {
+    return { email: "", error: "Please enter a valid email address." };
+  }
+  return { email: clean };
+}
+
+export function validateRegisterInput(raw: Record<string, unknown>): ValidationResult<{
+  name: string;
+  email: string;
+  password: string;
+}> {
+  const errors: string[] = [];
+  const name = sanitizeText(raw.name, 60);
+  if (name.length < 2) {
+    errors.push("Full Name must be at least 2 characters.");
+  }
+  const { email, error: emailErr } = validateEmail(raw.email);
+  if (emailErr) errors.push(emailErr);
+
+  const password = String(raw.password ?? "");
+  const confirmPassword = String(raw.confirmPassword ?? raw.confirm_password ?? "");
+
+  if (password.length < 6) {
+    errors.push("Password must be at least 6 characters long.");
+  }
+  if (confirmPassword && password !== confirmPassword) {
+    errors.push("Passwords do not match.");
+  }
+
+  if (errors.length > 0) {
+    return { ok: false, errors };
+  }
+  return { ok: true, errors: [], data: { name, email, password } };
+}
+
+export function validateLoginInput(raw: Record<string, unknown>): ValidationResult<{
+  email: string;
+  password: string;
+}> {
+  const errors: string[] = [];
+  const { email, error: emailErr } = validateEmail(raw.email);
+  if (emailErr) errors.push(emailErr);
+
+  const password = String(raw.password ?? "");
+  if (!password) {
+    errors.push("Password is required.");
+  }
+
+  if (errors.length > 0) {
+    return { ok: false, errors };
+  }
+  return { ok: true, errors: [], data: { email, password } };
 }

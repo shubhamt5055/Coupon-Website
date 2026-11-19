@@ -7,6 +7,7 @@ import type {
   CouponWithRelations,
   Store,
   StoreInput,
+  User,
 } from "./types";
 import {
   CACHE_KEYS,
@@ -34,6 +35,9 @@ const COUPON_SELECT = `
     c.didnt_work_count,
     c.created_at,
     c.updated_at,
+    c.user_id,
+    u.name AS submitted_by_name,
+    u.email AS submitted_by_email,
     s.name AS store_name,
     s.slug AS store_slug,
     s.logo_url AS store_logo_url,
@@ -44,6 +48,7 @@ const COUPON_SELECT = `
   FROM coupons c
   INNER JOIN stores s ON s.id = c.store_id
   INNER JOIN categories cat ON cat.id = c.category_id
+  LEFT JOIN users u ON u.id = c.user_id
 `;
 
 export async function getCoupons(
@@ -57,6 +62,7 @@ export async function getCoupons(
     !filters.storeSlug &&
     !filters.categoryId &&
     !filters.storeId &&
+    !filters.userId &&
     !filters.status &&
     !filters.includeExpired &&
     !filters.includeInactive &&
@@ -74,6 +80,8 @@ export async function getCoupons(
   if (filters.status === "active") {
     conditions.push("c.is_active = 1 AND c.expiry_date >= ?");
     params.push(today);
+  } else if (filters.status === "pending") {
+    conditions.push("c.is_active = 0 AND c.user_id IS NOT NULL");
   } else if (filters.status === "inactive") {
     conditions.push("c.is_active = 0");
   } else if (filters.status === "expired") {
@@ -107,6 +115,11 @@ export async function getCoupons(
   if (filters.storeId) {
     conditions.push("c.store_id = ?");
     params.push(filters.storeId);
+  }
+
+  if (filters.userId) {
+    conditions.push("c.user_id = ?");
+    params.push(filters.userId);
   }
 
   if (filters.search && filters.search.trim().length > 0) {
@@ -202,8 +215,8 @@ export async function createCoupon(db: D1Database, input: CouponInput): Promise<
     .prepare(
       `INSERT INTO coupons (
         title, code, description, terms, discount_text,
-        store_id, category_id, affiliate_or_store_url, expiry_date, is_active
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+        store_id, category_id, affiliate_or_store_url, expiry_date, is_active, user_id
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
     )
     .bind(
       input.title,
@@ -215,7 +228,8 @@ export async function createCoupon(db: D1Database, input: CouponInput): Promise<
       input.category_id,
       input.affiliate_or_store_url,
       input.expiry_date,
-      input.is_active
+      input.is_active,
+      input.user_id ?? null
     )
     .run();
 
@@ -426,6 +440,7 @@ export async function getAdminStats(db: D1Database): Promise<AdminStats> {
         `SELECT
           COUNT(*) AS total,
           SUM(CASE WHEN is_active = 1 AND expiry_date >= ? THEN 1 ELSE 0 END) AS active,
+          SUM(CASE WHEN is_active = 0 AND user_id IS NOT NULL THEN 1 ELSE 0 END) AS pending,
           SUM(CASE WHEN expiry_date < ? THEN 1 ELSE 0 END) AS expired,
           SUM(CASE WHEN is_active = 0 THEN 1 ELSE 0 END) AS inactive,
           COALESCE(SUM(click_count), 0) AS clicks
@@ -435,6 +450,7 @@ export async function getAdminStats(db: D1Database): Promise<AdminStats> {
       .first<{
         total: number;
         active: number;
+        pending: number;
         expired: number;
         inactive: number;
         clicks: number;
@@ -446,10 +462,89 @@ export async function getAdminStats(db: D1Database): Promise<AdminStats> {
   return {
     totalCoupons: couponStats?.total ?? 0,
     activeCoupons: couponStats?.active ?? 0,
+    pendingCoupons: couponStats?.pending ?? 0,
     expiredCoupons: couponStats?.expired ?? 0,
     inactiveCoupons: couponStats?.inactive ?? 0,
     totalClicks: couponStats?.clicks ?? 0,
     totalStores: storeCount?.count ?? 0,
     totalCategories: categoryCount?.count ?? 0,
+  };
+}
+
+// ========================
+// User Queries
+// ========================
+
+export async function getUserByEmail(db: D1Database, email: string): Promise<User | null> {
+  const row = await db
+    .prepare("SELECT * FROM users WHERE LOWER(email) = ? LIMIT 1")
+    .bind(email.trim().toLowerCase())
+    .first<User>();
+  return row ?? null;
+}
+
+export async function getUserById(db: D1Database, id: number): Promise<User | null> {
+  const row = await db
+    .prepare("SELECT id, name, email, role, created_at FROM users WHERE id = ? LIMIT 1")
+    .bind(id)
+    .first<User>();
+  return row ?? null;
+}
+
+export async function createUser(
+  db: D1Database,
+  input: { name: string; email: string; password_hash: string; password_salt: string; role?: string }
+): Promise<number> {
+  const res = await db
+    .prepare(
+      "INSERT INTO users (name, email, password_hash, password_salt, role) VALUES (?, ?, ?, ?, ?)"
+    )
+    .bind(
+      input.name,
+      input.email.trim().toLowerCase(),
+      input.password_hash,
+      input.password_salt,
+      input.role || "user"
+    )
+    .run();
+  return Number(res.meta.last_row_id);
+}
+
+export async function getUserStats(
+  db: D1Database,
+  userId: number
+): Promise<{
+  totalCoupons: number;
+  activeCoupons: number;
+  pendingCoupons: number;
+  totalClicks: number;
+  totalWorkedVotes: number;
+}> {
+  const today = getTodayIsoDate();
+  const row = await db
+    .prepare(
+      `SELECT
+        COUNT(*) AS totalCoupons,
+        SUM(CASE WHEN is_active = 1 AND expiry_date >= ? THEN 1 ELSE 0 END) AS activeCoupons,
+        SUM(CASE WHEN is_active = 0 THEN 1 ELSE 0 END) AS pendingCoupons,
+        COALESCE(SUM(click_count), 0) AS totalClicks,
+        COALESCE(SUM(worked_count), 0) AS totalWorkedVotes
+      FROM coupons WHERE user_id = ?`
+    )
+    .bind(today, userId)
+    .first<{
+      totalCoupons: number;
+      activeCoupons: number;
+      pendingCoupons: number;
+      totalClicks: number;
+      totalWorkedVotes: number;
+    }>();
+
+  return {
+    totalCoupons: row?.totalCoupons ?? 0,
+    activeCoupons: row?.activeCoupons ?? 0,
+    pendingCoupons: row?.pendingCoupons ?? 0,
+    totalClicks: row?.totalClicks ?? 0,
+    totalWorkedVotes: row?.totalWorkedVotes ?? 0,
   };
 }

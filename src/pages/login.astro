@@ -1,0 +1,155 @@
+---
+import MainLayout from "../layouts/MainLayout.astro";
+
+const user = Astro.locals.user;
+const nextUrl = Astro.url.searchParams.get("next") || "/";
+const safeNext = nextUrl.startsWith("/") && !nextUrl.startsWith("//") ? nextUrl : "/";
+const reason = Astro.url.searchParams.get("reason");
+
+if (user) {
+  return Astro.redirect(safeNext);
+}
+---
+
+<MainLayout
+  title="Sign In — CouponHub"
+  description="Sign in to your CouponHub account to share coupons, track savings, and manage deals."
+>
+  <div class="mx-auto flex min-h-[calc(100vh-250px)] max-w-md items-center px-4 py-12">
+    <div class="w-full rounded-3xl border border-slate-200 bg-white p-7 shadow-xl dark:border-slate-800 dark:bg-slate-900 sm:p-8">
+      <!-- Header -->
+      <div class="text-center">
+        <span class="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-600 to-blue-600 text-xl font-black text-white shadow-md">
+          %
+        </span>
+        <h1 class="mt-4 text-2xl font-black text-slate-900 dark:text-white">
+          Welcome Back
+        </h1>
+        <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">
+          Sign in to your account to share and manage coupons.
+        </p>
+      </div>
+
+      <!-- Context Reason Banner -->
+      {reason === "signin-required" && (
+        <div class="mt-5 rounded-2xl border border-amber-200 bg-amber-50 p-3.5 text-xs font-semibold text-amber-800 dark:border-amber-800 dark:bg-amber-950/60 dark:text-amber-200">
+          🔒 <strong>Sign-in required:</strong> You must create an account or sign in before uploading a coupon.
+        </div>
+      )}
+
+      <!-- Error Box -->
+      <div
+        id="login-error"
+        class="mt-5 hidden rounded-2xl border border-rose-200 bg-rose-50 p-3 text-xs font-semibold text-rose-700 dark:border-rose-800 dark:bg-rose-950/60 dark:text-rose-300"
+      ></div>
+
+      <!-- Login Form -->
+      <form id="user-login-form" class="mt-6 space-y-4" data-next={safeNext}>
+        <div>
+          <label for="login-email" class="mb-1.5 block text-xs font-bold text-slate-700 uppercase dark:text-slate-300">
+            Email Address
+          </label>
+          <input
+            id="login-email"
+            name="email"
+            type="email"
+            required
+            autocomplete="email"
+            placeholder="you@example.com"
+            class="w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-2.5 text-sm text-slate-900 outline-none focus:border-indigo-500 focus:bg-white dark:border-slate-700 dark:bg-slate-950 dark:text-white"
+          />
+        </div>
+
+        <div>
+          <label for="login-password" class="mb-1.5 block text-xs font-bold text-slate-700 uppercase dark:text-slate-300">
+            Password
+          </label>
+          <input
+            id="login-password"
+            name="password"
+            type="password"
+            required
+            autocomplete="current-password"
+            placeholder="••••••••"
+            class="w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-2.5 text-sm text-slate-900 outline-none focus:border-indigo-500 focus:bg-white dark:border-slate-700 dark:bg-slate-950 dark:text-white"
+          />
+        </div>
+
+        <button
+          type="submit"
+          id="login-btn"
+          class="w-full rounded-xl bg-indigo-600 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-indigo-700 disabled:opacity-60"
+        >
+          Sign In
+        </button>
+      </form>
+
+      <!-- Footer switch -->
+      <div class="mt-6 border-t border-slate-100 pt-5 text-center text-xs text-slate-600 dark:border-slate-800 dark:text-slate-400">
+        Don't have an account?{" "}
+        <a
+          href={`/register${safeNext !== "/" ? `?next=${encodeURIComponent(safeNext)}` : ""}`}
+          class="font-bold text-indigo-600 hover:underline dark:text-indigo-400"
+        >
+          Create account for free →
+        </a>
+      </div>
+
+      <div class="mt-4 text-center">
+        <a href="/admin/login" class="text-[11px] text-slate-400 hover:text-slate-600 dark:hover:text-slate-300">
+          Team Member? Admin Login
+        </a>
+      </div>
+    </div>
+  </div>
+</MainLayout>
+
+<script>
+  const form = document.getElementById("user-login-form") as HTMLFormElement | null;
+  const errorBox = document.getElementById("login-error");
+  const submitBtn = document.getElementById("login-btn") as HTMLButtonElement | null;
+
+  form?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    if (errorBox) errorBox.classList.add("hidden");
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Signing in...";
+    }
+
+    const formData = new FormData(form);
+    const payload = {
+      email: String(formData.get("email") || ""),
+      password: String(formData.get("password") || ""),
+    };
+
+    try {
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const data = (await res.json()) as { ok?: boolean; error?: string };
+
+      if (!res.ok || !data.ok) {
+        if (errorBox) {
+          errorBox.textContent = data.error || "Invalid email or password.";
+          errorBox.classList.remove("hidden");
+        }
+        return;
+      }
+
+      window.location.href = form.dataset.next || "/";
+    } catch {
+      if (errorBox) {
+        errorBox.textContent = "Network error. Please try again.";
+        errorBox.classList.remove("hidden");
+      }
+    } finally {
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Sign In";
+      }
+    }
+  });
+</script>

@@ -1,9 +1,45 @@
 import { defineMiddleware } from "astro:middleware";
-import { getAuthenticatedAdmin } from "./lib/auth";
+import { getAuthenticatedAdmin, getAuthenticatedUser } from "./lib/auth";
 
 export const onRequest = defineMiddleware(async (context, next) => {
   const { pathname, search } = context.url;
 
+  // 1. Populate visitor user session if cookie exists
+  const userSession = await getAuthenticatedUser(context.request);
+  if (userSession) {
+    context.locals.user = {
+      id: userSession.sub,
+      email: userSession.email,
+      name: userSession.name,
+      role: userSession.role,
+    };
+  }
+
+  // 2. Protect visitor routes: /submit-coupon, /my-coupons, /api/coupons/submit
+  const isProtectedUserPage =
+    pathname === "/submit-coupon" ||
+    pathname.startsWith("/submit-coupon/") ||
+    pathname === "/my-coupons" ||
+    pathname.startsWith("/my-coupons/");
+  const isProtectedUserApi = pathname === "/api/coupons/submit";
+
+  if (isProtectedUserPage || isProtectedUserApi) {
+    if (!userSession) {
+      if (isProtectedUserApi) {
+        return new Response(
+          JSON.stringify({ error: "Unauthorized. Please sign in to submit a coupon." }),
+          {
+            status: 401,
+            headers: { "Content-Type": "application/json" },
+          }
+        );
+      }
+      const nextPath = encodeURIComponent(`${pathname}${search}`);
+      return context.redirect(`/login?next=${nextPath}&reason=signin-required`);
+    }
+  }
+
+  // 3. Admin routes protection
   const isAdminPage = pathname === "/admin" || pathname.startsWith("/admin/");
   const isAdminLoginPage = pathname === "/admin/login" || pathname === "/admin/login/";
   const isAdminApi = pathname.startsWith("/api/admin/");
