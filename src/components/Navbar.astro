@@ -48,18 +48,6 @@ function isActive(href: string): boolean {
 
     <!-- Right Controls -->
     <div class="flex items-center gap-2">
-      <!-- Dark Mode Toggle -->
-      <button
-        type="button"
-        data-theme-toggle
-        aria-label="Toggle dark mode"
-        title="Toggle dark mode"
-        class="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 bg-slate-50 text-slate-700 transition hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800"
-      >
-        <span class="hidden dark:inline" aria-hidden="true">☀️</span>
-        <span class="inline dark:hidden" aria-hidden="true">🌙</span>
-      </button>
-
       <!-- Visitor Auth Section -->
       {user ? (
         <div class="hidden items-center gap-2 sm:flex">
@@ -78,14 +66,6 @@ function isActive(href: string): boolean {
             </span>
             <span class="max-w-[100px] truncate">{user.name}</span>
           </a>
-          <button
-            type="button"
-            id="navbar-logout-btn"
-            class="rounded-lg border border-slate-200 px-2.5 py-1.5 text-xs font-semibold text-slate-500 hover:border-rose-300 hover:bg-rose-50 hover:text-rose-600 dark:border-slate-700 dark:text-slate-400 dark:hover:border-rose-800 dark:hover:bg-rose-950 dark:hover:text-rose-300"
-            title="Sign Out"
-          >
-            Exit
-          </button>
         </div>
       ) : (
         <div class="hidden items-center sm:flex">
@@ -153,13 +133,6 @@ function isActive(href: string): boolean {
               {user.name}
             </span>
           </a>
-          <button
-            type="button"
-            id="mobile-logout-btn"
-            class="w-full text-left rounded-lg px-3 py-2 text-sm font-semibold text-rose-600 hover:bg-rose-50 dark:text-rose-400 dark:hover:bg-rose-950/60"
-          >
-            Sign Out
-          </button>
         </div>
       ) : (
         <div class="mt-2 border-t border-slate-100 pt-2 dark:border-slate-800">
@@ -189,12 +162,4 @@ function isActive(href: string): boolean {
     const isHidden = mobileMenu?.classList.toggle("hidden");
     toggleBtn.setAttribute("aria-expanded", String(!isHidden));
   });
-
-  const handleLogout = async () => {
-    await fetch("/api/auth/logout", { method: "POST" });
-    window.location.reload();
-  };
-
-  document.getElementById("navbar-logout-btn")?.addEventListener("click", handleLogout);
-  document.getElementById("mobile-logout-btn")?.addEventListener("click", handleLogout);
 </script>

@@ -28,19 +28,18 @@ const currentPath = Astro.url.pathname;
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <!-- Prevent dark mode flash before paint -->
+    <!-- Force light mode only -->
     <script is:inline>
       (() => {
-        const stored = localStorage.getItem("couponhub-theme");
-        const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-        if (stored === "dark" || (!stored && prefersDark)) {
-          document.documentElement.classList.add("dark");
-        }
+        document.documentElement.classList.remove("dark");
+        try {
+          localStorage.removeItem("couponhub-theme");
+        } catch {}
       })();
     </script>
   </head>
 
-  <body class="flex min-h-screen flex-col">
+  <body class="flex min-h-screen flex-col bg-white text-slate-900">
     <Navbar currentPath={currentPath} />
 
     <main class="flex-1">
@@ -49,14 +48,5 @@ const currentPath = Astro.url.pathname;
 
     <Footer />
     <CouponRevealModal />
-
-    <script>
-      document.querySelectorAll("[data-theme-toggle]").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          const isDark = document.documentElement.classList.toggle("dark");
-          localStorage.setItem("couponhub-theme", isDark ? "dark" : "light");
-        });
-      });
-    </script>
   </body>
 </html>
