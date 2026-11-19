@@ -2,8 +2,12 @@
 import MainLayout from "../layouts/MainLayout.astro";
 
 const user = Astro.locals.user;
-const nextUrl = Astro.url.searchParams.get("next") || "/";
-const safeNext = nextUrl.startsWith("/") && !nextUrl.startsWith("//") ? nextUrl : "/";
+const nextParam = Astro.url.searchParams.get("next");
+const safeNext =
+  nextParam && nextParam.startsWith("/") && !nextParam.startsWith("//") && nextParam !== "/"
+    ? nextParam
+    : "/my-coupons";
+
 const reason = Astro.url.searchParams.get("reason");
 const initialMode = Astro.url.searchParams.get("mode") === "register" ? "register" : "login";
 
@@ -52,7 +56,7 @@ if (user) {
       <!-- Context Reason Banner (e.g. from middleware) -->
       {reason === "signin-required" && (
         <div class="mt-4 rounded-2xl border border-amber-200 bg-amber-50 p-3.5 text-xs font-semibold text-amber-800 dark:border-amber-800 dark:bg-amber-950/60 dark:text-amber-200">
-          🔒 <strong>Sign-in required:</strong> Pehle sign in karein ya naya account banayein.
+          🔒 <strong>Sign-in required:</strong> Please sign in to your account or create a new one to continue.
         </div>
       )}
 
@@ -76,7 +80,7 @@ if (user) {
       <!-- ==================== SIGN IN FORM ==================== -->
       <form id="sign-in-form" class="mt-5 space-y-4" data-next={safeNext}>
         <div class="rounded-xl border border-slate-200/80 bg-slate-50/80 p-3 text-[11px] text-slate-600 dark:border-slate-800 dark:bg-slate-950/40 dark:text-slate-400">
-          🔑 <strong>Note:</strong> Agar aapne pehle account banaya hai, to apna email &amp; password enter karein. Agar account nahi hai to system turant aapko account banane ka form provide karega.
+          🔑 <strong>Note:</strong> If you already have an account, enter your email and password. If you don't have an account yet, the system will immediately provide a form for you to create one.
         </div>
 
         <div>
@@ -118,13 +122,13 @@ if (user) {
         </button>
 
         <div class="pt-2 text-center text-xs text-slate-500 dark:text-slate-400">
-          Account nahi hai?{" "}
+          Don't have an account?{" "}
           <button
             type="button"
             id="switch-to-register-link"
             class="font-bold text-indigo-600 hover:underline dark:text-indigo-400"
           >
-            Naya account banayein →
+            Create an account →
           </button>
         </div>
       </form>
@@ -132,7 +136,7 @@ if (user) {
       <!-- ==================== CREATE ACCOUNT FORM ==================== -->
       <form id="create-account-form" class="mt-5 hidden space-y-4" data-next={safeNext}>
         <div class="rounded-xl border border-indigo-100 bg-indigo-50/70 p-3 text-[11px] text-indigo-900 dark:border-indigo-900/60 dark:bg-indigo-950/40 dark:text-indigo-200">
-          ✨ <strong>Free Account:</strong> Apna account banayein taaki aap deals upload kar sakein aur unka verification status dekh sakein.
+          ✨ <strong>Free Account:</strong> Create a free account to upload promo codes, track deal performance, and view approval status.
         </div>
 
         <div>
@@ -330,20 +334,20 @@ if (user) {
           setMode(
             "register",
             email,
-            `Aapka account nahi mila! <strong>${email}</strong> par abhi koi account register nahi hai. Kripya neeche apna naam aur password daal kar apna account banayein.`
+            `No account found! <strong>${email}</strong> is not registered yet. Please enter your name and password below to create your account.`
           );
           return;
         }
 
         // Existing account, but invalid password
         if (authError) {
-          authError.textContent = data.error || "Password galat hai. Kripya sahi password enter karein.";
+          authError.textContent = data.error || "Incorrect password. Please verify your password and try again.";
           authError.classList.remove("hidden");
         }
         return;
       }
 
-      window.location.href = signInForm.dataset.next || "/";
+      window.location.href = signInForm.dataset.next || "/my-coupons";
     } catch {
       if (authError) {
         authError.textContent = "Network error. Please try again.";
@@ -370,7 +374,7 @@ if (user) {
 
     if (password !== confirmPassword) {
       if (authError) {
-        authError.textContent = "Passwords match nahi kar rahe. Kripya dono me same password dalein.";
+        authError.textContent = "Passwords do not match. Please ensure both passwords match.";
         authError.classList.remove("hidden");
       }
       return;
@@ -391,13 +395,13 @@ if (user) {
 
       if (!res.ok || !data.ok) {
         if (authError) {
-          authError.textContent = data.error || "Account create nahi ho paya. Kripya dobara try karein.";
+          authError.textContent = data.error || "Failed to create account. Please try again.";
           authError.classList.remove("hidden");
         }
         return;
       }
 
-      window.location.href = createAccountForm.dataset.next || "/";
+      window.location.href = createAccountForm.dataset.next || "/my-coupons";
     } catch {
       if (authError) {
         authError.textContent = "Network error. Please try again.";
