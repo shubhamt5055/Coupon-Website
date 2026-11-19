@@ -7,25 +7,14 @@ import {
   verifyPassword,
 } from "../../../lib/auth";
 import { validateLoginInput } from "../../../lib/validation";
+import { jsonError, jsonResponse, parseBody } from "../../../lib/api";
 
 export const POST: APIRoute = async ({ request }) => {
   try {
-    const contentType = request.headers.get("content-type") ?? "";
-    let body: Record<string, unknown> = {};
-
-    if (contentType.includes("application/json")) {
-      body = (await request.json()) as Record<string, unknown>;
-    } else {
-      const form = await request.formData();
-      body = Object.fromEntries(form.entries());
-    }
-
+    const body = await parseBody(request);
     const validation = validateLoginInput(body);
     if (!validation.ok || !validation.data) {
-      return Response.json(
-        { error: validation.errors[0], errors: validation.errors },
-        { status: 400 }
-      );
+      return jsonError(validation.errors[0], 400, { errors: validation.errors });
     }
 
     const { email, password } = validation.data;
@@ -33,27 +22,19 @@ export const POST: APIRoute = async ({ request }) => {
     const user = await getUserByEmail(db, email);
 
     if (!user) {
-      return Response.json(
-        {
-          ok: false,
-          notFound: true,
-          email,
-          error: "No account found with this email. Please create an account first!",
-        },
-        { status: 404 }
-      );
+      return jsonError("No account found with this email. Please create an account first!", 404, {
+        ok: false,
+        notFound: true,
+        email,
+      });
     }
 
     const isValid = await verifyPassword(password, user.password_hash, user.password_salt);
     if (!isValid) {
-      return Response.json(
-        {
-          ok: false,
-          notFound: false,
-          error: "Incorrect password. Please verify your password and try again.",
-        },
-        { status: 401 }
-      );
+      return jsonError("Incorrect password. Please verify your password and try again.", 401, {
+        ok: false,
+        notFound: false,
+      });
     }
 
     const token = await createUserSessionToken({
@@ -64,21 +45,13 @@ export const POST: APIRoute = async ({ request }) => {
     });
     const cookie = buildUserSessionCookie(token, request.url);
 
-    return new Response(
-      JSON.stringify({
-        ok: true,
-        user: { id: user.id, name: user.name, email: user.email },
-      }),
-      {
-        status: 200,
-        headers: {
-          "Content-Type": "application/json",
-          "Set-Cookie": cookie,
-        },
-      }
+    return jsonResponse(
+      { ok: true, user: { id: user.id, name: user.name, email: user.email } },
+      200,
+      { "Set-Cookie": cookie }
     );
   } catch (error) {
     console.error("POST /api/auth/login error:", error);
-    return Response.json({ error: "Login failed. Please try again." }, { status: 500 });
+    return jsonError("Login failed. Please try again.", 500);
   }
 };

@@ -6,29 +6,24 @@ import {
   getStoresWithCounts,
 } from "../../../lib/db";
 import { parseCsv, validateCouponInput } from "../../../lib/validation";
+import { jsonError, jsonResponse, parseBody } from "../../../lib/api";
 
 export const POST: APIRoute = async ({ request }) => {
   try {
-    const body = (await request.json()) as { csv?: string };
-    const csvText = String(body.csv ?? "");
+    const body = await parseBody<{ csv?: string }>(request);
+    const csvText = String(body.csv ?? "").trim();
 
-    if (!csvText.trim()) {
-      return Response.json({ error: "CSV content is empty." }, { status: 400 });
+    if (!csvText) {
+      return jsonError("CSV content is empty.", 400);
     }
 
     const rows = parseCsv(csvText);
     if (rows.length === 0) {
-      return Response.json(
-        { error: "No data rows found in CSV. Ensure a header row and at least one data row." },
-        { status: 400 }
-      );
+      return jsonError("No data rows found in CSV. Ensure a header row and at least one data row.", 400);
     }
 
     if (rows.length > 200) {
-      return Response.json(
-        { error: "Maximum 200 coupons allowed per CSV upload." },
-        { status: 400 }
-      );
+      return jsonError("Maximum 200 coupons allowed per CSV upload.", 400);
     }
 
     const db = getDb();
@@ -54,18 +49,12 @@ export const POST: APIRoute = async ({ request }) => {
     let imported = 0;
     const rowErrors: { row: number; reason: string }[] = [];
 
-    for (let i = 0; i < rows.length; i += 1) {
+    for (let i = 0; i < rows.length; i++) {
       const r = rows[i];
-      const rowNum = i + 2; // 1-indexed + header row
+      const rowNum = i + 2;
 
       const storeKey = (r.store || r.store_slug || r.store_name || r.store_id || "").toLowerCase();
-      const categoryKey = (
-        r.category ||
-        r.category_slug ||
-        r.category_name ||
-        r.category_id ||
-        ""
-      ).toLowerCase();
+      const categoryKey = (r.category || r.category_slug || r.category_name || r.category_id || "").toLowerCase();
 
       const storeId = storeLookup.get(storeKey);
       const categoryId = categoryLookup.get(categoryKey);
@@ -108,7 +97,7 @@ export const POST: APIRoute = async ({ request }) => {
       imported += 1;
     }
 
-    return Response.json({
+    return jsonResponse({
       ok: true,
       totalRows: rows.length,
       imported,
@@ -117,6 +106,6 @@ export const POST: APIRoute = async ({ request }) => {
     });
   } catch (error) {
     console.error("POST /api/admin/coupons-import error:", error);
-    return Response.json({ error: "Failed to import CSV." }, { status: 500 });
+    return jsonError("Failed to import CSV.", 500);
   }
 };

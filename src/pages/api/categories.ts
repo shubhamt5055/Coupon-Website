@@ -1,13 +1,14 @@
 import type { APIRoute } from "astro";
 import { getDb } from "../../lib/cloudflare";
 import { getCategoriesWithCounts } from "../../lib/db";
+import { jsonError, jsonResponse } from "../../lib/api";
 
 export const GET: APIRoute = async () => {
   try {
     const categories = await getCategoriesWithCounts(getDb());
-    return Response.json({ categories });
+    return jsonResponse({ categories });
   } catch (error) {
     console.error("GET /api/categories error:", error);
-    return Response.json({ error: "Failed to load categories." }, { status: 500 });
+    return jsonError("Failed to load categories.", 500);
   }
 };

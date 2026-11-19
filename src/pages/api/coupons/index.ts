@@ -1,6 +1,7 @@
 import type { APIRoute } from "astro";
 import { getDb } from "../../../lib/cloudflare";
 import { getCoupons, getTopCouponsToday } from "../../../lib/db";
+import { jsonError, jsonResponse } from "../../../lib/api";
 
 export const GET: APIRoute = async ({ url }) => {
   try {
@@ -10,7 +11,7 @@ export const GET: APIRoute = async ({ url }) => {
     if (top === "1" || top === "true") {
       const limit = Number(url.searchParams.get("limit")) || 4;
       const coupons = await getTopCouponsToday(db, limit);
-      return Response.json({ coupons });
+      return jsonResponse({ coupons });
     }
 
     const search = url.searchParams.get("q") ?? undefined;
@@ -30,9 +31,9 @@ export const GET: APIRoute = async ({ url }) => {
       sort,
     });
 
-    return Response.json({ coupons });
+    return jsonResponse({ coupons });
   } catch (error) {
     console.error("GET /api/coupons error:", error);
-    return Response.json({ error: "Failed to load coupons." }, { status: 500 });
+    return jsonError("Failed to load coupons.", 500);
   }
 };

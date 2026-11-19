@@ -2,6 +2,7 @@ import type { APIRoute } from "astro";
 import { getDb } from "../../../../lib/cloudflare";
 import { createCoupon, getCoupons } from "../../../../lib/db";
 import { validateCouponInput } from "../../../../lib/validation";
+import { jsonError, jsonResponse, parseBody } from "../../../../lib/api";
 
 export const GET: APIRoute = async ({ url }) => {
   try {
@@ -11,6 +12,7 @@ export const GET: APIRoute = async ({ url }) => {
     const status =
       statusParam === "active" ||
       statusParam === "inactive" ||
+      statusParam === "pending" ||
       statusParam === "expired"
         ? statusParam
         : "all";
@@ -27,32 +29,26 @@ export const GET: APIRoute = async ({ url }) => {
       sort: "newest",
     });
 
-    return Response.json({ coupons });
+    return jsonResponse({ coupons });
   } catch (error) {
     console.error("GET /api/admin/coupons error:", error);
-    return Response.json({ error: "Failed to fetch coupons." }, { status: 500 });
+    return jsonError("Failed to fetch coupons.", 500);
   }
 };
 
 export const POST: APIRoute = async ({ request }) => {
   try {
-    const body = (await request.json()) as Record<string, unknown>;
+    const body = await parseBody(request);
     const validation = validateCouponInput(body);
 
     if (!validation.ok || !validation.data) {
-      return Response.json(
-        { error: validation.errors[0], errors: validation.errors },
-        { status: 400 }
-      );
+      return jsonError(validation.errors[0], 400, { errors: validation.errors });
     }
 
     const id = await createCoupon(getDb(), validation.data);
-    return Response.json({ ok: true, id }, { status: 201 });
+    return jsonResponse({ ok: true, id }, 201);
   } catch (error) {
     console.error("POST /api/admin/coupons error:", error);
-    return Response.json(
-      { error: "Failed to create coupon. Verify selected store and category exist." },
-      { status: 500 }
-    );
+    return jsonError("Failed to create coupon.", 500);
   }
 };

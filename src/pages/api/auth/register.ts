@@ -7,40 +7,24 @@ import {
   hashPassword,
 } from "../../../lib/auth";
 import { validateRegisterInput } from "../../../lib/validation";
+import { jsonError, jsonResponse, parseBody } from "../../../lib/api";
 
 export const POST: APIRoute = async ({ request }) => {
   try {
-    const contentType = request.headers.get("content-type") ?? "";
-    let body: Record<string, unknown> = {};
-
-    if (contentType.includes("application/json")) {
-      body = (await request.json()) as Record<string, unknown>;
-    } else {
-      const form = await request.formData();
-      body = Object.fromEntries(form.entries());
-    }
-
+    const body = await parseBody(request);
     const validation = validateRegisterInput(body);
     if (!validation.ok || !validation.data) {
-      return Response.json(
-        { error: validation.errors[0], errors: validation.errors },
-        { status: 400 }
-      );
+      return jsonError(validation.errors[0], 400, { errors: validation.errors });
     }
 
     const { name, email, password } = validation.data;
     const db = getDb();
 
-    // Check if email already registered
     const existing = await getUserByEmail(db, email);
     if (existing) {
-      return Response.json(
-        { error: "An account with this email already exists. Please sign in instead." },
-        { status: 409 }
-      );
+      return jsonError("An account with this email already exists. Please sign in instead.", 409);
     }
 
-    // Hash password with PBKDF2 (100,000 iterations, random salt)
     const { hash, salt } = await hashPassword(password);
     const userId = await createUser(db, {
       name,
@@ -50,7 +34,6 @@ export const POST: APIRoute = async ({ request }) => {
       role: "user",
     });
 
-    // Create session token & cookie
     const token = await createUserSessionToken({
       id: userId,
       email,
@@ -59,21 +42,13 @@ export const POST: APIRoute = async ({ request }) => {
     });
     const cookie = buildUserSessionCookie(token, request.url);
 
-    return new Response(
-      JSON.stringify({
-        ok: true,
-        user: { id: userId, name, email },
-      }),
-      {
-        status: 201,
-        headers: {
-          "Content-Type": "application/json",
-          "Set-Cookie": cookie,
-        },
-      }
+    return jsonResponse(
+      { ok: true, user: { id: userId, name, email } },
+      201,
+      { "Set-Cookie": cookie }
     );
   } catch (error) {
     console.error("POST /api/auth/register error:", error);
-    return Response.json({ error: "Registration failed. Please try again." }, { status: 500 });
+    return jsonError("Account creation failed. Please try again.", 500);
   }
 };

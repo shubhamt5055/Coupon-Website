@@ -7,85 +7,68 @@ import {
   updateCoupon,
 } from "../../../../lib/db";
 import { validateCouponInput } from "../../../../lib/validation";
+import { jsonError, jsonResponse, parseBody, parseId } from "../../../../lib/api";
 
 export const GET: APIRoute = async ({ params }) => {
-  const id = Number(params.id);
-  if (!Number.isInteger(id) || id <= 0) {
-    return Response.json({ error: "Invalid coupon ID." }, { status: 400 });
-  }
+  const id = parseId(params.id);
+  if (!id) return jsonError("Invalid coupon ID.", 400);
 
   const coupon = await getCouponById(getDb(), id);
-  if (!coupon) {
-    return Response.json({ error: "Coupon not found." }, { status: 404 });
-  }
-  return Response.json({ coupon });
+  if (!coupon) return jsonError("Coupon not found.", 404);
+  return jsonResponse({ coupon });
 };
 
 export const PUT: APIRoute = async ({ params, request }) => {
-  const id = Number(params.id);
-  if (!Number.isInteger(id) || id <= 0) {
-    return Response.json({ error: "Invalid coupon ID." }, { status: 400 });
-  }
+  const id = parseId(params.id);
+  if (!id) return jsonError("Invalid coupon ID.", 400);
 
   try {
-    const body = (await request.json()) as Record<string, unknown>;
+    const body = await parseBody(request);
     const validation = validateCouponInput(body);
 
     if (!validation.ok || !validation.data) {
-      return Response.json(
-        { error: validation.errors[0], errors: validation.errors },
-        { status: 400 }
-      );
+      return jsonError(validation.errors[0], 400, { errors: validation.errors });
     }
 
     const updated = await updateCoupon(getDb(), id, validation.data);
-    if (!updated) {
-      return Response.json({ error: "Coupon not found." }, { status: 404 });
-    }
+    if (!updated) return jsonError("Coupon not found.", 404);
 
-    return Response.json({ ok: true, id });
+    return jsonResponse({ ok: true, id });
   } catch (error) {
     console.error("PUT /api/admin/coupons/[id] error:", error);
-    return Response.json({ error: "Failed to update coupon." }, { status: 500 });
+    return jsonError("Failed to update coupon.", 500);
   }
 };
 
 export const PATCH: APIRoute = async ({ params, request }) => {
-  const id = Number(params.id);
-  if (!Number.isInteger(id) || id <= 0) {
-    return Response.json({ error: "Invalid coupon ID." }, { status: 400 });
-  }
+  const id = parseId(params.id);
+  if (!id) return jsonError("Invalid coupon ID.", 400);
 
   try {
-    const body = (await request.json()) as { is_active?: boolean | number };
+    const body = await parseBody<{ is_active?: boolean | number }>(request);
     const isActive = body.is_active === true || body.is_active === 1 ? 1 : 0;
 
     const updated = await setCouponActiveStatus(getDb(), id, isActive);
-    if (!updated) {
-      return Response.json({ error: "Coupon not found." }, { status: 404 });
-    }
+    if (!updated) return jsonError("Coupon not found.", 404);
 
-    return Response.json({ ok: true, id, is_active: isActive });
+    return jsonResponse({ ok: true, id, is_active: isActive });
   } catch (error) {
     console.error("PATCH /api/admin/coupons/[id] error:", error);
-    return Response.json({ error: "Failed to update status." }, { status: 500 });
+    return jsonError("Failed to update coupon status.", 500);
   }
 };
 
 export const DELETE: APIRoute = async ({ params }) => {
-  const id = Number(params.id);
-  if (!Number.isInteger(id) || id <= 0) {
-    return Response.json({ error: "Invalid coupon ID." }, { status: 400 });
-  }
+  const id = parseId(params.id);
+  if (!id) return jsonError("Invalid coupon ID.", 400);
 
   try {
     const deleted = await deleteCoupon(getDb(), id);
-    if (!deleted) {
-      return Response.json({ error: "Coupon not found." }, { status: 404 });
-    }
-    return Response.json({ ok: true, id });
+    if (!deleted) return jsonError("Coupon not found.", 404);
+
+    return jsonResponse({ ok: true, id });
   } catch (error) {
     console.error("DELETE /api/admin/coupons/[id] error:", error);
-    return Response.json({ error: "Failed to delete coupon." }, { status: 500 });
+    return jsonError("Failed to delete coupon.", 500);
   }
 };

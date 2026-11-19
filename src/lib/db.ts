@@ -17,25 +17,13 @@ import {
 } from "./cloudflare";
 import { getTodayIsoDate } from "./format";
 
+// Base SELECT query joining store, category, and submitting user
 const COUPON_SELECT = `
   SELECT
-    c.id,
-    c.title,
-    c.code,
-    c.description,
-    c.terms,
-    c.discount_text,
-    c.store_id,
-    c.category_id,
-    c.affiliate_or_store_url,
-    c.expiry_date,
-    c.is_active,
-    c.click_count,
-    c.worked_count,
-    c.didnt_work_count,
-    c.created_at,
-    c.updated_at,
-    c.user_id,
+    c.id, c.title, c.code, c.description, c.terms, c.discount_text,
+    c.store_id, c.category_id, c.affiliate_or_store_url, c.expiry_date,
+    c.is_active, c.click_count, c.worked_count, c.didnt_work_count,
+    c.created_at, c.updated_at, c.user_id,
     u.name AS submitted_by_name,
     u.email AS submitted_by_email,
     s.name AS store_name,
@@ -50,6 +38,35 @@ const COUPON_SELECT = `
   INNER JOIN categories cat ON cat.id = c.category_id
   LEFT JOIN users u ON u.id = c.user_id
 `;
+
+// Generic query helpers for D1
+async function queryAll<T>(db: D1Database, sql: string, params: unknown[] = []): Promise<T[]> {
+  const stmt = params.length > 0 ? db.prepare(sql).bind(...params) : db.prepare(sql);
+  const { results } = await stmt.all<T>();
+  return results ?? [];
+}
+
+async function queryFirst<T>(db: D1Database, sql: string, params: unknown[] = []): Promise<T | null> {
+  const stmt = params.length > 0 ? db.prepare(sql).bind(...params) : db.prepare(sql);
+  const row = await stmt.first<T>();
+  return row ?? null;
+}
+
+async function runInsert(db: D1Database, sql: string, params: unknown[], invalidate = false): Promise<number> {
+  const res = await db.prepare(sql).bind(...params).run();
+  if (invalidate) await invalidateCouponCache();
+  return Number(res.meta.last_row_id);
+}
+
+async function runUpdate(db: D1Database, sql: string, params: unknown[], invalidate = true): Promise<boolean> {
+  const res = await db.prepare(sql).bind(...params).run();
+  if (invalidate) await invalidateCouponCache();
+  return (res.meta.changes ?? 0) > 0;
+}
+
+// ========================
+// Coupon Queries
+// ========================
 
 export async function getCoupons(
   db: D1Database,
@@ -88,9 +105,7 @@ export async function getCoupons(
     conditions.push("c.expiry_date < ?");
     params.push(today);
   } else {
-    if (!filters.includeInactive) {
-      conditions.push("c.is_active = 1");
-    }
+    if (!filters.includeInactive) conditions.push("c.is_active = 1");
     if (!filters.includeExpired) {
       conditions.push("c.expiry_date >= ?");
       params.push(today);
@@ -101,27 +116,22 @@ export async function getCoupons(
     conditions.push("cat.slug = ?");
     params.push(filters.categorySlug.trim().toLowerCase());
   }
-
   if (filters.storeSlug) {
     conditions.push("s.slug = ?");
     params.push(filters.storeSlug.trim().toLowerCase());
   }
-
   if (filters.categoryId) {
     conditions.push("c.category_id = ?");
     params.push(filters.categoryId);
   }
-
   if (filters.storeId) {
     conditions.push("c.store_id = ?");
     params.push(filters.storeId);
   }
-
   if (filters.userId) {
     conditions.push("c.user_id = ?");
     params.push(filters.userId);
   }
-
   if (filters.search && filters.search.trim().length > 0) {
     const term = `%${filters.search.trim().toLowerCase()}%`;
     conditions.push(
@@ -142,12 +152,9 @@ export async function getCoupons(
   }
 
   const limitClause = filters.limit && filters.limit > 0 ? `LIMIT ${Math.min(filters.limit, 200)}` : "";
-
   const sql = `${COUPON_SELECT} ${whereClause} ${orderBy} ${limitClause}`;
-  const { results } = await db
-    .prepare(sql)
-    .bind(...params, ...orderParams)
-    .all<CouponWithRelations>();
+
+  const results = await queryAll<CouponWithRelations>(db, sql, [...params, ...orderParams]);
 
   if (isDefaultPublicList) {
     await setCachedJson(CACHE_KEYS.HOME_ACTIVE, results, 60);
@@ -156,37 +163,20 @@ export async function getCoupons(
   return results;
 }
 
-export async function getTopCouponsToday(
-  db: D1Database,
-  limit = 4
-): Promise<CouponWithRelations[]> {
+export async function getTopCouponsToday(db: D1Database, limit = 4): Promise<CouponWithRelations[]> {
   const cached = await getCachedJson<CouponWithRelations[]>(CACHE_KEYS.TOP_COUPONS);
   if (cached) return cached.slice(0, limit);
 
   const today = getTodayIsoDate();
-  const { results } = await db
-    .prepare(
-      `${COUPON_SELECT}
-       WHERE c.is_active = 1 AND c.expiry_date >= ?
-       ORDER BY c.click_count DESC, c.worked_count DESC
-       LIMIT ?`
-    )
-    .bind(today, Math.min(limit, 12))
-    .all<CouponWithRelations>();
+  const sql = `${COUPON_SELECT} WHERE c.is_active = 1 AND c.expiry_date >= ? ORDER BY c.click_count DESC, c.worked_count DESC LIMIT ?`;
+  const results = await queryAll<CouponWithRelations>(db, sql, [today, Math.min(limit, 12)]);
 
   await setCachedJson(CACHE_KEYS.TOP_COUPONS, results, 60);
   return results;
 }
 
-export async function getCouponById(
-  db: D1Database,
-  id: number
-): Promise<CouponWithRelations | null> {
-  const row = await db
-    .prepare(`${COUPON_SELECT} WHERE c.id = ? LIMIT 1`)
-    .bind(id)
-    .first<CouponWithRelations>();
-  return row ?? null;
+export async function getCouponById(db: D1Database, id: number): Promise<CouponWithRelations | null> {
+  return queryFirst<CouponWithRelations>(db, `${COUPON_SELECT} WHERE c.id = ? LIMIT 1`, [id]);
 }
 
 export async function getRelatedCoupons(
@@ -197,113 +187,67 @@ export async function getRelatedCoupons(
   limit = 3
 ): Promise<CouponWithRelations[]> {
   const today = getTodayIsoDate();
-  const { results } = await db
-    .prepare(
-      `${COUPON_SELECT}
-       WHERE c.id != ? AND c.is_active = 1 AND c.expiry_date >= ?
-         AND (c.store_id = ? OR c.category_id = ?)
-       ORDER BY (c.store_id = ?) DESC, c.click_count DESC
-       LIMIT ?`
-    )
-    .bind(couponId, today, storeId, categoryId, storeId, limit)
-    .all<CouponWithRelations>();
-  return results;
+  const sql = `${COUPON_SELECT}
+    WHERE c.id != ? AND c.is_active = 1 AND c.expiry_date >= ?
+      AND (c.store_id = ? OR c.category_id = ?)
+    ORDER BY (c.store_id = ?) DESC, c.click_count DESC
+    LIMIT ?`;
+  return queryAll<CouponWithRelations>(db, sql, [couponId, today, storeId, categoryId, storeId, limit]);
 }
 
 export async function createCoupon(db: D1Database, input: CouponInput): Promise<number> {
-  const result = await db
-    .prepare(
-      `INSERT INTO coupons (
-        title, code, description, terms, discount_text,
-        store_id, category_id, affiliate_or_store_url, expiry_date, is_active, user_id
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
-    )
-    .bind(
-      input.title,
-      input.code,
-      input.description,
-      input.terms,
-      input.discount_text,
-      input.store_id,
-      input.category_id,
-      input.affiliate_or_store_url,
-      input.expiry_date,
-      input.is_active,
-      input.user_id ?? null
-    )
-    .run();
-
-  await invalidateCouponCache();
-  return Number(result.meta.last_row_id);
+  const sql = `INSERT INTO coupons (
+    title, code, description, terms, discount_text,
+    store_id, category_id, affiliate_or_store_url, expiry_date, is_active, user_id
+  ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+  return runInsert(db, sql, [
+    input.title,
+    input.code,
+    input.description,
+    input.terms,
+    input.discount_text,
+    input.store_id,
+    input.category_id,
+    input.affiliate_or_store_url,
+    input.expiry_date,
+    input.is_active,
+    input.user_id ?? null,
+  ], true);
 }
 
-export async function updateCoupon(
-  db: D1Database,
-  id: number,
-  input: CouponInput
-): Promise<boolean> {
-  const result = await db
-    .prepare(
-      `UPDATE coupons
-       SET title = ?, code = ?, description = ?, terms = ?, discount_text = ?,
-           store_id = ?, category_id = ?, affiliate_or_store_url = ?, expiry_date = ?,
-           is_active = ?, updated_at = CURRENT_TIMESTAMP
-       WHERE id = ?`
-    )
-    .bind(
-      input.title,
-      input.code,
-      input.description,
-      input.terms,
-      input.discount_text,
-      input.store_id,
-      input.category_id,
-      input.affiliate_or_store_url,
-      input.expiry_date,
-      input.is_active,
-      id
-    )
-    .run();
-
-  await invalidateCouponCache();
-  return (result.meta.changes ?? 0) > 0;
+export async function updateCoupon(db: D1Database, id: number, input: CouponInput): Promise<boolean> {
+  const sql = `UPDATE coupons
+    SET title = ?, code = ?, description = ?, terms = ?, discount_text = ?,
+        store_id = ?, category_id = ?, affiliate_or_store_url = ?, expiry_date = ?,
+        is_active = ?, updated_at = CURRENT_TIMESTAMP
+    WHERE id = ?`;
+  return runUpdate(db, sql, [
+    input.title,
+    input.code,
+    input.description,
+    input.terms,
+    input.discount_text,
+    input.store_id,
+    input.category_id,
+    input.affiliate_or_store_url,
+    input.expiry_date,
+    input.is_active,
+    id,
+  ]);
 }
 
-export async function setCouponActiveStatus(
-  db: D1Database,
-  id: number,
-  isActive: number
-): Promise<boolean> {
-  const result = await db
-    .prepare(
-      `UPDATE coupons SET is_active = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?`
-    )
-    .bind(isActive ? 1 : 0, id)
-    .run();
-  await invalidateCouponCache();
-  return (result.meta.changes ?? 0) > 0;
+export async function setCouponActiveStatus(db: D1Database, id: number, isActive: number): Promise<boolean> {
+  return runUpdate(db, `UPDATE coupons SET is_active = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?`, [isActive ? 1 : 0, id]);
 }
 
 export async function deleteCoupon(db: D1Database, id: number): Promise<boolean> {
-  const result = await db.prepare(`DELETE FROM coupons WHERE id = ?`).bind(id).run();
-  await invalidateCouponCache();
-  return (result.meta.changes ?? 0) > 0;
+  return runUpdate(db, `DELETE FROM coupons WHERE id = ?`, [id]);
 }
 
-export async function incrementCouponClick(
-  db: D1Database,
-  id: number
-): Promise<{ click_count: number } | null> {
-  await db
-    .prepare(`UPDATE coupons SET click_count = click_count + 1 WHERE id = ?`)
-    .bind(id)
-    .run();
+export async function incrementCouponClick(db: D1Database, id: number): Promise<{ click_count: number } | null> {
+  await db.prepare(`UPDATE coupons SET click_count = click_count + 1 WHERE id = ?`).bind(id).run();
   await invalidateCouponCache();
-  const row = await db
-    .prepare(`SELECT click_count FROM coupons WHERE id = ?`)
-    .bind(id)
-    .first<{ click_count: number }>();
-  return row ?? null;
+  return queryFirst<{ click_count: number }>(db, `SELECT click_count FROM coupons WHERE id = ?`, [id]);
 }
 
 export async function recordCouponVote(
@@ -312,151 +256,122 @@ export async function recordCouponVote(
   vote: "worked" | "didnt_work"
 ): Promise<{ worked_count: number; didnt_work_count: number } | null> {
   const column = vote === "worked" ? "worked_count" : "didnt_work_count";
-  await db
-    .prepare(`UPDATE coupons SET ${column} = ${column} + 1 WHERE id = ?`)
-    .bind(id)
-    .run();
-  const row = await db
-    .prepare(`SELECT worked_count, didnt_work_count FROM coupons WHERE id = ?`)
-    .bind(id)
-    .first<{ worked_count: number; didnt_work_count: number }>();
-  return row ?? null;
+  await db.prepare(`UPDATE coupons SET ${column} = ${column} + 1 WHERE id = ?`).bind(id).run();
+  return queryFirst<{ worked_count: number; didnt_work_count: number }>(
+    db,
+    `SELECT worked_count, didnt_work_count FROM coupons WHERE id = ?`,
+    [id]
+  );
 }
+
+// ========================
+// Category Queries
+// ========================
 
 export async function getCategoriesWithCounts(db: D1Database): Promise<Category[]> {
   const today = getTodayIsoDate();
-  const { results } = await db
-    .prepare(
-      `SELECT
-        cat.id,
-        cat.name,
-        cat.slug,
-        cat.icon,
-        cat.created_at,
-        COUNT(CASE WHEN c.is_active = 1 AND c.expiry_date >= ? THEN 1 END) AS active_coupon_count,
-        COUNT(c.id) AS total_coupon_count
-      FROM categories cat
-      LEFT JOIN coupons c ON c.category_id = cat.id
-      GROUP BY cat.id
-      ORDER BY active_coupon_count DESC, cat.name ASC`
-    )
-    .bind(today)
-    .all<Category>();
-  return results;
+  const sql = `SELECT
+      cat.id, cat.name, cat.slug, cat.icon, cat.created_at,
+      COUNT(CASE WHEN c.is_active = 1 AND c.expiry_date >= ? THEN 1 END) AS active_coupon_count,
+      COUNT(c.id) AS total_coupon_count
+    FROM categories cat
+    LEFT JOIN coupons c ON c.category_id = cat.id
+    GROUP BY cat.id
+    ORDER BY active_coupon_count DESC, cat.name ASC`;
+  return queryAll<Category>(db, sql, [today]);
 }
 
 export async function getCategoryBySlug(db: D1Database, slug: string): Promise<Category | null> {
-  const row = await db
-    .prepare(`SELECT id, name, slug, icon, created_at FROM categories WHERE slug = ? LIMIT 1`)
-    .bind(slug.trim().toLowerCase())
-    .first<Category>();
-  return row ?? null;
+  return queryFirst<Category>(db, `SELECT id, name, slug, icon, created_at FROM categories WHERE slug = ? LIMIT 1`, [
+    slug.trim().toLowerCase(),
+  ]);
 }
 
 export async function createCategory(db: D1Database, input: CategoryInput): Promise<number> {
-  const res = await db
-    .prepare(`INSERT INTO categories (name, slug, icon) VALUES (?, ?, ?)`)
-    .bind(input.name, input.slug, input.icon)
-    .run();
-  return Number(res.meta.last_row_id);
+  return runInsert(db, `INSERT INTO categories (name, slug, icon) VALUES (?, ?, ?)`, [
+    input.name,
+    input.slug,
+    input.icon,
+  ]);
 }
 
 export async function deleteCategory(db: D1Database, id: number): Promise<boolean> {
-  const res = await db.prepare(`DELETE FROM categories WHERE id = ?`).bind(id).run();
-  await invalidateCouponCache();
-  return (res.meta.changes ?? 0) > 0;
+  return runUpdate(db, `DELETE FROM categories WHERE id = ?`, [id]);
 }
+
+// ========================
+// Store Queries
+// ========================
 
 export async function getStoresWithCounts(db: D1Database): Promise<Store[]> {
   const today = getTodayIsoDate();
-  const { results } = await db
-    .prepare(
-      `SELECT
-        s.id,
-        s.name,
-        s.slug,
-        s.logo_url,
-        s.website_url,
-        s.description,
-        s.created_at,
-        COUNT(CASE WHEN c.is_active = 1 AND c.expiry_date >= ? THEN 1 END) AS active_coupon_count,
-        COUNT(c.id) AS total_coupon_count
-      FROM stores s
-      LEFT JOIN coupons c ON c.store_id = s.id
-      GROUP BY s.id
-      ORDER BY active_coupon_count DESC, s.name ASC`
-    )
-    .bind(today)
-    .all<Store>();
-  return results;
+  const sql = `SELECT
+      s.id, s.name, s.slug, s.logo_url, s.website_url, s.description, s.created_at,
+      COUNT(CASE WHEN c.is_active = 1 AND c.expiry_date >= ? THEN 1 END) AS active_coupon_count,
+      COUNT(c.id) AS total_coupon_count
+    FROM stores s
+    LEFT JOIN coupons c ON c.store_id = s.id
+    GROUP BY s.id
+    ORDER BY active_coupon_count DESC, s.name ASC`;
+  return queryAll<Store>(db, sql, [today]);
 }
 
 export async function getStoreBySlug(db: D1Database, slug: string): Promise<Store | null> {
-  const row = await db
-    .prepare(
-      `SELECT id, name, slug, logo_url, website_url, description, created_at
-       FROM stores WHERE slug = ? LIMIT 1`
-    )
-    .bind(slug.trim().toLowerCase())
-    .first<Store>();
-  return row ?? null;
+  return queryFirst<Store>(
+    db,
+    `SELECT id, name, slug, logo_url, website_url, description, created_at FROM stores WHERE slug = ? LIMIT 1`,
+    [slug.trim().toLowerCase()]
+  );
 }
 
 export async function createStore(db: D1Database, input: StoreInput): Promise<number> {
-  const res = await db
-    .prepare(
-      `INSERT INTO stores (name, slug, logo_url, website_url, description)
-       VALUES (?, ?, ?, ?, ?)`
-    )
-    .bind(input.name, input.slug, input.logo_url, input.website_url, input.description)
-    .run();
-  return Number(res.meta.last_row_id);
+  return runInsert(
+    db,
+    `INSERT INTO stores (name, slug, logo_url, website_url, description) VALUES (?, ?, ?, ?, ?)`,
+    [input.name, input.slug, input.logo_url, input.website_url, input.description]
+  );
 }
 
 export async function updateStore(db: D1Database, id: number, input: StoreInput): Promise<boolean> {
-  const res = await db
-    .prepare(
-      `UPDATE stores
-       SET name = ?, slug = ?, logo_url = ?, website_url = ?, description = ?
-       WHERE id = ?`
-    )
-    .bind(input.name, input.slug, input.logo_url, input.website_url, input.description, id)
-    .run();
-  await invalidateCouponCache();
-  return (res.meta.changes ?? 0) > 0;
+  return runUpdate(
+    db,
+    `UPDATE stores SET name = ?, slug = ?, logo_url = ?, website_url = ?, description = ? WHERE id = ?`,
+    [input.name, input.slug, input.logo_url, input.website_url, input.description, id]
+  );
 }
 
 export async function deleteStore(db: D1Database, id: number): Promise<boolean> {
-  const res = await db.prepare(`DELETE FROM stores WHERE id = ?`).bind(id).run();
-  await invalidateCouponCache();
-  return (res.meta.changes ?? 0) > 0;
+  return runUpdate(db, `DELETE FROM stores WHERE id = ?`, [id]);
 }
+
+// ========================
+// Stats & Aggregations
+// ========================
 
 export async function getAdminStats(db: D1Database): Promise<AdminStats> {
   const today = getTodayIsoDate();
   const [couponStats, storeCount, categoryCount] = await Promise.all([
-    db
-      .prepare(
-        `SELECT
-          COUNT(*) AS total,
-          SUM(CASE WHEN is_active = 1 AND expiry_date >= ? THEN 1 ELSE 0 END) AS active,
-          SUM(CASE WHEN is_active = 0 AND user_id IS NOT NULL THEN 1 ELSE 0 END) AS pending,
-          SUM(CASE WHEN expiry_date < ? THEN 1 ELSE 0 END) AS expired,
-          SUM(CASE WHEN is_active = 0 THEN 1 ELSE 0 END) AS inactive,
-          COALESCE(SUM(click_count), 0) AS clicks
-        FROM coupons`
-      )
-      .bind(today, today)
-      .first<{
-        total: number;
-        active: number;
-        pending: number;
-        expired: number;
-        inactive: number;
-        clicks: number;
-      }>(),
-    db.prepare(`SELECT COUNT(*) AS count FROM stores`).first<{ count: number }>(),
-    db.prepare(`SELECT COUNT(*) AS count FROM categories`).first<{ count: number }>(),
+    queryFirst<{
+      total: number;
+      active: number;
+      pending: number;
+      expired: number;
+      inactive: number;
+      clicks: number;
+    }>(
+      db,
+      `SELECT
+        COUNT(*) AS total,
+        SUM(CASE WHEN is_active = 1 AND expiry_date >= ? THEN 1 ELSE 0 END) AS active,
+        SUM(CASE WHEN is_active = 0 AND user_id IS NOT NULL THEN 1 ELSE 0 END) AS pending,
+        SUM(CASE WHEN expiry_date < ? THEN 1 ELSE 0 END) AS expired,
+        SUM(CASE WHEN is_active = 0 THEN 1 ELSE 0 END) AS inactive,
+        COALESCE(SUM(click_count), 0) AS clicks
+      FROM coupons`,
+      [today, today]
+    ),
+    queryFirst<{ count: number }>(db, `SELECT COUNT(*) AS count FROM stores`),
+    queryFirst<{ count: number }>(db, `SELECT COUNT(*) AS count FROM categories`),
   ]);
 
   return {
@@ -476,38 +391,30 @@ export async function getAdminStats(db: D1Database): Promise<AdminStats> {
 // ========================
 
 export async function getUserByEmail(db: D1Database, email: string): Promise<User | null> {
-  const row = await db
-    .prepare("SELECT * FROM users WHERE LOWER(email) = ? LIMIT 1")
-    .bind(email.trim().toLowerCase())
-    .first<User>();
-  return row ?? null;
+  return queryFirst<User>(db, "SELECT * FROM users WHERE LOWER(email) = ? LIMIT 1", [
+    email.trim().toLowerCase(),
+  ]);
 }
 
 export async function getUserById(db: D1Database, id: number): Promise<User | null> {
-  const row = await db
-    .prepare("SELECT id, name, email, role, created_at FROM users WHERE id = ? LIMIT 1")
-    .bind(id)
-    .first<User>();
-  return row ?? null;
+  return queryFirst<User>(db, "SELECT id, name, email, role, created_at FROM users WHERE id = ? LIMIT 1", [id]);
 }
 
 export async function createUser(
   db: D1Database,
   input: { name: string; email: string; password_hash: string; password_salt: string; role?: string }
 ): Promise<number> {
-  const res = await db
-    .prepare(
-      "INSERT INTO users (name, email, password_hash, password_salt, role) VALUES (?, ?, ?, ?, ?)"
-    )
-    .bind(
+  return runInsert(
+    db,
+    "INSERT INTO users (name, email, password_hash, password_salt, role) VALUES (?, ?, ?, ?, ?)",
+    [
       input.name,
       input.email.trim().toLowerCase(),
       input.password_hash,
       input.password_salt,
-      input.role || "user"
-    )
-    .run();
-  return Number(res.meta.last_row_id);
+      input.role || "user",
+    ]
+  );
 }
 
 export async function getUserStats(
@@ -521,24 +428,23 @@ export async function getUserStats(
   totalWorkedVotes: number;
 }> {
   const today = getTodayIsoDate();
-  const row = await db
-    .prepare(
-      `SELECT
-        COUNT(*) AS totalCoupons,
-        SUM(CASE WHEN is_active = 1 AND expiry_date >= ? THEN 1 ELSE 0 END) AS activeCoupons,
-        SUM(CASE WHEN is_active = 0 THEN 1 ELSE 0 END) AS pendingCoupons,
-        COALESCE(SUM(click_count), 0) AS totalClicks,
-        COALESCE(SUM(worked_count), 0) AS totalWorkedVotes
-      FROM coupons WHERE user_id = ?`
-    )
-    .bind(today, userId)
-    .first<{
-      totalCoupons: number;
-      activeCoupons: number;
-      pendingCoupons: number;
-      totalClicks: number;
-      totalWorkedVotes: number;
-    }>();
+  const row = await queryFirst<{
+    totalCoupons: number;
+    activeCoupons: number;
+    pendingCoupons: number;
+    totalClicks: number;
+    totalWorkedVotes: number;
+  }>(
+    db,
+    `SELECT
+      COUNT(*) AS totalCoupons,
+      SUM(CASE WHEN is_active = 1 AND expiry_date >= ? THEN 1 ELSE 0 END) AS activeCoupons,
+      SUM(CASE WHEN is_active = 0 THEN 1 ELSE 0 END) AS pendingCoupons,
+      COALESCE(SUM(click_count), 0) AS totalClicks,
+      COALESCE(SUM(worked_count), 0) AS totalWorkedVotes
+    FROM coupons WHERE user_id = ?`,
+    [today, userId]
+  );
 
   return {
     totalCoupons: row?.totalCoupons ?? 0,

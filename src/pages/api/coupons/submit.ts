@@ -3,28 +3,16 @@ import { getDb } from "../../../lib/cloudflare";
 import { createCoupon } from "../../../lib/db";
 import { getAuthenticatedUser } from "../../../lib/auth";
 import { validateCouponInput } from "../../../lib/validation";
+import { jsonError, jsonResponse, parseBody } from "../../../lib/api";
 
 export const POST: APIRoute = async ({ request, locals }) => {
   try {
     const user = locals.user ?? (await getAuthenticatedUser(request));
-
     if (!user) {
-      return Response.json(
-        { error: "You must be signed in to submit a coupon." },
-        { status: 401 }
-      );
+      return jsonError("You must be signed in to submit a coupon.", 401);
     }
 
-    const contentType = request.headers.get("content-type") ?? "";
-    let body: Record<string, unknown> = {};
-
-    if (contentType.includes("application/json")) {
-      body = (await request.json()) as Record<string, unknown>;
-    } else {
-      const form = await request.formData();
-      body = Object.fromEntries(form.entries());
-    }
-
+    const body = await parseBody(request);
     const validation = validateCouponInput({
       ...body,
       user_id: user.id,
@@ -32,22 +20,13 @@ export const POST: APIRoute = async ({ request, locals }) => {
     });
 
     if (!validation.ok || !validation.data) {
-      return Response.json(
-        { error: validation.errors[0], errors: validation.errors },
-        { status: 400 }
-      );
+      return jsonError(validation.errors[0], 400, { errors: validation.errors });
     }
 
     const id = await createCoupon(getDb(), validation.data);
-    return Response.json(
-      { ok: true, id, status: "pending_verification" },
-      { status: 201 }
-    );
+    return jsonResponse({ ok: true, id, status: "pending_verification" }, 201);
   } catch (error) {
     console.error("POST /api/coupons/submit error:", error);
-    return Response.json(
-      { error: "Failed to submit coupon. Please check that store and category are valid." },
-      { status: 500 }
-    );
+    return jsonError("Failed to submit coupon. Please check that store and category are valid.", 500);
   }
 };
