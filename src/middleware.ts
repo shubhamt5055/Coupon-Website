@@ -26,12 +26,9 @@ export const onRequest = defineMiddleware(async (context, next) => {
   if (isProtectedUserPage || isProtectedUserApi) {
     if (!userSession) {
       if (isProtectedUserApi) {
-        return new Response(
-          JSON.stringify({ error: "Unauthorized. Please sign in to submit a coupon." }),
-          {
-            status: 401,
-            headers: { "Content-Type": "application/json" },
-          }
+        return Response.json(
+          { error: "Unauthorized. Please sign in to submit a coupon." },
+          { status: 401 }
         );
       }
       const nextPath = encodeURIComponent(`${pathname}${search}`);
@@ -51,12 +48,9 @@ export const onRequest = defineMiddleware(async (context, next) => {
 
     if (!session.authenticated) {
       if (isAdminApi) {
-        return new Response(
-          JSON.stringify({ error: "Unauthorized. Admin login required." }),
-          {
-            status: 401,
-            headers: { "Content-Type": "application/json" },
-          }
+        return Response.json(
+          { error: "Unauthorized. Admin login required." },
+          { status: 401 }
         );
       }
 

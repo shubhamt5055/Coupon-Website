@@ -100,9 +100,18 @@ const adminUser = Astro.locals.adminUser ?? "admin";
       const id = btn.dataset.deleteCat;
       const name = btn.dataset.catName || "this category";
       if (!confirm(`Delete "${name}" AND all coupons under it?`)) return;
-      const res = await fetch(`/api/admin/categories/${id}`, { method: "DELETE" });
-      if (res.ok) {
-        document.querySelector(`[data-cat-card="${id}"]`)?.remove();
+      btn.disabled = true;
+      try {
+        const res = await fetch(`/api/admin/categories/${id}`, { method: "DELETE" });
+        if (res.ok) {
+          document.querySelector(`[data-cat-card="${id}"]`)?.remove();
+        } else {
+          alert("Failed to delete category.");
+        }
+      } catch {
+        alert("Network error. Please try again.");
+      } finally {
+        btn.disabled = false;
       }
     });
   });

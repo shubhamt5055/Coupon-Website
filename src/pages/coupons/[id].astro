@@ -1,16 +1,14 @@
 ---
 import MainLayout from "../../layouts/MainLayout.astro";
 import CouponCard from "../../components/CouponCard.astro";
+import StoreLogo from "../../components/StoreLogo.astro";
 import { getDb } from "../../lib/cloudflare";
 import { getCouponById, getRelatedCoupons } from "../../lib/db";
 import {
   formatDisplayDate,
   getDaysUntilExpiry,
-  getStoreColorClass,
-  getStoreInitials,
   isCouponExpired,
   safeExternalUrl,
-  safeImageUrl,
 } from "../../lib/format";
 
 const id = Number(Astro.params.id);
@@ -32,7 +30,6 @@ const related = coupon
 const expired = coupon ? isCouponExpired(coupon.expiry_date) : false;
 const daysLeft = coupon ? getDaysUntilExpiry(coupon.expiry_date) : null;
 const storeUrl = coupon ? safeExternalUrl(coupon.affiliate_or_store_url) : "#";
-const logo = coupon ? safeImageUrl(coupon.store_logo_url) : "";
 const totalVotes = coupon ? coupon.worked_count + coupon.didnt_work_count : 0;
 const successRate =
   coupon && totalVotes > 0 ? Math.round((coupon.worked_count / totalVotes) * 100) : null;
@@ -82,22 +79,7 @@ const successRate =
             <div class="flex-1">
               <div class="mb-4 flex flex-wrap items-center gap-3">
                 <a href={`/stores/${coupon.store_slug}`} class="flex items-center gap-3">
-                  {logo ? (
-                    <img
-                      src={logo}
-                      alt={`${coupon.store_name} logo`}
-                      class="h-12 w-12 rounded-xl border border-slate-200 bg-white object-contain p-1"
-                    />
-                  ) : (
-                    <div
-                      class:list={[
-                        "flex h-12 w-12 items-center justify-center rounded-xl text-sm font-extrabold text-white",
-                        getStoreColorClass(coupon.store_name),
-                      ]}
-                    >
-                      {getStoreInitials(coupon.store_name)}
-                    </div>
-                  )}
+                  <StoreLogo store={{ name: coupon.store_name, slug: coupon.store_slug, logo_url: coupon.store_logo_url }} size="md" />
                   <div>
                     <p class="text-sm font-bold text-slate-900">{coupon.store_name}</p>
                     <p class="text-xs text-slate-500">
@@ -302,6 +284,11 @@ const successRate =
               statusMsg.textContent = "Thanks for voting! Your feedback has been saved.";
               statusMsg.classList.remove("hidden");
             }
+          }
+        } catch {
+          if (statusMsg) {
+            statusMsg.textContent = "Network error. Please try again.";
+            statusMsg.classList.remove("hidden");
           }
         } finally {
           btn.disabled = false;
