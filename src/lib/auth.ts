@@ -151,7 +151,7 @@ export async function createSessionToken(username: string): Promise<string> {
 }
 
 export async function verifySessionToken(token: string | undefined): Promise<{ valid: boolean; username?: string }> {
-  const res = await verifySignedToken<{ sub?: string }>(token, getAuthConfig().secret);
+  const res = await verifySignedToken<{ sub?: string }> (token, getAuthConfig().secret);
   return res && res.sub ? { valid: true, username: res.sub } : { valid: false };
 }
 

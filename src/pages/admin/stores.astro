@@ -13,49 +13,49 @@ const adminUser = Astro.locals.adminUser ?? "admin";
   <div class="grid gap-8 lg:grid-cols-3">
     <!-- Add Store Form -->
     <div class="lg:col-span-1">
-      <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs dark:border-slate-800 dark:bg-slate-900">
-        <h1 class="text-lg font-extrabold text-slate-900 dark:text-white">Add New Store</h1>
-        <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">
+      <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs">
+        <h1 class="text-lg font-black text-[#064E3B]">Add New Store</h1>
+        <p class="mt-1 text-xs text-slate-500">
           Logo uploads use {r2Enabled ? "Cloudflare R2 bucket" : "inline fallback (enable R2 in wrangler.jsonc for CDN storage)"}.
         </p>
 
-        <div id="store-error" class="mt-4 hidden rounded-xl bg-rose-50 p-3 text-xs font-semibold text-rose-700 dark:bg-rose-950/60 dark:text-rose-300"></div>
+        <div id="store-error" class="mt-4 hidden rounded-xl bg-rose-50 p-3 text-xs font-semibold text-rose-700"></div>
 
         <form id="add-store-form" class="mt-4 space-y-4">
           <div>
-            <label for="store-name" class="mb-1 block text-xs font-bold uppercase text-slate-600 dark:text-slate-300">Store Name *</label>
-            <input id="store-name" name="name" type="text" required placeholder="e.g., Ajio" class="w-full rounded-xl border border-slate-300 bg-slate-50 px-3.5 py-2 text-sm dark:border-slate-700 dark:bg-slate-950" />
+            <label for="store-name" class="mb-1 block text-xs font-bold uppercase text-slate-600">Store Name *</label>
+            <input id="store-name" name="name" type="text" required placeholder="e.g., Ajio" class="w-full rounded-xl border border-slate-300 bg-slate-50 px-3.5 py-2 text-sm outline-none transition focus:border-[#10B981] focus:bg-white focus:ring-4 focus:ring-[#10B981]/15" />
           </div>
 
           <div>
-            <label for="store-slug" class="mb-1 block text-xs font-bold uppercase text-slate-600 dark:text-slate-300">Slug (auto if blank)</label>
-            <input id="store-slug" name="slug" type="text" placeholder="ajio" class="w-full rounded-xl border border-slate-300 bg-slate-50 px-3.5 py-2 text-sm dark:border-slate-700 dark:bg-slate-950" />
+            <label for="store-slug" class="mb-1 block text-xs font-bold uppercase text-slate-600">Slug (auto if blank)</label>
+            <input id="store-slug" name="slug" type="text" placeholder="ajio" class="w-full rounded-xl border border-slate-300 bg-slate-50 px-3.5 py-2 text-sm outline-none transition focus:border-[#10B981] focus:bg-white focus:ring-4 focus:ring-[#10B981]/15" />
           </div>
 
           <div>
-            <label for="store-website" class="mb-1 block text-xs font-bold uppercase text-slate-600 dark:text-slate-300">Website URL *</label>
-            <input id="store-website" name="website_url" type="url" required placeholder="https://www.ajio.com" class="w-full rounded-xl border border-slate-300 bg-slate-50 px-3.5 py-2 text-sm dark:border-slate-700 dark:bg-slate-950" />
+            <label for="store-website" class="mb-1 block text-xs font-bold uppercase text-slate-600">Website URL *</label>
+            <input id="store-website" name="website_url" type="url" required placeholder="https://www.ajio.com" class="w-full rounded-xl border border-slate-300 bg-slate-50 px-3.5 py-2 text-sm outline-none transition focus:border-[#10B981] focus:bg-white focus:ring-4 focus:ring-[#10B981]/15" />
           </div>
 
           <div>
-            <label for="logo-file" class="mb-1 block text-xs font-bold uppercase text-slate-600 dark:text-slate-300">
+            <label for="logo-file" class="mb-1 block text-xs font-bold uppercase text-slate-600">
               Upload Logo (R2 / Image)
             </label>
-            <input id="logo-file" type="file" accept="image/png,image/jpeg,image/webp,image/svg+xml" class="block w-full text-xs text-slate-500 file:mr-3 file:rounded-lg file:border-0 file:bg-indigo-50 file:px-3 file:py-1.5 file:font-semibold file:text-indigo-700 hover:file:bg-indigo-100 dark:file:bg-indigo-950 dark:file:text-indigo-300" />
+            <input id="logo-file" type="file" accept="image/png,image/jpeg,image/webp,image/svg+xml" class="block w-full text-xs text-slate-500 file:mr-3 file:rounded-lg file:border-0 file:bg-[#ECFDF5] file:px-3 file:py-1.5 file:font-semibold file:text-[#064E3B] hover:file:bg-[#10B981]/20" />
             <p id="upload-status" class="mt-1 text-[11px] text-slate-500"></p>
           </div>
 
           <div>
-            <label for="store-logo-url" class="mb-1 block text-xs font-bold uppercase text-slate-600 dark:text-slate-300">Or Logo URL</label>
-            <input id="store-logo-url" name="logo_url" type="text" placeholder="https://... or auto-filled after upload" class="w-full rounded-xl border border-slate-300 bg-slate-50 px-3.5 py-2 text-sm dark:border-slate-700 dark:bg-slate-950" />
+            <label for="store-logo-url" class="mb-1 block text-xs font-bold uppercase text-slate-600">Or Logo URL</label>
+            <input id="store-logo-url" name="logo_url" type="text" placeholder="https://... or auto-filled after upload" class="w-full rounded-xl border border-slate-300 bg-slate-50 px-3.5 py-2 text-sm outline-none transition focus:border-[#10B981] focus:bg-white focus:ring-4 focus:ring-[#10B981]/15" />
           </div>
 
           <div>
-            <label for="store-desc" class="mb-1 block text-xs font-bold uppercase text-slate-600 dark:text-slate-300">Short Description</label>
-            <textarea id="store-desc" name="description" rows="2" placeholder="What does this store sell?" class="w-full rounded-xl border border-slate-300 bg-slate-50 px-3.5 py-2 text-sm dark:border-slate-700 dark:bg-slate-950"></textarea>
+            <label for="store-desc" class="mb-1 block text-xs font-bold uppercase text-slate-600">Short Description</label>
+            <textarea id="store-desc" name="description" rows="2" placeholder="What does this store sell?" class="w-full rounded-xl border border-slate-300 bg-slate-50 px-3.5 py-2 text-sm outline-none transition focus:border-[#10B981] focus:bg-white focus:ring-4 focus:ring-[#10B981]/15"></textarea>
           </div>
 
-          <button type="submit" class="w-full rounded-xl bg-indigo-600 py-2.5 text-sm font-bold text-white hover:bg-indigo-700">
+          <button type="submit" class="w-full rounded-xl bg-[#064E3B] py-2.5 text-sm font-bold text-white shadow-xs transition hover:bg-[#10B981]">
             Add Store
           </button>
         </form>
@@ -64,25 +64,25 @@ const adminUser = Astro.locals.adminUser ?? "admin";
 
     <!-- Stores List -->
     <div class="lg:col-span-2">
-      <h2 class="mb-4 text-lg font-extrabold text-slate-900 dark:text-white">
+      <h2 class="mb-4 text-lg font-black text-[#064E3B]">
         Existing Stores ({stores.length})
       </h2>
       <div class="grid gap-4 sm:grid-cols-2">
         {stores.map((store) => {
           const logo = safeImageUrl(store.logo_url);
           return (
-            <div data-store-card={store.id} class="flex items-start justify-between gap-3 rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
+            <div data-store-card={store.id} class="flex items-start justify-between gap-3 rounded-2xl border border-slate-200 bg-white p-4">
               <div class="flex min-w-0 items-center gap-3">
                 {logo ? (
-                  <img src={logo} alt={store.name} class="h-11 w-11 shrink-0 rounded-xl border border-slate-200 bg-white object-contain p-1 dark:border-slate-700" />
+                  <img src={logo} alt={store.name} class="h-11 w-11 shrink-0 rounded-xl border border-slate-200 bg-white object-contain p-1" />
                 ) : (
                   <div class:list={["flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-xs font-extrabold text-white", getStoreColorClass(store.name)]}>
                     {getStoreInitials(store.name)}
                   </div>
                 )}
                 <div class="min-w-0">
-                  <p class="truncate font-bold text-slate-900 dark:text-white">{store.name}</p>
-                  <p class="truncate text-xs text-slate-500 dark:text-slate-400">
+                  <p class="truncate font-bold text-slate-900">{store.name}</p>
+                  <p class="truncate text-xs text-slate-500">
                     /{store.slug} · {store.total_coupon_count ?? 0} coupons
                   </p>
                 </div>
@@ -91,7 +91,7 @@ const adminUser = Astro.locals.adminUser ?? "admin";
                 type="button"
                 data-delete-store={store.id}
                 data-store-name={store.name}
-                class="shrink-0 rounded-lg border border-rose-200 px-2.5 py-1 text-xs font-semibold text-rose-600 hover:bg-rose-50 dark:border-rose-900 dark:text-rose-400"
+                class="shrink-0 rounded-lg border border-rose-200 px-2.5 py-1 text-xs font-semibold text-rose-600 hover:bg-rose-50"
               >
                 Delete
               </button>

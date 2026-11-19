@@ -85,14 +85,12 @@ export function safeImageUrl(url: string | null | undefined): string {
 }
 
 const STORE_COLORS = [
-  "bg-indigo-600",
-  "bg-blue-600",
-  "bg-emerald-600",
-  "bg-orange-500",
-  "bg-rose-600",
-  "bg-violet-600",
-  "bg-teal-600",
-  "bg-amber-600",
+  "bg-[#064E3B]",
+  "bg-[#10B981]",
+  "bg-[#047857]",
+  "bg-[#065F46]",
+  "bg-[#059669]",
+  "bg-[#0f766e]",
 ];
 
 export function getStoreColorClass(name: string): string {

@@ -16,11 +16,11 @@ const totalDeals = stores.reduce((sum, s) => sum + (s.active_coupon_count ?? 0),
   <section class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
     <!-- Header Banner -->
     <div class="mb-10 text-center sm:text-left">
-      <div class="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3.5 py-1 text-xs font-bold text-emerald-900 shadow-2xs">
-        <span class="h-2 w-2 rounded-full bg-emerald-500 animate-soft-pulse"></span>
+      <div class="inline-flex items-center gap-2 rounded-full border border-[#10B981]/30 bg-[#ECFDF5] px-3.5 py-1 text-xs font-bold text-[#064E3B] shadow-2xs">
+        <span class="h-2 w-2 rounded-full bg-[#10B981] animate-soft-pulse"></span>
         <span>{stores.length} Partner Stores · {totalDeals} Verified Deals Active</span>
       </div>
-      <h1 class="mt-3 text-3xl font-black tracking-tight text-slate-900 sm:text-4xl">
+      <h1 class="mt-3 text-3xl font-black tracking-tight text-[#064E3B] sm:text-4xl">
         All Partner Stores &amp; Brands
       </h1>
       <p class="mt-2 max-w-2xl text-sm leading-relaxed text-slate-500">
@@ -34,7 +34,7 @@ const totalDeals = stores.reduce((sum, s) => sum + (s.active_coupon_count ?? 0),
             type="text"
             id="store-search-input"
             placeholder="Search stores (e.g., Amazon, Swiggy, Myntra)..."
-            class="w-full rounded-2xl border border-slate-200 bg-white py-3 pr-4 pl-11 text-sm font-semibold text-slate-800 shadow-xs outline-none transition placeholder:text-slate-400 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10"
+            class="w-full rounded-2xl border border-slate-200 bg-white py-3 pr-4 pl-11 text-sm font-semibold text-slate-800 shadow-xs outline-none transition placeholder:text-slate-400 focus:border-[#10B981] focus:ring-4 focus:ring-[#10B981]/15"
           />
           <svg class="absolute top-3.5 left-4 h-4 w-4 text-slate-400" viewBox="0 0 20 20" fill="currentColor">
             <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"/>

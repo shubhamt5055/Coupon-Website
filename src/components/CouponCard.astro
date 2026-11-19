@@ -27,10 +27,10 @@ const successRate =
 
 <article
   class:list={[
-    "group relative flex flex-col justify-between rounded-3xl border bg-white p-5.5 shadow-xs transition-all duration-200 hover:-translate-y-1 hover:shadow-xl",
+    "group relative flex flex-col justify-between rounded-3xl border bg-white p-5.5 shadow-2xs transition-all duration-200 hover:-translate-y-1 hover:shadow-xl",
     expired
       ? "border-slate-200/70 opacity-70 grayscale-[35%]"
-      : "border-slate-200/90 hover:border-emerald-400 hover:shadow-emerald-950/5",
+      : "border-slate-200/90 hover:border-[#10B981] hover:shadow-[#064E3B]/10",
   ]}
 >
   <div>
@@ -44,7 +44,7 @@ const successRate =
           <StoreLogo store={{ name: coupon.store_name, slug: coupon.store_slug, logo_url: coupon.store_logo_url }} size="sm" />
         </div>
         <div class="min-w-0">
-          <p class="truncate text-sm font-extrabold text-slate-900 group-hover:text-emerald-700 transition">
+          <p class="truncate text-sm font-extrabold text-[#064E3B] group-hover:text-[#10B981] transition">
             {coupon.store_name}
           </p>
           <span class="inline-flex items-center gap-1 text-[11px] font-semibold text-slate-500">
@@ -57,10 +57,10 @@ const successRate =
       <!-- Discount Tag -->
       <span
         class:list={[
-          "shrink-0 rounded-xl px-3 py-1.5 text-xs font-black tracking-tight uppercase shadow-xs",
+          "shrink-0 rounded-xl px-3 py-1.5 text-xs font-black tracking-tight uppercase shadow-2xs",
           expired
             ? "bg-slate-100 text-slate-500 ring-1 ring-slate-200"
-            : "bg-emerald-50 text-emerald-800 ring-1 ring-emerald-600/20",
+            : "bg-[#ECFDF5] text-[#064E3B] ring-1 ring-[#10B981]/40",
         ]}
       >
         {expired ? "EXPIRED" : coupon.discount_text}
@@ -76,8 +76,8 @@ const successRate =
         </span>
       )}
       {!expired && !featuredBadge && (
-        <span class="inline-flex items-center gap-1 rounded-lg bg-emerald-50 px-2 py-0.5 text-[11px] font-extrabold text-emerald-700 ring-1 ring-emerald-600/20">
-          <span class="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-soft-pulse"></span>
+        <span class="inline-flex items-center gap-1 rounded-lg bg-[#ECFDF5] px-2 py-0.5 text-[11px] font-extrabold text-[#064E3B] ring-1 ring-[#10B981]/30">
+          <span class="h-1.5 w-1.5 rounded-full bg-[#10B981] animate-soft-pulse"></span>
           <span>Staff Verified</span>
         </span>
       )}
@@ -96,7 +96,7 @@ const successRate =
     </div>
 
     <!-- Title & Description -->
-    <h3 class="text-base font-extrabold leading-snug tracking-tight text-slate-900 group-hover:text-emerald-800 transition">
+    <h3 class="text-base font-extrabold leading-snug tracking-tight text-slate-900 group-hover:text-[#064E3B] transition">
       <a href={`/coupons/${coupon.id}`}>
         {coupon.title}
       </a>
@@ -135,13 +135,13 @@ const successRate =
         </span>
       </div>
     ) : (
-      <div class="flex items-center justify-between gap-2 rounded-2xl border border-slate-200 bg-slate-50/90 p-1.5 pl-4 shadow-2xs transition group-hover:border-emerald-300">
+      <div class="flex items-center justify-between gap-2 rounded-2xl border border-[#10B981]/30 bg-[#ECFDF5]/50 p-1.5 pl-4 shadow-2xs transition group-hover:border-[#10B981]">
         <div class="flex items-center gap-1.5 font-mono text-xs font-black tracking-wider text-slate-700">
-          <svg class="h-3.5 w-3.5 text-emerald-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <svg class="h-3.5 w-3.5 text-[#10B981]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
           </svg>
           <span
-            class="coupon-code-display"
+            class="coupon-code-display font-black text-[#064E3B]"
             data-coupon-code-text={coupon.id}
           >
             {masked}
@@ -149,7 +149,7 @@ const successRate =
         </div>
         <button
           type="button"
-          class="reveal-coupon-btn inline-flex items-center gap-1.5 rounded-xl bg-emerald-600 px-4 py-2.5 text-xs font-black text-white shadow-sm transition hover:bg-emerald-700 active:scale-95"
+          class="reveal-coupon-btn inline-flex items-center gap-1.5 rounded-xl bg-[#064E3B] px-4 py-2.5 text-xs font-black text-white shadow-sm transition hover:bg-[#10B981] active:scale-95"
           data-coupon-id={coupon.id}
           data-coupon-code={coupon.code}
           data-coupon-title={coupon.title}
@@ -172,7 +172,7 @@ const successRate =
       </div>
       <a
         href={`/coupons/${coupon.id}`}
-        class="font-bold text-slate-600 hover:text-emerald-700 hover:underline"
+        class="font-black text-[#064E3B] hover:text-[#10B981] hover:underline"
       >
         View Deal →
       </a>

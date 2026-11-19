@@ -1,5 +1,11 @@
 @import "tailwindcss";
 
+@theme {
+  --color-brand-dark: #064E3B;
+  --color-brand-primary: #10B981;
+  --color-brand-light: #ECFDF5;
+}
+
 @layer base {
   html {
     scroll-behavior: smooth;
@@ -8,10 +14,15 @@
 
   body {
     margin: 0;
-    background-color: #fafaf9;
+    background-color: #f8fbf9;
     color: #0f172a;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::selection {
+    background-color: #10b981;
+    color: #ffffff;
   }
 
   button,
@@ -22,7 +33,7 @@
 
 /* Authentic voucher ticket perforation line */
 .ticket-dashed-line {
-  border-bottom: 2px dashed #e2e8f0;
+  border-bottom: 2px dashed #a7f3d0;
 }
 
 /* Ticket cutout punch holes */
@@ -32,7 +43,7 @@
   top: 50%;
   width: 14px;
   height: 14px;
-  background-color: #fafaf9;
+  background-color: #f8fbf9;
   border-radius: 9999px;
   transform: translateY(-50%);
   z-index: 10;
@@ -40,12 +51,12 @@
 
 .ticket-notch-left {
   left: -7px;
-  border-right: 1px solid #cbd5e1;
+  border-right: 1px solid #6ee7b7;
 }
 
 .ticket-notch-right {
   right: -7px;
-  border-left: 1px solid #cbd5e1;
+  border-left: 1px solid #6ee7b7;
 }
 
 /* Subtle pulse glow for live verified badges */
