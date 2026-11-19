@@ -45,29 +45,6 @@
   border-bottom: 2px dashed rgba(255, 122, 24, 0.35);
 }
 
-/* Couponly Ticket cutout punch holes */
-.ticket-notch-left,
-.ticket-notch-right {
-  position: absolute;
-  top: 50%;
-  width: 14px;
-  height: 14px;
-  background-color: #F8FAFC;
-  border-radius: 9999px;
-  transform: translateY(-50%);
-  z-index: 10;
-}
-
-.ticket-notch-left {
-  left: -7px;
-  border-right: 1.5px solid rgba(255, 122, 24, 0.4);
-}
-
-.ticket-notch-right {
-  right: -7px;
-  border-left: 1.5px solid rgba(255, 122, 24, 0.4);
-}
-
 /* Subtle pulse glow for live verified badges */
 @keyframes soft-pulse {
   0%, 100% { opacity: 1; transform: scale(1); }

@@ -3,7 +3,6 @@ import MainLayout from "../../layouts/MainLayout.astro";
 import CouponCard from "../../components/CouponCard.astro";
 import { getDb } from "../../lib/cloudflare";
 import { getCategoryBySlug, getCoupons } from "../../lib/db";
-import { getCategoryTheme } from "../../lib/format";
 
 const slug = Astro.params.slug ?? "";
 const includeExpired = Astro.url.searchParams.get("includeExpired") === "1";
@@ -23,8 +22,6 @@ const coupons = category
       sort: "popular",
     })
   : [];
-
-const theme = category ? getCategoryTheme(category.slug || category.name) : null;
 ---
 
 <MainLayout

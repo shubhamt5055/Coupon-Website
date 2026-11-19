@@ -4,10 +4,7 @@ import CouponCard from "../../components/CouponCard.astro";
 import StoreLogo from "../../components/StoreLogo.astro";
 import { getDb } from "../../lib/cloudflare";
 import { getCoupons, getStoreBySlug } from "../../lib/db";
-import {
-  getStoreBrandTheme,
-  safeExternalUrl,
-} from "../../lib/format";
+import { safeExternalUrl } from "../../lib/format";
 
 const slug = Astro.params.slug ?? "";
 const includeExpired = Astro.url.searchParams.get("includeExpired") === "1";
@@ -29,7 +26,6 @@ const coupons = store
   : [];
 
 const websiteUrl = store ? safeExternalUrl(store.website_url) : "#";
-const theme = store ? getStoreBrandTheme(store.slug || store.name) : null;
 ---
 
 <MainLayout
@@ -79,7 +75,7 @@ const theme = store ? getStoreBrandTheme(store.slug || store.name) : null;
               </h1>
 
               <p class="mt-1.5 max-w-2xl text-xs font-medium leading-relaxed text-slate-600 sm:text-sm">
-                {store.description || theme?.brandTagline}
+                {store.description || "Verified Online Coupons & Promo Codes"}
               </p>
             </div>
           </div>
