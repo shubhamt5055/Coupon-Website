@@ -11,23 +11,23 @@ const adminUser = Astro.locals.adminUser ?? "admin";
   <div class="grid gap-8 lg:grid-cols-3">
     <div class="lg:col-span-1">
       <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs">
-        <h1 class="text-lg font-black text-[#064E3B]">Add Category</h1>
+        <h1 class="text-lg font-black text-[#581C87]">Add Category</h1>
         <div id="cat-error" class="mt-4 hidden rounded-xl bg-rose-50 p-3 text-xs font-semibold text-rose-700"></div>
 
         <form id="add-cat-form" class="mt-4 space-y-4">
           <div>
             <label for="cat-name" class="mb-1 block text-xs font-bold uppercase text-slate-600">Category Name *</label>
-            <input id="cat-name" name="name" type="text" required placeholder="e.g., Gaming" class="w-full rounded-xl border border-slate-300 bg-slate-50 px-3.5 py-2 text-sm outline-none transition focus:border-[#10B981] focus:bg-white focus:ring-4 focus:ring-[#10B981]/15" />
+            <input id="cat-name" name="name" type="text" required placeholder="e.g., Gaming" class="w-full rounded-xl border border-slate-300 bg-slate-50 px-3.5 py-2 text-sm outline-none transition focus:border-[#9333EA] focus:bg-white focus:ring-4 focus:ring-[#9333EA]/15" />
           </div>
           <div>
             <label for="cat-slug" class="mb-1 block text-xs font-bold uppercase text-slate-600">Slug (auto if blank)</label>
-            <input id="cat-slug" name="slug" type="text" placeholder="gaming" class="w-full rounded-xl border border-slate-300 bg-slate-50 px-3.5 py-2 text-sm outline-none transition focus:border-[#10B981] focus:bg-white focus:ring-4 focus:ring-[#10B981]/15" />
+            <input id="cat-slug" name="slug" type="text" placeholder="gaming" class="w-full rounded-xl border border-slate-300 bg-slate-50 px-3.5 py-2 text-sm outline-none transition focus:border-[#9333EA] focus:bg-white focus:ring-4 focus:ring-[#9333EA]/15" />
           </div>
           <div>
             <label for="cat-icon" class="mb-1 block text-xs font-bold uppercase text-slate-600">Icon Emoji</label>
-            <input id="cat-icon" name="icon" type="text" value="🏷️" class="w-full rounded-xl border border-slate-300 bg-slate-50 px-3.5 py-2 text-sm outline-none transition focus:border-[#10B981] focus:bg-white focus:ring-4 focus:ring-[#10B981]/15" />
+            <input id="cat-icon" name="icon" type="text" value="🏷️" class="w-full rounded-xl border border-slate-300 bg-slate-50 px-3.5 py-2 text-sm outline-none transition focus:border-[#9333EA] focus:bg-white focus:ring-4 focus:ring-[#9333EA]/15" />
           </div>
-          <button type="submit" class="w-full rounded-xl bg-[#064E3B] py-2.5 text-sm font-bold text-white shadow-xs transition hover:bg-[#10B981]">
+          <button type="submit" class="w-full rounded-xl bg-gradient-to-r from-[#581C87] via-[#9333EA] to-[#EC4899] py-2.5 text-sm font-bold text-white shadow-xs transition hover:opacity-95">
             Add Category
           </button>
         </form>
@@ -35,14 +35,14 @@ const adminUser = Astro.locals.adminUser ?? "admin";
     </div>
 
     <div class="lg:col-span-2">
-      <h2 class="mb-4 text-lg font-black text-[#064E3B]">
+      <h2 class="mb-4 text-lg font-black text-[#581C87]">
         Existing Categories ({categories.length})
       </h2>
       <div class="grid gap-4 sm:grid-cols-2">
         {categories.map((cat) => (
           <div data-cat-card={cat.id} class="flex items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white p-4">
             <div class="flex items-center gap-3">
-              <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-[#ECFDF5] border border-[#10B981]/25 text-xl">
+              <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-purple-50 border border-[#9333EA]/25 text-xl">
                 {cat.icon || "🏷️"}
               </span>
               <div>

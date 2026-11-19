@@ -85,12 +85,12 @@ export function safeImageUrl(url: string | null | undefined): string {
 }
 
 const STORE_COLORS = [
-  "bg-[#064E3B]",
-  "bg-[#10B981]",
-  "bg-[#047857]",
-  "bg-[#065F46]",
-  "bg-[#059669]",
-  "bg-[#0f766e]",
+  "bg-[#581C87]",
+  "bg-[#9333EA]",
+  "bg-[#EC4899]",
+  "bg-[#14B8A6]",
+  "bg-[#38BDF8]",
+  "bg-[#7C3AED]",
 ];
 
 export function getStoreColorClass(name: string): string {
@@ -200,12 +200,12 @@ export function getStoreBrandTheme(slugOrName: string): StoreBrandTheme {
     };
   }
   return {
-    bgGradient: "from-slate-100/50 via-slate-50/20 to-white",
-    badgeColor: "bg-emerald-50 text-emerald-900 border-emerald-200/90",
-    accentText: "group-hover:text-emerald-700",
-    borderHover: "hover:border-emerald-400 hover:shadow-emerald-950/5",
+    bgGradient: "from-purple-500/10 via-pink-500/5 to-white",
+    badgeColor: "bg-purple-50 text-[#581C87] border-[#9333EA]/30",
+    accentText: "group-hover:text-[#9333EA]",
+    borderHover: "hover:border-[#9333EA] hover:shadow-purple-950/5",
     brandTagline: "Verified Online Coupons & Promo Codes",
-    brandColorHex: "#059669",
+    brandColorHex: "#9333EA",
   };
 }
 
@@ -274,10 +274,10 @@ export function getCategoryTheme(slugOrName: string): CategoryTheme {
     };
   }
   return {
-    bgGradient: "from-emerald-500/10 via-slate-500/5 to-white",
-    iconBg: "bg-slate-100 text-slate-800 group-hover:bg-emerald-600 group-hover:text-white",
-    badgeBg: "bg-slate-50 text-slate-700 border-slate-200/80 group-hover:bg-emerald-50 group-hover:text-emerald-800",
-    hoverBorder: "hover:border-emerald-400 hover:shadow-emerald-950/5",
-    textColor: "group-hover:text-emerald-800",
+    bgGradient: "from-purple-500/10 via-pink-500/5 to-white",
+    iconBg: "bg-purple-50 text-[#581C87] group-hover:bg-[#9333EA] group-hover:text-white",
+    badgeBg: "bg-purple-50 text-[#581C87] border-[#9333EA]/30 group-hover:bg-purple-100",
+    hoverBorder: "hover:border-[#9333EA] hover:shadow-purple-950/5",
+    textColor: "group-hover:text-[#9333EA]",
   };
 }
