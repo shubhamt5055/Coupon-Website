@@ -33,14 +33,14 @@ const theme = store ? getStoreBrandTheme(store.slug || store.name) : null;
 ---
 
 <MainLayout
-  title={store ? `${store.name} Coupon Codes & Verified Promo Codes — CouponHub` : "Store Not Found | CouponHub"}
+  title={store ? `${store.name} Coupon Codes & Verified Promo Codes — Couponly` : "Store Not Found | Couponly"}
   description={store ? `Verified ${store.name} promo codes and discount offers.` : "Store not found."}
 >
   {!store ? (
     <section class="mx-auto max-w-2xl px-4 py-20 text-center">
-      <h1 class="text-3xl font-extrabold text-[#581C87]">Store Not Found</h1>
+      <h1 class="text-3xl font-black text-[#081126]">Store Not Found</h1>
       <p class="mt-2 text-sm text-slate-500">The store you are looking for does not exist or has been removed.</p>
-      <a href="/stores" class="mt-6 inline-block rounded-2xl bg-gradient-to-r from-[#581C87] to-[#9333EA] px-6 py-3 text-sm font-bold text-white shadow-md shadow-[#9333EA]/20 transition hover:opacity-95">
+      <a href="/stores" class="mt-6 inline-block rounded-full bg-[#0499FA] px-7 py-3 text-sm font-black text-white shadow-md shadow-[#0499FA]/20 transition hover:bg-[#0377C4]">
         Browse All Stores
       </a>
     </section>
@@ -48,32 +48,25 @@ const theme = store ? getStoreBrandTheme(store.slug || store.name) : null;
     <section class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
       <!-- Breadcrumbs -->
       <nav class="mb-5 flex items-center gap-2 text-xs font-semibold text-slate-400">
-        <a href="/" class="hover:text-[#9333EA]">Home</a>
+        <a href="/" class="hover:text-[#0499FA] transition">Home</a>
         <span>/</span>
-        <a href="/stores" class="hover:text-[#9333EA]">Stores</a>
+        <a href="/stores" class="hover:text-[#0499FA] transition">Stores</a>
         <span>/</span>
-        <span class="text-slate-800 font-bold">{store.name}</span>
+        <span class="text-[#081126] font-bold">{store.name}</span>
       </nav>
 
       <!-- Store Hero Banner -->
-      <div class="relative mb-10 overflow-hidden rounded-3xl border border-slate-200/90 bg-white p-6 shadow-xs sm:p-8">
-        <div
-          class:list={[
-            "pointer-events-none absolute inset-0 bg-gradient-to-r opacity-50",
-            theme?.bgGradient,
-          ]}
-        ></div>
-
+      <div class="relative mb-10 overflow-hidden rounded-2xl border border-slate-200/90 bg-white p-6 shadow-xs sm:p-8">
         <div class="relative z-10 flex flex-col justify-between gap-6 lg:flex-row lg:items-center">
           <div class="flex items-start gap-4 sm:gap-5">
-            <div class="h-18 w-18 shrink-0 rounded-3xl border border-slate-200/90 bg-white p-2 shadow-xs flex items-center justify-center overflow-hidden">
+            <div class="h-18 w-18 shrink-0 rounded-2xl border border-slate-200/90 bg-white p-2 shadow-xs flex items-center justify-center overflow-hidden">
               <StoreLogo store={store} size="lg" />
             </div>
 
             <div>
               <div class="flex flex-wrap items-center gap-2">
-                <span class="inline-flex items-center gap-1.5 rounded-full border border-[#14B8A6]/40 bg-teal-50 px-2.5 py-0.5 text-[11px] font-black text-[#14B8A6]">
-                  <span class="h-1.5 w-1.5 rounded-full bg-[#14B8A6] animate-soft-pulse"></span>
+                <span class="inline-flex items-center gap-1.5 rounded-full border border-[#0499FA]/20 bg-[#EAF6FE] px-2.5 py-0.5 text-[11px] font-black text-[#0499FA]">
+                  <span class="h-1.5 w-1.5 rounded-full bg-[#0499FA] animate-soft-pulse"></span>
                   <span>Verified Partner</span>
                 </span>
                 <span class="text-xs font-semibold text-slate-400">
@@ -81,7 +74,7 @@ const theme = store ? getStoreBrandTheme(store.slug || store.name) : null;
                 </span>
               </div>
 
-              <h1 class="mt-1.5 text-2xl font-black tracking-tight text-[#581C87] sm:text-4xl">
+              <h1 class="mt-1.5 text-2xl font-black tracking-tight text-[#081126] sm:text-4xl">
                 {store.name} Coupons &amp; Promo Codes
               </h1>
 
@@ -95,7 +88,7 @@ const theme = store ? getStoreBrandTheme(store.slug || store.name) : null;
           <div class="flex flex-wrap items-center gap-3">
             <a
               href={includeExpired ? `/stores/${store.slug}` : `/stores/${store.slug}?includeExpired=1`}
-              class="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-xs font-bold text-slate-700 shadow-2xs transition hover:border-[#9333EA] hover:text-[#581C87]"
+              class="rounded-full border border-slate-200 bg-white px-4 py-2.5 text-xs font-bold text-slate-700 shadow-2xs transition hover:border-[#0499FA] hover:text-[#0499FA]"
             >
               {includeExpired ? "Hide Expired Deals" : "Include Expired Deals"}
             </a>
@@ -104,7 +97,7 @@ const theme = store ? getStoreBrandTheme(store.slug || store.name) : null;
                 href={websiteUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                class="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-[#581C87] via-[#9333EA] to-[#EC4899] px-5 py-2.5 text-xs font-black text-white shadow-md shadow-[#9333EA]/20 transition hover:opacity-95 active:scale-95"
+                class="inline-flex items-center gap-1.5 rounded-full bg-[#FF7A18] px-5 py-2.5 text-xs font-black text-white shadow-md shadow-[#FF7A18]/25 transition hover:bg-[#E6680C] active:scale-95"
               >
                 <span>Visit {store.name}</span>
                 <span>↗</span>
@@ -116,14 +109,14 @@ const theme = store ? getStoreBrandTheme(store.slug || store.name) : null;
 
       <!-- Coupon Grid -->
       {coupons.length === 0 ? (
-        <div class="rounded-3xl border border-dashed border-slate-300 bg-white p-14 text-center shadow-xs">
-          <p class="text-lg font-extrabold text-slate-800">
+        <div class="rounded-2xl border border-dashed border-slate-300 bg-white p-14 text-center shadow-xs">
+          <p class="text-lg font-black text-[#081126]">
             No active coupons for {store.name} right now.
           </p>
           <p class="mt-1 text-xs text-slate-500">
             Check back soon or explore other partner stores.
           </p>
-          <a href="/stores" class="mt-4 inline-block text-xs font-black text-emerald-700 hover:underline">
+          <a href="/stores" class="mt-4 inline-block text-xs font-black text-[#0499FA] hover:underline">
             Explore other partner stores →
           </a>
         </div>

@@ -85,12 +85,12 @@ export function safeImageUrl(url: string | null | undefined): string {
 }
 
 const STORE_COLORS = [
-  "bg-[#581C87]",
-  "bg-[#9333EA]",
-  "bg-[#EC4899]",
-  "bg-[#14B8A6]",
-  "bg-[#38BDF8]",
-  "bg-[#7C3AED]",
+  "bg-[#0499FA]",
+  "bg-[#FF7A18]",
+  "bg-[#081126]",
+  "bg-[#10B981]",
+  "bg-[#3B82F6]",
+  "bg-[#F59E0B]",
 ];
 
 export function getStoreColorClass(name: string): string {
@@ -200,12 +200,12 @@ export function getStoreBrandTheme(slugOrName: string): StoreBrandTheme {
     };
   }
   return {
-    bgGradient: "from-purple-500/10 via-pink-500/5 to-white",
-    badgeColor: "bg-purple-50 text-[#581C87] border-[#9333EA]/30",
-    accentText: "group-hover:text-[#9333EA]",
-    borderHover: "hover:border-[#9333EA] hover:shadow-purple-950/5",
+    bgGradient: "from-[#0499FA]/10 via-[#EAF6FE]/20 to-white",
+    badgeColor: "bg-[#EAF6FE] text-[#0499FA] border-[#0499FA]/20",
+    accentText: "group-hover:text-[#0499FA]",
+    borderHover: "hover:border-[#0499FA] hover:shadow-blue-950/5",
     brandTagline: "Verified Online Coupons & Promo Codes",
-    brandColorHex: "#9333EA",
+    brandColorHex: "#0499FA",
   };
 }
 
@@ -274,10 +274,10 @@ export function getCategoryTheme(slugOrName: string): CategoryTheme {
     };
   }
   return {
-    bgGradient: "from-purple-500/10 via-pink-500/5 to-white",
-    iconBg: "bg-purple-50 text-[#581C87] group-hover:bg-[#9333EA] group-hover:text-white",
-    badgeBg: "bg-purple-50 text-[#581C87] border-[#9333EA]/30 group-hover:bg-purple-100",
-    hoverBorder: "hover:border-[#9333EA] hover:shadow-purple-950/5",
-    textColor: "group-hover:text-[#9333EA]",
+    bgGradient: "from-[#0499FA]/10 via-[#EAF6FE]/20 to-white",
+    iconBg: "bg-[#EAF6FE] text-[#0499FA] group-hover:bg-[#0499FA] group-hover:text-white",
+    badgeBg: "bg-[#EAF6FE] text-[#0499FA] border-[#0499FA]/20 group-hover:bg-blue-100",
+    hoverBorder: "hover:border-[#0499FA] hover:shadow-blue-950/5",
+    textColor: "group-hover:text-[#0499FA]",
   };
 }

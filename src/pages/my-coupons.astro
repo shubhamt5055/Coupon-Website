@@ -26,23 +26,23 @@ const justSubmitted = Boolean(submittedParam);
 ---
 
 <MainLayout
-  title="My Submitted Coupons — CouponHub"
-  description="Manage the coupons and promo codes you have shared on CouponHub."
+  title="My Submitted Coupons — Couponly"
+  description="Manage the coupons and promo codes you have shared on Couponly."
 >
   <div class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
     <!-- Header -->
     <div class="mb-8 flex flex-wrap items-center justify-between gap-4">
       <div>
         <div class="flex items-center gap-3">
-          <span class="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-[#581C87] to-[#9333EA] text-lg font-black text-[#FACC15] shadow-xs">
+          <span class="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#0499FA] text-lg font-black text-white shadow-xs">
             {user.name.charAt(0).toUpperCase()}
           </span>
           <div>
-            <h1 class="text-2xl font-black tracking-tight text-[#581C87] sm:text-3xl">
+            <h1 class="text-2xl font-black tracking-tight text-[#081126] sm:text-3xl">
               My Submitted Coupons
             </h1>
             <p class="text-xs font-medium text-slate-500">
-              Logged in as <strong class="text-slate-800">{user.name}</strong> ({user.email})
+              Logged in as <strong class="text-[#081126]">{user.name}</strong> ({user.email})
             </p>
           </div>
         </div>
@@ -51,7 +51,7 @@ const justSubmitted = Boolean(submittedParam);
       <div class="flex flex-wrap items-center gap-2.5">
         <a
           href="/submit-coupon"
-          class="rounded-xl bg-gradient-to-r from-[#581C87] via-[#9333EA] to-[#EC4899] px-5 py-2.5 text-xs font-black text-white shadow-xs transition hover:opacity-95 active:scale-95"
+          class="rounded-full bg-[#0499FA] px-5 py-2.5 text-xs font-black text-white shadow-xs transition hover:bg-[#0377C4] active:scale-95"
         >
           + Share Another Coupon
         </a>
@@ -60,12 +60,12 @@ const justSubmitted = Boolean(submittedParam);
 
     <!-- Celebration Banner -->
     {justSubmitted && (
-      <div class="mb-8 rounded-2xl border border-[#9333EA]/30 bg-gradient-to-r from-purple-50 via-pink-50/40 to-white p-5 text-[#581C87] shadow-xs">
+      <div class="mb-8 rounded-2xl border border-[#FF7A18]/30 bg-[#FFF9F5] p-5 text-[#FF7A18] shadow-xs">
         <div class="flex items-center gap-3">
           <span class="text-3xl">⏳</span>
           <div>
-            <p class="text-sm font-bold">Coupon submitted for admin verification!</p>
-            <p class="mt-0.5 text-xs text-[#581C87]/80">
+            <p class="text-sm font-bold text-[#081126]">Coupon submitted for admin verification!</p>
+            <p class="mt-0.5 text-xs text-slate-600">
               Your deal has been sent to the Admin Panel for review. Once verified and approved by the team, it will appear publicly on the live site!
             </p>
           </div>
@@ -77,38 +77,38 @@ const justSubmitted = Boolean(submittedParam);
     <div class="mb-10 grid grid-cols-2 gap-4 sm:grid-cols-4">
       <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs">
         <p class="text-xs font-bold text-slate-500 uppercase">Total Submitted</p>
-        <p class="mt-1 text-2xl font-black text-slate-900">{stats.totalCoupons}</p>
+        <p class="mt-1 text-2xl font-black text-[#081126]">{stats.totalCoupons}</p>
       </div>
 
-      <div class="rounded-2xl border border-amber-200 bg-amber-50/70 p-5 shadow-xs">
-        <p class="text-xs font-bold text-amber-700 uppercase">Pending Review</p>
-        <p class="mt-1 text-2xl font-black text-amber-800">{stats.pendingCoupons}</p>
+      <div class="rounded-2xl border border-[#FF7A18]/30 bg-[#FFF9F5] p-5 shadow-xs">
+        <p class="text-xs font-bold text-[#FF7A18] uppercase">Pending Review</p>
+        <p class="mt-1 text-2xl font-black text-[#FF7A18]">{stats.pendingCoupons}</p>
       </div>
 
-      <div class="rounded-2xl border border-[#14B8A6]/30 bg-teal-50/60 p-5 shadow-xs">
-        <p class="text-xs font-bold text-[#0f766e] uppercase">Live &amp; Verified</p>
-        <p class="mt-1 text-2xl font-black text-[#0f766e]">{stats.activeCoupons}</p>
+      <div class="rounded-2xl border border-[#0499FA]/20 bg-[#EAF6FE] p-5 shadow-xs">
+        <p class="text-xs font-bold text-[#0499FA] uppercase">Live &amp; Verified</p>
+        <p class="mt-1 text-2xl font-black text-[#0499FA]">{stats.activeCoupons}</p>
       </div>
 
-      <div class="rounded-2xl border border-[#9333EA]/30 bg-purple-50/60 p-5 shadow-xs">
-        <p class="text-xs font-bold text-[#581C87] uppercase">Total Clicks</p>
-        <p class="mt-1 text-2xl font-black text-[#9333EA]">{stats.totalClicks}</p>
+      <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs">
+        <p class="text-xs font-bold text-slate-500 uppercase">Total Clicks</p>
+        <p class="mt-1 text-2xl font-black text-[#081126]">{stats.totalClicks}</p>
       </div>
     </div>
 
     <!-- Coupons Section -->
     <div class="mb-6 flex items-center justify-between">
-      <h2 id="coupon-count-header" class="text-xl font-black text-[#581C87]">
+      <h2 id="coupon-count-header" class="text-xl font-black text-[#081126]">
         Your Coupons ({coupons.length})
       </h2>
     </div>
 
     {coupons.length === 0 ? (
-      <div class="rounded-3xl border border-dashed border-[#9333EA]/30 bg-white p-12 text-center">
-        <span class="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-purple-50 text-3xl border border-[#9333EA]/20">
+      <div class="rounded-3xl border border-dashed border-slate-300 bg-white p-12 text-center">
+        <span class="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-[#EAF6FE] text-3xl border border-[#0499FA]/20">
           🏷️
         </span>
-        <h3 class="mt-4 text-lg font-bold text-slate-900">
+        <h3 class="mt-4 text-lg font-bold text-[#081126]">
           You haven't submitted any coupons yet
         </h3>
         <p class="mx-auto mt-2 max-w-md text-sm text-slate-500">
@@ -116,7 +116,7 @@ const justSubmitted = Boolean(submittedParam);
         </p>
         <a
           href="/submit-coupon"
-          class="mt-6 inline-block rounded-xl bg-gradient-to-r from-[#581C87] via-[#9333EA] to-[#EC4899] px-6 py-3 text-sm font-bold text-white shadow-xs transition hover:opacity-95"
+          class="mt-6 inline-block rounded-full bg-[#0499FA] px-7 py-3 text-sm font-bold text-white shadow-xs transition hover:bg-[#0377C4]"
         >
           + Share Your First Coupon
         </a>
@@ -138,12 +138,12 @@ const justSubmitted = Boolean(submittedParam);
               <div class="mt-3.5 flex items-center justify-between border-t border-slate-100 pt-3">
                 <span class="text-[11px] font-semibold">
                   {coupon.is_active === 0 ? (
-                    <span class="inline-flex items-center gap-1 text-amber-700">
+                    <span class="inline-flex items-center gap-1 text-[#FF7A18] font-bold">
                       ⏳ Pending Admin Review
                     </span>
                   ) : (
-                    <span class="inline-flex items-center gap-1 text-[#0f766e] font-bold">
-                      <span class="h-1.5 w-1.5 rounded-full bg-[#14B8A6]"></span>
+                    <span class="inline-flex items-center gap-1 text-emerald-600 font-bold">
+                      <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
                       Published Live
                     </span>
                   )}

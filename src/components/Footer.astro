@@ -2,35 +2,40 @@
 const year = new Date().getFullYear();
 ---
 
-<footer class="mt-20 border-t border-[#9333EA]/30 bg-[#581C87] text-purple-100">
-  <!-- Top Deal Alert / Savings Banner -->
-  <div class="border-b border-[#9333EA]/20 bg-[#3B0764] py-8">
+<footer class="mt-20 bg-[#091024] text-slate-300">
+  <!-- Pre-Footer Support / Newsletter CTA Strip -->
+  <div class="border-b border-white/10 bg-[#0A1633] py-8">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <div class="flex flex-col items-center justify-between gap-6 md:flex-row">
         <div>
-          <div class="inline-flex items-center gap-2 rounded-full bg-[#EC4899]/20 px-3 py-1 text-xs font-black text-[#FACC15] border border-[#EC4899]/40 shadow-xs">
-            <span>⚡ Instant Deal Alerts</span>
-          </div>
-          <h3 class="mt-2 text-lg font-black tracking-tight text-white sm:text-xl">
-            Never miss a working promo code again
+          <span class="inline-flex items-center gap-1.5 rounded-full bg-[#FFEDE1] px-3 py-1 text-xs font-black text-[#FF7A18]">
+            <span>⚡ Never Miss a Deal</span>
+          </span>
+          <h3 class="mt-2 text-xl font-black tracking-tight text-white sm:text-2xl">
+            Get the Best Coupons Delivered to Your Inbox
           </h3>
-          <p class="mt-1 text-xs text-purple-200/80">
-            Join 12,000+ smart shoppers who save an average of ₹450 per checkout with CouponHub.
+          <p class="mt-1 text-xs text-slate-400">
+            Join 50,000+ smart shoppers who save an average of ₹450 per checkout with verified promo codes.
           </p>
         </div>
 
-        <form class="flex w-full max-w-md items-center gap-2 sm:w-auto" onsubmit="event.preventDefault(); alert('Subscribed to deal alerts!');">
-          <input
-            type="email"
-            required
-            placeholder="Enter your email address..."
-            class="w-full min-w-0 rounded-xl border border-[#9333EA]/50 bg-[#260647] px-4 py-2.5 text-xs font-medium text-white placeholder-purple-300/60 outline-none transition focus:border-[#EC4899] focus:bg-[#1E0438] focus:ring-2 focus:ring-[#EC4899]/30 sm:w-72"
-          />
+        <form class="flex w-full max-w-md items-center gap-2 sm:w-auto" onsubmit="event.preventDefault(); alert('Thank you! You have subscribed to Couponly deal alerts.');">
+          <div class="relative flex-1 sm:w-72">
+            <input
+              type="email"
+              required
+              placeholder="Enter your email address..."
+              class="w-full rounded-full border border-white/15 bg-white/5 py-2.5 pr-4 pl-5 text-xs font-medium text-white placeholder-slate-400 outline-none transition focus:border-[#0499FA] focus:bg-white/10 focus:ring-2 focus:ring-[#0499FA]/30"
+            />
+          </div>
           <button
             type="submit"
-            class="shrink-0 rounded-xl bg-gradient-to-r from-[#FACC15] to-[#EC4899] px-5 py-2.5 text-xs font-black text-[#581C87] transition hover:opacity-95 active:scale-95 shadow-md shadow-[#EC4899]/20"
+            class="shrink-0 inline-flex items-center gap-1.5 rounded-full bg-[#FF7A18] px-6 py-2.5 text-xs font-black text-white transition hover:bg-[#E6680C] active:scale-95 shadow-md shadow-[#FF7A18]/20"
           >
-            Get Deals
+            <span>Subscribe</span>
+            <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+            </svg>
           </button>
         </form>
       </div>
@@ -42,93 +47,102 @@ const year = new Date().getFullYear();
     <div class="grid gap-10 sm:grid-cols-2 lg:grid-cols-5">
       <!-- Brand & Mission Column -->
       <div class="lg:col-span-2">
-        <a href="/" class="group inline-flex items-center gap-3 text-white">
-          <div class="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-tr from-[#9333EA] to-[#EC4899] text-white shadow-md shadow-[#EC4899]/30 transition group-hover:scale-105">
+        <a href="/" class="group inline-flex items-center gap-2.5 text-white">
+          <div class="relative flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-tr from-[#0499FA] to-[#36ADFB] text-white shadow-md shadow-[#0499FA]/20 group-hover:scale-105 transition-transform">
             <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
               <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/>
               <line x1="7" y1="7" x2="7.01" y2="7"/>
             </svg>
+            <span class="absolute -bottom-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-[#FF7A18] ring-2 ring-[#091024]">
+              <span class="h-1.5 w-1.5 rounded-full bg-white"></span>
+            </span>
           </div>
           <div class="flex flex-col">
             <span class="text-xl font-black tracking-tight text-white">
-              Coupon<span class="text-[#FACC15]">Hub</span>
+              Coupon<span class="text-[#0499FA]">ly</span>
             </span>
-            <span class="text-[10px] font-bold tracking-wider text-[#38BDF8] uppercase">
-              100% Hand-Verified Savings
+            <span class="text-[10px] font-bold tracking-wider text-slate-400 uppercase -mt-0.5">
+              Verified Deals Hub
             </span>
           </div>
         </a>
 
-        <p class="mt-4 max-w-sm text-xs leading-relaxed text-purple-200/80">
-          CouponHub is India's community-driven verified coupons platform. We test promo codes across top online stores every morning so you always get maximum savings.
+        <p class="mt-4 max-w-sm text-xs leading-relaxed text-slate-400">
+          Couponly is India's leading community-driven verified coupons platform. We hand-test promo codes across top online stores every day so you always get maximum savings.
         </p>
 
-        <!-- Trust Badges -->
-        <div class="mt-6 flex flex-wrap items-center gap-2 text-[11px] font-bold">
-          <span class="inline-flex items-center gap-1.5 rounded-lg border border-[#9333EA]/40 bg-[#3B0764] px-2.5 py-1 text-purple-200">
-            <span>🛡️</span> 100% Free Forever
-          </span>
-          <span class="inline-flex items-center gap-1.5 rounded-lg border border-[#14B8A6]/40 bg-[#3B0764] px-2.5 py-1 text-[#14B8A6]">
-            <span>⚡</span> Direct Store Links
-          </span>
-          <span class="inline-flex items-center gap-1.5 rounded-lg border border-[#FACC15]/40 bg-[#3B0764] px-2.5 py-1 text-[#FACC15]">
-            <span>🔒</span> Zero Ad Spam
-          </span>
+        <!-- Social Media Circular Icons -->
+        <div class="mt-6 flex items-center gap-2.5">
+          <a href="#" aria-label="Facebook" class="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-slate-300 transition hover:bg-[#0499FA] hover:text-white">
+            <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          </a>
+          <a href="#" aria-label="Twitter" class="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-slate-300 transition hover:bg-[#0499FA] hover:text-white">
+            <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          </a>
+          <a href="#" aria-label="Instagram" class="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-slate-300 transition hover:bg-[#FF7A18] hover:text-white">
+            <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+          </a>
+          <a href="#" aria-label="LinkedIn" class="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-slate-300 transition hover:bg-[#0499FA] hover:text-white">
+            <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+          </a>
         </div>
       </div>
 
-      <!-- Column 2: Top Stores -->
+      <!-- Column 2: Quick Links -->
       <div>
-        <h4 class="text-xs font-black tracking-wider text-[#FACC15] uppercase">
-          Top Stores
+        <h4 class="text-xs font-black tracking-wider text-white uppercase">
+          Quick Links
         </h4>
-        <ul class="mt-4 space-y-2.5 text-xs font-semibold text-purple-200/80">
-          <li><a href="/stores/amazon" class="hover:text-[#FACC15] transition">Amazon Coupons</a></li>
-          <li><a href="/stores/swiggy" class="hover:text-[#FACC15] transition">Swiggy Promo Codes</a></li>
-          <li><a href="/stores/myntra" class="hover:text-[#FACC15] transition">Myntra Fashion Deals</a></li>
-          <li><a href="/stores/zomato" class="hover:text-[#FACC15] transition">Zomato Food Offers</a></li>
-          <li><a href="/stores/flipkart" class="hover:text-[#FACC15] transition">Flipkart Offers</a></li>
-          <li><a href="/stores" class="text-[#38BDF8] font-bold hover:underline">View All Stores →</a></li>
+        <ul class="mt-4 space-y-2.5 text-xs font-medium text-slate-400">
+          <li><a href="/" class="hover:text-[#0499FA] transition">Home</a></li>
+          <li><a href="/coupons" class="hover:text-[#0499FA] transition">Browse Coupons</a></li>
+          <li><a href="/stores" class="hover:text-[#0499FA] transition">Top Stores</a></li>
+          <li><a href="/categories" class="hover:text-[#0499FA] transition">Categories</a></li>
+          <li><a href="/submit-coupon" class="hover:text-[#0499FA] transition">+ Submit a Coupon</a></li>
+          <li><a href="/my-coupons" class="hover:text-[#0499FA] transition">My Saved Deals</a></li>
         </ul>
       </div>
 
-      <!-- Column 3: Categories -->
+      <!-- Column 3: Popular Categories -->
       <div>
-        <h4 class="text-xs font-black tracking-wider text-[#EC4899] uppercase">
-          Browse Deals
+        <h4 class="text-xs font-black tracking-wider text-white uppercase">
+          Top Categories
         </h4>
-        <ul class="mt-4 space-y-2.5 text-xs font-semibold text-purple-200/80">
-          <li><a href="/categories/food" class="hover:text-[#EC4899] transition">🍔 Food &amp; Dining</a></li>
-          <li><a href="/categories/fashion" class="hover:text-[#EC4899] transition">👗 Fashion &amp; Apparel</a></li>
-          <li><a href="/categories/electronics" class="hover:text-[#EC4899] transition">📱 Electronics &amp; Tech</a></li>
-          <li><a href="/categories/travel" class="hover:text-[#EC4899] transition">✈️ Travel &amp; Hotels</a></li>
-          <li><a href="/coupons?sort=popular" class="hover:text-[#EC4899] transition">🔥 Trending Today</a></li>
-          <li><a href="/categories" class="text-[#38BDF8] font-bold hover:underline">All Categories →</a></li>
+        <ul class="mt-4 space-y-2.5 text-xs font-medium text-slate-400">
+          <li><a href="/categories/food" class="hover:text-[#FF7A18] transition">🍔 Food &amp; Dining</a></li>
+          <li><a href="/categories/fashion" class="hover:text-[#FF7A18] transition">👗 Fashion &amp; Apparel</a></li>
+          <li><a href="/categories/electronics" class="hover:text-[#FF7A18] transition">📱 Electronics &amp; Tech</a></li>
+          <li><a href="/categories/travel" class="hover:text-[#FF7A18] transition">✈️ Travel &amp; Hotels</a></li>
+          <li><a href="/categories/beauty" class="hover:text-[#FF7A18] transition">💄 Beauty &amp; Health</a></li>
+          <li><a href="/categories" class="text-[#0499FA] font-bold hover:underline">All Categories →</a></li>
         </ul>
       </div>
 
-      <!-- Column 4: Community & Tools -->
+      <!-- Column 4: Top Stores -->
       <div>
-        <h4 class="text-xs font-black tracking-wider text-[#14B8A6] uppercase">
-          Community &amp; Portals
+        <h4 class="text-xs font-black tracking-wider text-white uppercase">
+          Featured Brands
         </h4>
-        <ul class="mt-4 space-y-2.5 text-xs font-semibold text-purple-200/80">
-          <li><a href="/login" class="hover:text-[#14B8A6] transition">Sign In / Register</a></li>
-          <li><a href="/my-coupons" class="hover:text-[#14B8A6] transition">My Submitted Coupons</a></li>
-          <li><a href="/submit-coupon" class="hover:text-[#14B8A6] transition">Share a Working Deal</a></li>
-          <li><a href="/coupons?includeExpired=1" class="hover:text-[#14B8A6] transition">Expired Archive</a></li>
-          <li><a href="/admin" class="hover:text-[#14B8A6] transition">Admin Portal</a></li>
+        <ul class="mt-4 space-y-2.5 text-xs font-medium text-slate-400">
+          <li><a href="/stores/amazon" class="hover:text-[#0499FA] transition">Amazon India</a></li>
+          <li><a href="/stores/flipkart" class="hover:text-[#0499FA] transition">Flipkart Offers</a></li>
+          <li><a href="/stores/zomato" class="hover:text-[#0499FA] transition">Zomato Gold</a></li>
+          <li><a href="/stores/swiggy" class="hover:text-[#0499FA] transition">Swiggy Instamart</a></li>
+          <li><a href="/stores/myntra" class="hover:text-[#0499FA] transition">Myntra Fashion</a></li>
+          <li><a href="/stores" class="text-[#FF7A18] font-bold hover:underline">View All Stores →</a></li>
         </ul>
       </div>
     </div>
 
-    <!-- Bottom Bar -->
-    <div class="mt-12 flex flex-col items-center justify-between gap-4 border-t border-[#9333EA]/20 pt-8 text-xs font-medium text-purple-200/60 sm:flex-row">
-      <p>© {year} CouponHub. Handcrafted for smart online savings.</p>
-      <div class="flex items-center gap-4 text-purple-200/80">
-        <span>Built with Astro SSR &amp; Cloudflare D1</span>
+    <!-- Bottom Copyright Bar -->
+    <div class="mt-12 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-8 text-xs font-medium text-slate-400 sm:flex-row">
+      <p>Copyright © {year} Couponly. All rights reserved.</p>
+      <div class="flex items-center gap-4 text-slate-400">
+        <a href="/coupons" class="hover:text-white transition">Explore Deals</a>
         <span>•</span>
-        <a href="/admin" class="font-bold text-[#FACC15] hover:text-white transition">Admin Portal</a>
+        <a href="/submit-coupon" class="hover:text-white transition">Share Coupon</a>
+        <span>•</span>
+        <a href="/admin" class="font-bold text-[#FF7A18] hover:text-white transition">Admin Portal</a>
       </div>
     </div>
   </div>

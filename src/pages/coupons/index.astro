@@ -35,19 +35,19 @@ const hasFilters = Boolean(q || categorySlug || storeSlug || includeExpired || s
 ---
 
 <MainLayout
-  title={q ? `Search "${q}" — Discount Coupons | CouponHub` : "Explore All Verified Coupons | CouponHub"}
+  title={q ? `Search "${q}" — Discount Coupons | Couponly` : "Explore All Verified Coupons | Couponly"}
   description="Search and filter verified discount promo codes by store, category, or discount type."
 >
   <section class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
     <!-- Header -->
     <div class="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
       <div>
-        <div class="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-purple-50 to-pink-50 border border-[#EC4899]/30 px-3 py-1 text-xs font-black tracking-wider text-[#581C87] uppercase">
+        <div class="inline-flex items-center gap-1.5 rounded-full bg-[#EAF6FE] border border-[#0499FA]/20 px-3 py-1 text-xs font-black tracking-wider text-[#0499FA] uppercase">
           <span>🏷️</span>
-          <span>Verified Promo Directory</span>
+          <span>Verified Deals Directory</span>
         </div>
-        <h1 class="mt-1 text-3xl font-black tracking-tight text-[#581C87] sm:text-4xl">
-          {q ? `Search results for "${q}"` : "All Verified Coupons"}
+        <h1 class="mt-2 text-3xl font-black tracking-tight text-[#081126] sm:text-4xl">
+          {q ? `Search results for "${q}"` : "All Verified Coupons & Deals"}
         </h1>
         <p class="mt-1.5 text-sm font-medium text-slate-500">
           Filter by your favorite store, product category, or discount value.
@@ -55,7 +55,7 @@ const hasFilters = Boolean(q || categorySlug || storeSlug || includeExpired || s
       </div>
 
       <p class="text-sm font-bold text-slate-500">
-        Found <strong class="text-[#9333EA] font-black">{coupons.length}</strong> {coupons.length === 1 ? "coupon" : "coupons"}
+        Found <strong class="text-[#0499FA] font-black">{coupons.length}</strong> {coupons.length === 1 ? "coupon" : "coupons"}
       </p>
     </div>
 
@@ -63,15 +63,15 @@ const hasFilters = Boolean(q || categorySlug || storeSlug || includeExpired || s
     <form
       method="GET"
       action="/coupons"
-      class="mb-9 rounded-3xl border border-[#9333EA]/20 bg-white p-5 shadow-xs sm:p-6"
+      class="mb-9 rounded-2xl border border-slate-200 bg-white p-5 shadow-xs sm:p-6"
     >
       <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
         <div class="lg:col-span-2">
-          <label for="filter-q" class="mb-1.5 block text-xs font-bold uppercase text-slate-700">
+          <label for="filter-q" class="mb-1.5 block text-xs font-bold uppercase text-[#081126]">
             Keyword Search
           </label>
           <div class="relative flex items-center">
-            <svg class="pointer-events-none absolute left-3.5 h-4 w-4 text-[#9333EA]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <svg class="pointer-events-none absolute left-3.5 h-4 w-4 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
             <input
@@ -79,20 +79,20 @@ const hasFilters = Boolean(q || categorySlug || storeSlug || includeExpired || s
               type="search"
               name="q"
               value={q}
-              placeholder="Store name, title, or code (e.g. Zomato)..."
-              class="w-full rounded-xl border border-slate-300 bg-slate-50 py-2.5 pr-4 pl-10 text-sm font-medium text-slate-900 outline-none transition focus:border-[#9333EA] focus:ring-2 focus:ring-[#9333EA]/20 focus:bg-white"
+              placeholder="Store name, title, or code (e.g. Nike, Swiggy)..."
+              class="w-full rounded-xl border border-slate-300 bg-slate-50 py-2.5 pr-4 pl-10 text-sm font-medium text-[#081126] outline-none transition focus:border-[#0499FA] focus:ring-2 focus:ring-[#0499FA]/20 focus:bg-white"
             />
           </div>
         </div>
 
         <div>
-          <label for="filter-category" class="mb-1.5 block text-xs font-bold uppercase text-slate-700">
+          <label for="filter-category" class="mb-1.5 block text-xs font-bold uppercase text-[#081126]">
             Category
           </label>
           <select
             id="filter-category"
             name="category"
-            class="w-full rounded-xl border border-slate-300 bg-slate-50 px-3.5 py-2.5 text-sm font-medium text-slate-900 outline-none transition focus:border-[#9333EA] focus:ring-2 focus:ring-[#9333EA]/20 focus:bg-white"
+            class="w-full rounded-xl border border-slate-300 bg-slate-50 px-3.5 py-2.5 text-sm font-medium text-[#081126] outline-none transition focus:border-[#0499FA] focus:ring-2 focus:ring-[#0499FA]/20 focus:bg-white"
           >
             <option value="">All Categories</option>
             {categories.map((cat) => (
@@ -104,13 +104,13 @@ const hasFilters = Boolean(q || categorySlug || storeSlug || includeExpired || s
         </div>
 
         <div>
-          <label for="filter-store" class="mb-1.5 block text-xs font-bold uppercase text-slate-700">
+          <label for="filter-store" class="mb-1.5 block text-xs font-bold uppercase text-[#081126]">
             Store
           </label>
           <select
             id="filter-store"
             name="store"
-            class="w-full rounded-xl border border-slate-300 bg-slate-50 px-3.5 py-2.5 text-sm font-medium text-slate-900 outline-none transition focus:border-[#9333EA] focus:ring-2 focus:ring-[#9333EA]/20 focus:bg-white"
+            class="w-full rounded-xl border border-slate-300 bg-slate-50 px-3.5 py-2.5 text-sm font-medium text-[#081126] outline-none transition focus:border-[#0499FA] focus:ring-2 focus:ring-[#0499FA]/20 focus:bg-white"
           >
             <option value="">All Stores</option>
             {stores.map((s) => (
@@ -122,13 +122,13 @@ const hasFilters = Boolean(q || categorySlug || storeSlug || includeExpired || s
         </div>
 
         <div>
-          <label for="filter-sort" class="mb-1.5 block text-xs font-bold uppercase text-slate-700">
+          <label for="filter-sort" class="mb-1.5 block text-xs font-bold uppercase text-[#081126]">
             Sort Order
           </label>
           <select
             id="filter-sort"
             name="sort"
-            class="w-full rounded-xl border border-slate-300 bg-slate-50 px-3.5 py-2.5 text-sm font-medium text-slate-900 outline-none transition focus:border-[#9333EA] focus:ring-2 focus:ring-[#9333EA]/20 focus:bg-white"
+            class="w-full rounded-xl border border-slate-300 bg-slate-50 px-3.5 py-2.5 text-sm font-medium text-[#081126] outline-none transition focus:border-[#0499FA] focus:ring-2 focus:ring-[#0499FA]/20 focus:bg-white"
           >
             <option value="newest" selected={sort === "newest"}>Newest First</option>
             <option value="popular" selected={sort === "popular"}>Most Popular</option>
@@ -144,7 +144,7 @@ const hasFilters = Boolean(q || categorySlug || storeSlug || includeExpired || s
             name="includeExpired"
             value="1"
             checked={includeExpired}
-            class="h-4 w-4 rounded border-slate-300 text-[#581C87] focus:ring-[#9333EA]"
+            class="h-4 w-4 rounded border-slate-300 text-[#0499FA] focus:ring-[#0499FA]"
           />
           <span>Include Expired Deals Archive</span>
         </label>
@@ -153,14 +153,14 @@ const hasFilters = Boolean(q || categorySlug || storeSlug || includeExpired || s
           {hasFilters && (
             <a
               href="/coupons"
-              class="rounded-xl border border-slate-200 px-4 py-2 text-sm font-bold text-slate-600 transition hover:bg-purple-50 hover:text-[#581C87]"
+              class="rounded-full border border-slate-200 px-4 py-2 text-sm font-bold text-slate-600 transition hover:bg-slate-100 hover:text-[#081126]"
             >
               Reset Filters
             </a>
           )}
           <button
             type="submit"
-            class="rounded-xl bg-gradient-to-r from-[#581C87] via-[#9333EA] to-[#EC4899] px-6 py-2.5 text-sm font-black text-white shadow-md shadow-[#9333EA]/20 transition hover:opacity-95 active:scale-95"
+            class="rounded-full bg-[#0499FA] px-6 py-2.5 text-sm font-black text-white shadow-md shadow-[#0499FA]/20 transition hover:bg-[#0377C4] active:scale-95"
           >
             Apply Filters
           </button>
@@ -170,15 +170,15 @@ const hasFilters = Boolean(q || categorySlug || storeSlug || includeExpired || s
 
     <!-- Coupons Grid -->
     {coupons.length === 0 ? (
-      <div class="rounded-3xl border border-dashed border-[#9333EA]/30 bg-white p-14 text-center shadow-xs">
+      <div class="rounded-2xl border border-dashed border-slate-300 bg-white p-14 text-center shadow-xs">
         <span class="text-4xl">🔍</span>
-        <h3 class="mt-4 text-lg font-bold text-slate-900">No coupons matched your search</h3>
+        <h3 class="mt-4 text-lg font-bold text-[#081126]">No coupons matched your search</h3>
         <p class="mx-auto mt-2 max-w-md text-sm text-slate-500">
           Try adjusting your keywords, clearing selected category/store, or enabling expired coupons.
         </p>
         <a
           href="/coupons"
-          class="mt-6 inline-block rounded-xl bg-gradient-to-r from-[#581C87] to-[#9333EA] px-6 py-2.5 text-sm font-bold text-white shadow-md shadow-[#9333EA]/20 hover:opacity-95"
+          class="mt-6 inline-block rounded-full bg-[#0499FA] px-6 py-2.5 text-sm font-bold text-white shadow-md shadow-[#0499FA]/20 hover:bg-[#0377C4]"
         >
           View All Active Deals
         </a>

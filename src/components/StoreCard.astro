@@ -12,28 +12,28 @@ const count = store.active_coupon_count ?? 0;
 
 <a
   href={`/stores/${store.slug}`}
-  class="group relative flex flex-col justify-between overflow-hidden rounded-3xl border border-slate-200/90 bg-white p-5.5 shadow-2xs transition-all duration-300 hover:-translate-y-1 hover:border-[#9333EA] hover:shadow-xl hover:shadow-[#9333EA]/15"
+  class="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-slate-200/90 bg-white p-5 shadow-2xs transition-all duration-300 hover:-translate-y-1 hover:border-[#0499FA] hover:shadow-xl hover:shadow-[#0499FA]/10"
 >
   <!-- Ambient Brand Tint on Hover -->
-  <div class="pointer-events-none absolute inset-0 bg-gradient-to-br from-purple-50/80 via-sky-50/40 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
+  <div class="pointer-events-none absolute inset-0 bg-gradient-to-br from-[#EAF6FE]/60 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
 
   <div class="relative z-10">
     <!-- Top Row: Logo & Live Deals Pill -->
     <div class="flex items-start justify-between gap-3">
-      <div class="h-13 w-13 shrink-0 rounded-2xl border border-slate-200/90 bg-white p-1.5 shadow-xs transition-transform duration-300 group-hover:scale-105 group-hover:shadow-md flex items-center justify-center overflow-hidden">
+      <div class="h-14 w-14 shrink-0 rounded-2xl border border-slate-100 bg-white p-2 shadow-xs transition-transform duration-300 group-hover:scale-105 flex items-center justify-center overflow-hidden">
         <StoreLogo store={store} size="md" />
       </div>
 
       <!-- Live Count Pill -->
-      <span class="inline-flex items-center gap-1.5 rounded-full border border-[#38BDF8]/40 bg-gradient-to-r from-sky-50 to-purple-50 px-2.5 py-1 text-[11px] font-black text-[#581C87] shadow-2xs transition-all group-hover:border-[#9333EA]">
-        <span class="h-1.5 w-1.5 rounded-full bg-[#14B8A6] animate-soft-pulse"></span>
+      <span class="inline-flex items-center gap-1.5 rounded-full border border-[#0499FA]/20 bg-[#EAF6FE] px-2.5 py-1 text-[11px] font-black text-[#0499FA] shadow-2xs transition-all">
+        <span class="h-1.5 w-1.5 rounded-full bg-[#0499FA] animate-soft-pulse"></span>
         <span>{count} {count === 1 ? "Offer" : "Offers"}</span>
       </span>
     </div>
 
     <!-- Store Name & Tagline -->
     <div class="mt-4">
-      <h3 class="truncate text-lg font-black tracking-tight text-slate-900 transition-colors group-hover:text-[#9333EA]">
+      <h3 class="truncate text-base font-black tracking-tight text-[#081126] transition-colors group-hover:text-[#0499FA]">
         {store.name}
       </h3>
       <p class="mt-1 line-clamp-2 text-xs font-medium leading-relaxed text-slate-500">
@@ -44,13 +44,13 @@ const count = store.active_coupon_count ?? 0;
 
   <!-- Bottom CTA Row -->
   <div class="relative z-10 mt-5 flex items-center justify-between border-t border-slate-100 pt-3.5 text-xs font-bold text-slate-500">
-    <span class="flex items-center gap-1 text-[11px] font-bold text-[#14B8A6]">
-      <svg class="h-3.5 w-3.5 text-[#14B8A6]" viewBox="0 0 20 20" fill="currentColor">
+    <span class="flex items-center gap-1 text-[11px] font-bold text-emerald-600">
+      <svg class="h-3.5 w-3.5 text-emerald-500" viewBox="0 0 20 20" fill="currentColor">
         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
       </svg>
-      <span>Verified</span>
+      <span>Verified Store</span>
     </span>
-    <span class="inline-flex items-center gap-1 font-extrabold text-[#9333EA] transition-all group-hover:translate-x-1 group-hover:text-[#EC4899]">
+    <span class="inline-flex items-center gap-1 font-extrabold text-[#0499FA] transition-all group-hover:translate-x-1 group-hover:text-[#FF7A18]">
       <span>View Deals</span>
       <span>→</span>
     </span>

@@ -20,19 +20,19 @@ const defaultExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
 ---
 
 <MainLayout
-  title="Submit a Coupon — CouponHub"
-  description="Share a discount coupon or promo code with the CouponHub community."
+  title="Submit a Coupon — Couponly"
+  description="Share a discount coupon or promo code with the Couponly community."
 >
   <div class="mx-auto max-w-3xl px-4 py-10 sm:px-6 lg:px-8">
     <!-- Header -->
     <div class="mb-8">
       <div class="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <span class="inline-flex items-center gap-1.5 rounded-full bg-purple-50 border border-[#9333EA]/25 px-3 py-1 text-xs font-black text-[#581C87]">
-            <span class="h-2 w-2 rounded-full bg-[#14B8A6] animate-pulse"></span>
+          <span class="inline-flex items-center gap-1.5 rounded-full bg-[#EAF6FE] border border-[#0499FA]/20 px-3 py-1 text-xs font-black text-[#0499FA]">
+            <span class="h-2 w-2 rounded-full bg-[#0499FA] animate-pulse"></span>
             Signed in as {user.name} ({user.email})
           </span>
-          <h1 class="mt-3 text-3xl font-black tracking-tight text-[#581C87]">
+          <h1 class="mt-3 text-3xl font-black tracking-tight text-[#081126]">
             Share a Working Coupon
           </h1>
           <p class="mt-1 text-sm text-slate-600">
@@ -42,13 +42,13 @@ const defaultExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
 
         <a
           href="/my-coupons"
-          class="rounded-xl border border-[#9333EA]/20 bg-white px-4 py-2 text-xs font-bold text-[#581C87] shadow-2xs transition hover:bg-purple-50 hover:border-[#9333EA]/40"
+          class="rounded-full border border-slate-200 bg-white px-4 py-2 text-xs font-bold text-[#081126] shadow-2xs transition hover:border-[#0499FA] hover:text-[#0499FA]"
         >
           My Coupons →
         </a>
       </div>
 
-      <div class="mt-4 flex items-center gap-2.5 rounded-2xl border border-[#9333EA]/20 bg-gradient-to-r from-purple-50/70 via-pink-50/40 to-white p-3.5 text-xs text-[#581C87]">
+      <div class="mt-4 flex items-center gap-2.5 rounded-2xl border border-[#0499FA]/20 bg-[#EAF6FE]/40 p-3.5 text-xs text-[#081126]">
         <span class="text-base">🛡️</span>
         <p><strong>Admin Verification:</strong> To ensure high coupon quality and avoid broken codes, coupons submitted by visitors are verified by our team before publishing.</p>
       </div>
@@ -63,12 +63,12 @@ const defaultExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
     <!-- Form -->
     <form
       id="user-coupon-form"
-      class="space-y-6 rounded-3xl border border-[#9333EA]/20 bg-white p-6 shadow-sm sm:p-8"
+      class="space-y-6 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8"
     >
       <div class="grid gap-5 sm:grid-cols-2">
         <!-- Title -->
         <div class="sm:col-span-2">
-          <label for="coupon-title" class="mb-1.5 block text-xs font-bold text-slate-700 uppercase">
+          <label for="coupon-title" class="mb-1.5 block text-xs font-bold text-[#081126] uppercase">
             Coupon Title *
           </label>
           <input
@@ -78,13 +78,13 @@ const defaultExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
             required
             maxlength="140"
             placeholder="e.g. Flat 25% Off on Footwear & Sneakers"
-            class="w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-2.5 text-sm outline-none focus:border-[#9333EA] focus:ring-2 focus:ring-[#9333EA]/20 focus:bg-white transition"
+            class="w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-2.5 text-sm outline-none focus:border-[#0499FA] focus:ring-2 focus:ring-[#0499FA]/20 focus:bg-white transition"
           />
         </div>
 
         <!-- Code -->
         <div>
-          <label for="coupon-code" class="mb-1.5 block text-xs font-bold text-slate-700 uppercase">
+          <label for="coupon-code" class="mb-1.5 block text-xs font-bold text-[#081126] uppercase">
             Promo / Coupon Code *
           </label>
           <input
@@ -94,13 +94,13 @@ const defaultExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
             required
             maxlength="40"
             placeholder="e.g. SAVE25"
-            class="w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-2.5 font-mono text-sm uppercase outline-none focus:border-[#9333EA] focus:ring-2 focus:ring-[#9333EA]/20 focus:bg-white transition"
+            class="w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-2.5 font-mono text-sm uppercase outline-none focus:border-[#0499FA] focus:ring-2 focus:ring-[#0499FA]/20 focus:bg-white transition"
           />
         </div>
 
         <!-- Discount Badge -->
         <div>
-          <label for="coupon-discount" class="mb-1.5 block text-xs font-bold text-slate-700 uppercase">
+          <label for="coupon-discount" class="mb-1.5 block text-xs font-bold text-[#081126] uppercase">
             Discount Badge *
           </label>
           <input
@@ -110,20 +110,20 @@ const defaultExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
             required
             maxlength="40"
             placeholder="e.g. 25% OFF or ₹150 OFF"
-            class="w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-2.5 text-sm outline-none focus:border-[#9333EA] focus:ring-2 focus:ring-[#9333EA]/20 focus:bg-white transition"
+            class="w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-2.5 text-sm outline-none focus:border-[#0499FA] focus:ring-2 focus:ring-[#0499FA]/20 focus:bg-white transition"
           />
         </div>
 
         <!-- Store Selection -->
         <div>
-          <label for="coupon-store" class="mb-1.5 block text-xs font-bold text-slate-700 uppercase">
+          <label for="coupon-store" class="mb-1.5 block text-xs font-bold text-[#081126] uppercase">
             Store / Brand *
           </label>
           <select
             id="coupon-store"
             name="store_id"
             required
-            class="w-full rounded-xl border border-slate-300 bg-slate-50 px-3.5 py-2.5 text-sm outline-none focus:border-[#9333EA] focus:ring-2 focus:ring-[#9333EA]/20 transition"
+            class="w-full rounded-xl border border-slate-300 bg-slate-50 px-3.5 py-2.5 text-sm outline-none focus:border-[#0499FA] focus:ring-2 focus:ring-[#0499FA]/20 transition"
           >
             <option value="">Select Store</option>
             {stores.map((s) => (
@@ -134,14 +134,14 @@ const defaultExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
 
         <!-- Category Selection -->
         <div>
-          <label for="coupon-category" class="mb-1.5 block text-xs font-bold text-slate-700 uppercase">
+          <label for="coupon-category" class="mb-1.5 block text-xs font-bold text-[#081126] uppercase">
             Category *
           </label>
           <select
             id="coupon-category"
             name="category_id"
             required
-            class="w-full rounded-xl border border-slate-300 bg-slate-50 px-3.5 py-2.5 text-sm outline-none focus:border-[#9333EA] focus:ring-2 focus:ring-[#9333EA]/20 transition"
+            class="w-full rounded-xl border border-slate-300 bg-slate-50 px-3.5 py-2.5 text-sm outline-none focus:border-[#0499FA] focus:ring-2 focus:ring-[#0499FA]/20 transition"
           >
             <option value="">Select Category</option>
             {categories.map((c) => (
@@ -154,7 +154,7 @@ const defaultExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
 
         <!-- Store URL -->
         <div>
-          <label for="coupon-url" class="mb-1.5 block text-xs font-bold text-slate-700 uppercase">
+          <label for="coupon-url" class="mb-1.5 block text-xs font-bold text-[#081126] uppercase">
             Store / Deal Link *
           </label>
           <input
@@ -163,13 +163,13 @@ const defaultExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
             type="url"
             required
             placeholder="https://www.example.com/deal"
-            class="w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-2.5 text-sm outline-none focus:border-[#9333EA] focus:ring-2 focus:ring-[#9333EA]/20 focus:bg-white transition"
+            class="w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-2.5 text-sm outline-none focus:border-[#0499FA] focus:ring-2 focus:ring-[#0499FA]/20 focus:bg-white transition"
           />
         </div>
 
         <!-- Expiry Date -->
         <div>
-          <label for="coupon-expiry" class="mb-1.5 block text-xs font-bold text-slate-700 uppercase">
+          <label for="coupon-expiry" class="mb-1.5 block text-xs font-bold text-[#081126] uppercase">
             Expiry Date *
           </label>
           <input
@@ -178,13 +178,13 @@ const defaultExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
             type="date"
             required
             value={defaultExpiry}
-            class="w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-2.5 text-sm outline-none focus:border-[#9333EA] focus:ring-2 focus:ring-[#9333EA]/20 focus:bg-white transition"
+            class="w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-2.5 text-sm outline-none focus:border-[#0499FA] focus:ring-2 focus:ring-[#0499FA]/20 focus:bg-white transition"
           />
         </div>
 
         <!-- Description -->
         <div class="sm:col-span-2">
-          <label for="coupon-desc" class="mb-1.5 block text-xs font-bold text-slate-700 uppercase">
+          <label for="coupon-desc" class="mb-1.5 block text-xs font-bold text-[#081126] uppercase">
             Description
           </label>
           <textarea
@@ -193,13 +193,13 @@ const defaultExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
             rows="3"
             maxlength="1000"
             placeholder="What products or minimum purchase is required for this discount?"
-            class="w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-2.5 text-sm outline-none focus:border-[#9333EA] focus:ring-2 focus:ring-[#9333EA]/20 focus:bg-white transition"
+            class="w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-2.5 text-sm outline-none focus:border-[#0499FA] focus:ring-2 focus:ring-[#0499FA]/20 focus:bg-white transition"
           ></textarea>
         </div>
 
         <!-- Terms -->
         <div class="sm:col-span-2">
-          <label for="coupon-terms" class="mb-1.5 block text-xs font-bold text-slate-700 uppercase">
+          <label for="coupon-terms" class="mb-1.5 block text-xs font-bold text-[#081126] uppercase">
             Terms &amp; Conditions
           </label>
           <textarea
@@ -208,7 +208,7 @@ const defaultExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
             rows="2"
             maxlength="1500"
             placeholder="e.g. Valid on prepaid orders only. Cannot be combined with other offers."
-            class="w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-2.5 text-sm outline-none focus:border-[#9333EA] focus:ring-2 focus:ring-[#9333EA]/20 focus:bg-white transition"
+            class="w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-2.5 text-sm outline-none focus:border-[#0499FA] focus:ring-2 focus:ring-[#0499FA]/20 focus:bg-white transition"
           ></textarea>
         </div>
       </div>
@@ -217,14 +217,14 @@ const defaultExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
       <div class="flex flex-wrap items-center justify-between gap-3 border-t border-slate-100 pt-5">
         <a
           href="/"
-          class="rounded-xl border border-slate-200 px-5 py-2.5 text-sm font-semibold text-slate-600 transition hover:bg-slate-50"
+          class="rounded-full border border-slate-200 px-5 py-2.5 text-sm font-semibold text-slate-600 transition hover:bg-slate-50"
         >
           Cancel
         </a>
         <button
           type="submit"
           id="submit-btn"
-          class="rounded-xl bg-gradient-to-r from-[#581C87] via-[#9333EA] to-[#EC4899] px-7 py-3 text-sm font-black text-white shadow-md shadow-[#9333EA]/20 transition hover:opacity-95 disabled:opacity-60"
+          class="rounded-full bg-[#0499FA] px-7 py-3 text-sm font-black text-white shadow-md shadow-[#0499FA]/20 transition hover:bg-[#0377C4] disabled:opacity-60"
         >
           Submit Coupon for Verification 🚀
         </button>
