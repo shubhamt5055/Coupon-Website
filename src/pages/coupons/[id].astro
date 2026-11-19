@@ -36,7 +36,7 @@ const successRate =
 ---
 
 <MainLayout
-  title={coupon ? `${coupon.title} (${coupon.store_name}) | Couponly` : "Coupon Not Found | Couponly"}
+  title={coupon ? `${coupon.title} (${coupon.store_name}) | CouponHub` : "Coupon Not Found | CouponHub"}
   description={coupon ? `${coupon.discount_text} at ${coupon.store_name} with code ${coupon.code}. ${coupon.description}` : "Coupon not found."}
 >
   {!coupon || coupon.is_active !== 1 ? (

@@ -17,7 +17,7 @@ if (user) {
 ---
 
 <MainLayout
-  title="Sign In / Create Account — Couponly"
+  title="Sign In / Create Account — CouponHub"
   description="Sign in with your registered account, or create a new account to share coupons and deals."
   compactFooter={true}
 >
@@ -33,7 +33,7 @@ if (user) {
           </div>
         </div>
         <h1 id="auth-title" class="mt-2 text-xl font-black tracking-tight text-[#081126] sm:text-2xl">
-          Sign In to Couponly
+          Sign In to CouponHub
         </h1>
         <p id="auth-subtitle" class="mt-0.5 text-xs font-medium text-slate-500">
           Sign in is available for registered users only.
@@ -296,7 +296,7 @@ if (user) {
       tabLoginBtn?.classList.remove("text-slate-700");
       tabLoginBtn?.classList.add("bg-[#0499FA]", "text-white", "shadow-xs");
 
-      if (authTitle) authTitle.textContent = "Sign In to Couponly";
+      if (authTitle) authTitle.textContent = "Sign In to CouponHub";
       if (authSubtitle) authSubtitle.textContent = "Sign in is available for registered users only.";
 
       if (prefillEmail && loginEmailInput) {
