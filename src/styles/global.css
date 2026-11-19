@@ -1,15 +1,17 @@
 @import "tailwindcss";
-@custom-variant dark (&:where(.dark, .dark *));
 
 @layer base {
   html {
     scroll-behavior: smooth;
-    font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", "Helvetica Neue", Arial, sans-serif;
   }
 
   body {
     margin: 0;
-    @apply bg-slate-50 text-slate-900 antialiased transition-colors duration-200 dark:bg-slate-950 dark:text-slate-100;
+    background-color: #fafaf9;
+    color: #0f172a;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   button,
@@ -18,9 +20,40 @@
   }
 }
 
-/* Ticket-style perforated divider */
-.coupon-divider {
-  background-image: linear-gradient(to right, currentColor 45%, transparent 45%);
-  background-size: 10px 1px;
-  background-repeat: repeat-x;
+/* Authentic voucher ticket perforation line */
+.ticket-dashed-line {
+  border-bottom: 2px dashed #e2e8f0;
+}
+
+/* Ticket cutout punch holes */
+.ticket-notch-left,
+.ticket-notch-right {
+  position: absolute;
+  top: 50%;
+  width: 14px;
+  height: 14px;
+  background-color: #fafaf9;
+  border-radius: 9999px;
+  transform: translateY(-50%);
+  z-index: 10;
+}
+
+.ticket-notch-left {
+  left: -7px;
+  border-right: 1px solid #cbd5e1;
+}
+
+.ticket-notch-right {
+  right: -7px;
+  border-left: 1px solid #cbd5e1;
+}
+
+/* Subtle pulse glow for live verified badges */
+@keyframes soft-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.75; transform: scale(1.05); }
+}
+
+.animate-soft-pulse {
+  animation: soft-pulse 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }

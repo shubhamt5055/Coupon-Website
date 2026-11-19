@@ -2,47 +2,68 @@
 const year = new Date().getFullYear();
 ---
 
-<footer class="mt-16 border-t border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-950">
-  <div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-    <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+<footer class="mt-20 border-t border-slate-200/80 bg-white">
+  <div class="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
+    <div class="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
       <div class="sm:col-span-2">
-        <a href="/" class="inline-flex items-center gap-2 text-lg font-extrabold text-slate-900 dark:text-white">
-          <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-600 text-sm text-white">%</span>
-          <span>Coupon<span class="text-indigo-600 dark:text-indigo-400">Hub</span></span>
+        <a href="/" class="flex items-center gap-3 text-slate-900">
+          <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-tr from-emerald-600 via-teal-600 to-indigo-600 text-white shadow-xs">
+            <svg class="h-4.5 w-4.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/>
+              <line x1="7" y1="7" x2="7.01" y2="7"/>
+            </svg>
+          </div>
+          <span class="text-xl font-black tracking-tight">
+            Coupon<span class="text-emerald-600">Hub</span>
+          </span>
         </a>
-        <p class="mt-3 max-w-md text-sm leading-relaxed text-slate-600 dark:text-slate-400">
-          Verified promo codes, instant store discounts, and daily trending deals — powered by Astro &amp; Cloudflare D1 for lightning-fast savings on mobile and desktop.
+        <p class="mt-3.5 max-w-md text-sm leading-relaxed text-slate-500">
+          We hand-test and curate real discount vouchers from India's leading online stores. Save money effortlessly on food delivery, fashion, electronics, and travel.
         </p>
+
+        <!-- Trust Badges -->
+        <div class="mt-5 flex flex-wrap items-center gap-2 text-xs font-bold text-slate-600">
+          <span class="inline-flex items-center gap-1.5 rounded-lg bg-slate-100 px-3 py-1.5 shadow-2xs">
+            <span>🛡️</span> 100% Free &amp; Verified
+          </span>
+          <span class="inline-flex items-center gap-1.5 rounded-lg bg-slate-100 px-3 py-1.5 shadow-2xs">
+            <span>⚡</span> Direct Store Links
+          </span>
+          <span class="inline-flex items-center gap-1.5 rounded-lg bg-slate-100 px-3 py-1.5 shadow-2xs">
+            <span>🤝</span> Community Powered
+          </span>
+        </div>
       </div>
 
       <div>
-        <h3 class="text-xs font-bold tracking-wider text-slate-900 uppercase dark:text-slate-200">
-          Explore
+        <h3 class="text-xs font-black tracking-wider text-slate-900 uppercase">
+          Quick Explore
         </h3>
-        <ul class="mt-3 space-y-2 text-sm text-slate-600 dark:text-slate-400">
-          <li><a href="/" class="hover:text-indigo-600 dark:hover:text-indigo-400">Home</a></li>
-          <li><a href="/coupons" class="hover:text-indigo-600 dark:hover:text-indigo-400">All Coupons</a></li>
-          <li><a href="/categories" class="hover:text-indigo-600 dark:hover:text-indigo-400">Categories</a></li>
-          <li><a href="/stores" class="hover:text-indigo-600 dark:hover:text-indigo-400">Stores</a></li>
+        <ul class="mt-4 space-y-2.5 text-sm font-semibold text-slate-600">
+          <li><a href="/" class="hover:text-emerald-700 transition">Home</a></li>
+          <li><a href="/coupons" class="hover:text-emerald-700 transition">All Active Coupons</a></li>
+          <li><a href="/categories" class="hover:text-emerald-700 transition">Shop by Category</a></li>
+          <li><a href="/stores" class="hover:text-emerald-700 transition">Top Stores</a></li>
         </ul>
       </div>
 
       <div>
-        <h3 class="text-xs font-bold tracking-wider text-slate-900 uppercase dark:text-slate-200">
-          Community &amp; Admin
+        <h3 class="text-xs font-black tracking-wider text-slate-900 uppercase">
+          Community &amp; Deals
         </h3>
-        <ul class="mt-3 space-y-2 text-sm text-slate-600 dark:text-slate-400">
-          <li><a href="/submit-coupon" class="hover:text-indigo-600 dark:hover:text-indigo-400">Share a Deal</a></li>
-          <li><a href="/my-coupons" class="hover:text-indigo-600 dark:hover:text-indigo-400">My Submitted Coupons</a></li>
-          <li><a href="/admin" class="hover:text-indigo-600 dark:hover:text-indigo-400">Admin Portal</a></li>
-          <li><a href="/coupons?includeExpired=1" class="hover:text-indigo-600 dark:hover:text-indigo-400">Expired Archive</a></li>
+        <ul class="mt-4 space-y-2.5 text-sm font-semibold text-slate-600">
+          <li><a href="/login" class="hover:text-emerald-700 transition">Sign In / Register</a></li>
+          <li><a href="/my-coupons" class="hover:text-emerald-700 transition">My Submitted Coupons</a></li>
+          <li><a href="/submit-coupon" class="hover:text-emerald-700 transition">Share a Working Deal</a></li>
+          <li><a href="/coupons?includeExpired=1" class="hover:text-emerald-700 transition">Expired Archive</a></li>
+          <li><a href="/admin" class="hover:text-emerald-700 transition">Admin Portal</a></li>
         </ul>
       </div>
     </div>
 
-    <div class="mt-10 flex flex-col items-center justify-between gap-3 border-t border-slate-200 pt-6 text-xs text-slate-500 sm:flex-row dark:border-slate-800 dark:text-slate-400">
-      <p>© {year} CouponHub. All rights reserved.</p>
-      <p>Built with Astro SSR, Tailwind CSS &amp; Cloudflare D1</p>
+    <div class="mt-12 flex flex-col items-center justify-between gap-4 border-t border-slate-100 pt-7 text-xs font-medium text-slate-400 sm:flex-row">
+      <p>© {year} CouponHub. Crafted for smart shoppers everywhere.</p>
+      <p class="font-semibold text-slate-500">Built with Astro SSR &amp; Cloudflare D1</p>
     </div>
   </div>
 </footer>
