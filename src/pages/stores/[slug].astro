@@ -1,13 +1,12 @@
 ---
 import MainLayout from "../../layouts/MainLayout.astro";
 import CouponCard from "../../components/CouponCard.astro";
+import StoreLogo from "../../components/StoreLogo.astro";
 import { getDb } from "../../lib/cloudflare";
 import { getCoupons, getStoreBySlug } from "../../lib/db";
 import {
-  getStoreColorClass,
-  getStoreInitials,
+  getStoreBrandTheme,
   safeExternalUrl,
-  safeImageUrl,
 } from "../../lib/format";
 
 const slug = Astro.params.slug ?? "";
@@ -29,80 +28,103 @@ const coupons = store
     })
   : [];
 
-const logo = store ? safeImageUrl(store.logo_url) : "";
 const websiteUrl = store ? safeExternalUrl(store.website_url) : "#";
+const theme = store ? getStoreBrandTheme(store.slug || store.name) : null;
 ---
 
 <MainLayout
-  title={store ? `${store.name} Coupon Codes & Discounts | CouponHub` : "Store Not Found | CouponHub"}
+  title={store ? `${store.name} Coupon Codes & Verified Promo Codes — CouponHub` : "Store Not Found | CouponHub"}
   description={store ? `Verified ${store.name} promo codes and discount offers.` : "Store not found."}
 >
   {!store ? (
     <section class="mx-auto max-w-2xl px-4 py-20 text-center">
-      <h1 class="text-3xl font-extrabold text-slate-900 dark:text-white">Store Not Found</h1>
-      <a href="/stores" class="mt-6 inline-block rounded-xl bg-indigo-600 px-6 py-3 text-sm font-bold text-white">
+      <h1 class="text-3xl font-extrabold text-slate-900">Store Not Found</h1>
+      <p class="mt-2 text-sm text-slate-500">The store you are looking for does not exist or has been removed.</p>
+      <a href="/stores" class="mt-6 inline-block rounded-2xl bg-emerald-600 px-6 py-3 text-sm font-bold text-white shadow-xs hover:bg-emerald-700">
         Browse All Stores
       </a>
     </section>
   ) : (
     <section class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
-      <!-- Store Header -->
-      <div class="mb-8 flex flex-col justify-between gap-5 rounded-2xl border border-slate-200 bg-white p-6 sm:flex-row sm:items-center dark:border-slate-800 dark:bg-slate-900">
-        <div class="flex items-start gap-4">
-          {logo ? (
-            <img
-              src={logo}
-              alt={`${store.name} logo`}
-              class="h-16 w-16 shrink-0 rounded-2xl border border-slate-200 bg-white object-contain p-1.5 dark:border-slate-700"
-            />
-          ) : (
-            <div
-              class:list={[
-                "flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl text-xl font-extrabold text-white shadow-sm",
-                getStoreColorClass(store.name),
-              ]}
-            >
-              {getStoreInitials(store.name)}
-            </div>
-          )}
+      <!-- Breadcrumbs -->
+      <nav class="mb-5 flex items-center gap-2 text-xs font-semibold text-slate-400">
+        <a href="/" class="hover:text-slate-700">Home</a>
+        <span>/</span>
+        <a href="/stores" class="hover:text-slate-700">Stores</a>
+        <span>/</span>
+        <span class="text-slate-800">{store.name}</span>
+      </nav>
 
-          <div>
-            <h1 class="text-2xl font-extrabold text-slate-900 sm:text-3xl dark:text-white">
-              {store.name} Coupons
-            </h1>
-            {store.description && (
-              <p class="mt-1 max-w-2xl text-sm text-slate-600 dark:text-slate-400">
-                {store.description}
+      <!-- Store Hero Banner -->
+      <div class="relative mb-10 overflow-hidden rounded-3xl border border-slate-200/90 bg-white p-6 shadow-xs sm:p-8">
+        <div
+          class:list={[
+            "pointer-events-none absolute inset-0 bg-gradient-to-r opacity-50",
+            theme?.bgGradient,
+          ]}
+        ></div>
+
+        <div class="relative z-10 flex flex-col justify-between gap-6 lg:flex-row lg:items-center">
+          <div class="flex items-start gap-4 sm:gap-5">
+            <div class="h-18 w-18 shrink-0 rounded-3xl border border-slate-200/90 bg-white p-2 shadow-xs flex items-center justify-center overflow-hidden">
+              <StoreLogo store={store} size="lg" />
+            </div>
+
+            <div>
+              <div class="flex flex-wrap items-center gap-2">
+                <span class="inline-flex items-center gap-1.5 rounded-full border border-emerald-600/20 bg-emerald-50 px-2.5 py-0.5 text-[11px] font-black text-emerald-800">
+                  <span class="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-soft-pulse"></span>
+                  <span>Verified Partner</span>
+                </span>
+                <span class="text-xs font-semibold text-slate-400">
+                  {coupons.length} {coupons.length === 1 ? "Offer Live" : "Offers Live"}
+                </span>
+              </div>
+
+              <h1 class="mt-1.5 text-2xl font-black tracking-tight text-slate-900 sm:text-4xl">
+                {store.name} Coupons &amp; Promo Codes
+              </h1>
+
+              <p class="mt-1.5 max-w-2xl text-xs font-medium leading-relaxed text-slate-600 sm:text-sm">
+                {store.description || theme?.brandTagline}
               </p>
+            </div>
+          </div>
+
+          <!-- Actions -->
+          <div class="flex flex-wrap items-center gap-3">
+            <a
+              href={includeExpired ? `/stores/${store.slug}` : `/stores/${store.slug}?includeExpired=1`}
+              class="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-xs font-bold text-slate-700 shadow-2xs transition hover:bg-slate-50"
+            >
+              {includeExpired ? "Hide Expired Deals" : "Include Expired Deals"}
+            </a>
+            {websiteUrl !== "#" && (
+              <a
+                href={websiteUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center gap-1.5 rounded-xl bg-slate-900 px-5 py-2.5 text-xs font-black text-white shadow-xs transition hover:bg-emerald-700 active:scale-95"
+              >
+                <span>Visit {store.name}</span>
+                <span>↗</span>
+              </a>
             )}
           </div>
         </div>
-
-        <div class="flex flex-wrap items-center gap-2.5">
-          <a
-            href={includeExpired ? `/stores/${store.slug}` : `/stores/${store.slug}?includeExpired=1`}
-            class="rounded-xl border border-slate-200 px-4 py-2 text-xs font-bold text-slate-700 hover:bg-slate-100 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800"
-          >
-            {includeExpired ? "Hide Expired" : "Show Expired"}
-          </a>
-          <a
-            href={websiteUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="rounded-xl bg-orange-500 px-4 py-2 text-xs font-bold text-white shadow-xs hover:bg-orange-600"
-          >
-            Visit {store.name} ↗
-          </a>
-        </div>
       </div>
 
+      <!-- Coupon Grid -->
       {coupons.length === 0 ? (
-        <div class="rounded-2xl border border-dashed border-slate-300 bg-white p-12 text-center dark:border-slate-700 dark:bg-slate-900">
-          <p class="text-lg font-bold text-slate-700 dark:text-slate-200">
+        <div class="rounded-3xl border border-dashed border-slate-300 bg-white p-14 text-center shadow-xs">
+          <p class="text-lg font-extrabold text-slate-800">
             No active coupons for {store.name} right now.
           </p>
-          <a href="/coupons" class="mt-4 inline-block text-sm font-bold text-indigo-600 hover:underline">
-            Explore other deals →
+          <p class="mt-1 text-xs text-slate-500">
+            Check back soon or explore other partner stores.
+          </p>
+          <a href="/stores" class="mt-4 inline-block text-xs font-black text-emerald-700 hover:underline">
+            Explore other partner stores →
           </a>
         </div>
       ) : (

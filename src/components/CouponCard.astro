@@ -1,14 +1,12 @@
 ---
 import type { CouponWithRelations } from "../lib/types";
+import StoreLogo from "./StoreLogo.astro";
 import {
   formatDisplayDate,
   getDaysUntilExpiry,
-  getStoreColorClass,
-  getStoreInitials,
   isCouponExpired,
   maskCouponCode,
   safeExternalUrl,
-  safeImageUrl,
 } from "../lib/format";
 
 interface Props {
@@ -20,7 +18,6 @@ const { coupon, featuredBadge } = Astro.props;
 const expired = isCouponExpired(coupon.expiry_date);
 const daysLeft = getDaysUntilExpiry(coupon.expiry_date);
 const expiringSoon = !expired && daysLeft !== null && daysLeft <= 7;
-const logo = safeImageUrl(coupon.store_logo_url);
 const storeUrl = safeExternalUrl(coupon.affiliate_or_store_url);
 const masked = maskCouponCode(coupon.code);
 const totalVotes = coupon.worked_count + coupon.didnt_work_count;
@@ -43,23 +40,9 @@ const successRate =
         href={`/stores/${coupon.store_slug}`}
         class="flex min-w-0 items-center gap-3 transition hover:opacity-85"
       >
-        {logo ? (
-          <img
-            src={logo}
-            alt={`${coupon.store_name} logo`}
-            loading="lazy"
-            class="h-11 w-11 shrink-0 rounded-2xl border border-slate-200/90 bg-white object-contain p-1.5 shadow-xs"
-          />
-        ) : (
-          <div
-            class:list={[
-              "flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl text-xs font-black text-white shadow-xs",
-              getStoreColorClass(coupon.store_name),
-            ]}
-          >
-            {getStoreInitials(coupon.store_name)}
-          </div>
-        )}
+        <div class="h-11 w-11 shrink-0 rounded-2xl border border-slate-200/90 bg-white p-1 shadow-2xs flex items-center justify-center overflow-hidden">
+          <StoreLogo store={{ name: coupon.store_name, slug: coupon.store_slug, logo_url: coupon.store_logo_url }} size="sm" />
+        </div>
         <div class="min-w-0">
           <p class="truncate text-sm font-extrabold text-slate-900 group-hover:text-emerald-700 transition">
             {coupon.store_name}
