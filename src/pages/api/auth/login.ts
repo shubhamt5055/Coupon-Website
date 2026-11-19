@@ -33,12 +33,27 @@ export const POST: APIRoute = async ({ request }) => {
     const user = await getUserByEmail(db, email);
 
     if (!user) {
-      return Response.json({ error: "Invalid email or password." }, { status: 401 });
+      return Response.json(
+        {
+          ok: false,
+          notFound: true,
+          email,
+          error: "No account found with this email. Please create an account first!",
+        },
+        { status: 404 }
+      );
     }
 
     const isValid = await verifyPassword(password, user.password_hash, user.password_salt);
     if (!isValid) {
-      return Response.json({ error: "Invalid email or password." }, { status: 401 });
+      return Response.json(
+        {
+          ok: false,
+          notFound: false,
+          error: "Incorrect password. Please verify your password and try again.",
+        },
+        { status: 401 }
+      );
     }
 
     const token = await createUserSessionToken({

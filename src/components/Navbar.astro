@@ -60,14 +60,6 @@ function isActive(href: string): boolean {
         <span class="inline dark:hidden" aria-hidden="true">🌙</span>
       </button>
 
-      <!-- Submit Coupon Button (Always visible) -->
-      <a
-        href="/submit-coupon"
-        class="hidden items-center gap-1.5 rounded-lg bg-indigo-600 px-3.5 py-2 text-xs font-bold text-white shadow-xs transition hover:bg-indigo-700 sm:inline-flex"
-      >
-        <span>+ Submit Deal</span>
-      </a>
-
       <!-- Visitor Auth Section -->
       {user ? (
         <div class="hidden items-center gap-2 sm:flex">
@@ -96,18 +88,12 @@ function isActive(href: string): boolean {
           </button>
         </div>
       ) : (
-        <div class="hidden items-center gap-1.5 sm:flex">
+        <div class="hidden items-center sm:flex">
           <a
             href="/login"
-            class="rounded-lg px-3 py-2 text-xs font-bold text-slate-700 transition hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800"
+            class="rounded-xl bg-indigo-600 px-4 py-2 text-xs font-bold text-white shadow-xs transition hover:bg-indigo-700 focus:outline-none"
           >
             Sign In
-          </a>
-          <a
-            href="/register"
-            class="rounded-lg border border-slate-300 px-3 py-2 text-xs font-bold text-slate-700 transition hover:border-indigo-400 hover:text-indigo-600 dark:border-slate-700 dark:text-slate-200 dark:hover:border-indigo-500"
-          >
-            Sign Up
           </a>
         </div>
       )}
@@ -156,14 +142,6 @@ function isActive(href: string): boolean {
         </a>
       ))}
 
-      <!-- Mobile Action: Submit Deal -->
-      <a
-        href="/submit-coupon"
-        class="mt-1 flex items-center justify-center gap-1.5 rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-bold text-white shadow-xs"
-      >
-        + Submit a Coupon
-      </a>
-
       {user ? (
         <div class="mt-2 border-t border-slate-100 pt-2 dark:border-slate-800">
           <a
@@ -184,18 +162,12 @@ function isActive(href: string): boolean {
           </button>
         </div>
       ) : (
-        <div class="mt-2 grid grid-cols-2 gap-2 border-t border-slate-100 pt-2 dark:border-slate-800">
+        <div class="mt-2 border-t border-slate-100 pt-2 dark:border-slate-800">
           <a
             href="/login"
-            class="rounded-lg border border-slate-200 py-2 text-center text-xs font-bold text-slate-700 dark:border-slate-700 dark:text-slate-200"
+            class="block w-full rounded-xl bg-indigo-600 py-2.5 text-center text-xs font-bold text-white shadow-xs"
           >
             Sign In
-          </a>
-          <a
-            href="/register"
-            class="rounded-lg bg-slate-100 py-2 text-center text-xs font-bold text-slate-900 dark:bg-slate-800 dark:text-white"
-          >
-            Sign Up
           </a>
         </div>
       )}

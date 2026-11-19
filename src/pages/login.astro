@@ -5,6 +5,7 @@ const user = Astro.locals.user;
 const nextUrl = Astro.url.searchParams.get("next") || "/";
 const safeNext = nextUrl.startsWith("/") && !nextUrl.startsWith("//") ? nextUrl : "/";
 const reason = Astro.url.searchParams.get("reason");
+const initialMode = Astro.url.searchParams.get("mode") === "register" ? "register" : "login";
 
 if (user) {
   return Astro.redirect(safeNext);
@@ -12,39 +13,72 @@ if (user) {
 ---
 
 <MainLayout
-  title="Sign In — CouponHub"
-  description="Sign in to your CouponHub account to share coupons, track savings, and manage deals."
+  title="Sign In / Create Account — CouponHub"
+  description="Sign in with your registered account, or create a new account to share coupons and deals."
 >
   <div class="mx-auto flex min-h-[calc(100vh-250px)] max-w-md items-center px-4 py-12">
-    <div class="w-full rounded-3xl border border-slate-200 bg-white p-7 shadow-xl dark:border-slate-800 dark:bg-slate-900 sm:p-8">
-      <!-- Header -->
+    <div class="w-full rounded-3xl border border-slate-200 bg-white p-6 shadow-xl dark:border-slate-800 dark:bg-slate-900 sm:p-8">
+      <!-- Brand Icon & Header -->
       <div class="text-center">
         <span class="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-600 to-blue-600 text-xl font-black text-white shadow-md">
           %
         </span>
-        <h1 class="mt-4 text-2xl font-black text-slate-900 dark:text-white">
-          Welcome Back
+        <h1 id="auth-title" class="mt-4 text-2xl font-black text-slate-900 dark:text-white">
+          Sign In to CouponHub
         </h1>
-        <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">
-          Sign in to your account to share and manage coupons.
+        <p id="auth-subtitle" class="mt-1 text-xs text-slate-500 dark:text-slate-400">
+          Sign in is available for registered users only.
         </p>
       </div>
 
-      <!-- Context Reason Banner -->
+      <!-- Mode Toggle Switch (Sign In vs Create Account) -->
+      <div class="mt-6 flex rounded-2xl bg-slate-100 p-1 dark:bg-slate-800/80">
+        <button
+          type="button"
+          id="tab-login-btn"
+          class="flex-1 rounded-xl py-2 text-xs font-bold transition shadow-xs bg-white text-slate-900 dark:bg-slate-900 dark:text-white"
+        >
+          Sign In
+        </button>
+        <button
+          type="button"
+          id="tab-register-btn"
+          class="flex-1 rounded-xl py-2 text-xs font-bold transition text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white"
+        >
+          Create Account
+        </button>
+      </div>
+
+      <!-- Context Reason Banner (e.g. from middleware) -->
       {reason === "signin-required" && (
-        <div class="mt-5 rounded-2xl border border-amber-200 bg-amber-50 p-3.5 text-xs font-semibold text-amber-800 dark:border-amber-800 dark:bg-amber-950/60 dark:text-amber-200">
-          🔒 <strong>Sign-in required:</strong> You must create an account or sign in before uploading a coupon.
+        <div class="mt-4 rounded-2xl border border-amber-200 bg-amber-50 p-3.5 text-xs font-semibold text-amber-800 dark:border-amber-800 dark:bg-amber-950/60 dark:text-amber-200">
+          🔒 <strong>Sign-in required:</strong> Pehle sign in karein ya naya account banayein.
         </div>
       )}
 
+      <!-- Alert / Notice Box (Account Not Found or Guidance) -->
+      <div
+        id="auth-alert"
+        class="mt-4 hidden rounded-2xl border border-amber-300 bg-amber-50 p-3.5 text-xs font-semibold text-amber-900 dark:border-amber-700 dark:bg-amber-950/70 dark:text-amber-200"
+      >
+        <div class="flex items-start gap-2">
+          <span class="text-base">⚠️</span>
+          <div id="auth-alert-text"></div>
+        </div>
+      </div>
+
       <!-- Error Box -->
       <div
-        id="login-error"
-        class="mt-5 hidden rounded-2xl border border-rose-200 bg-rose-50 p-3 text-xs font-semibold text-rose-700 dark:border-rose-800 dark:bg-rose-950/60 dark:text-rose-300"
+        id="auth-error"
+        class="mt-4 hidden rounded-2xl border border-rose-200 bg-rose-50 p-3 text-xs font-semibold text-rose-700 dark:border-rose-800 dark:bg-rose-950/60 dark:text-rose-300"
       ></div>
 
-      <!-- Login Form -->
-      <form id="user-login-form" class="mt-6 space-y-4" data-next={safeNext}>
+      <!-- ==================== SIGN IN FORM ==================== -->
+      <form id="sign-in-form" class="mt-5 space-y-4" data-next={safeNext}>
+        <div class="rounded-xl border border-slate-200/80 bg-slate-50/80 p-3 text-[11px] text-slate-600 dark:border-slate-800 dark:bg-slate-950/40 dark:text-slate-400">
+          🔑 <strong>Note:</strong> Agar aapne pehle account banaya hai, to apna email &amp; password enter karein. Agar account nahi hai to system turant aapko account banane ka form provide karega.
+        </div>
+
         <div>
           <label for="login-email" class="mb-1.5 block text-xs font-bold text-slate-700 uppercase dark:text-slate-300">
             Email Address
@@ -56,7 +90,7 @@ if (user) {
             required
             autocomplete="email"
             placeholder="you@example.com"
-            class="w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-2.5 text-sm text-slate-900 outline-none focus:border-indigo-500 focus:bg-white dark:border-slate-700 dark:bg-slate-950 dark:text-white"
+            class="w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-2.5 text-sm text-slate-900 outline-none transition focus:border-indigo-500 focus:bg-white dark:border-slate-700 dark:bg-slate-950 dark:text-white"
           />
         </div>
 
@@ -71,7 +105,7 @@ if (user) {
             required
             autocomplete="current-password"
             placeholder="••••••••"
-            class="w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-2.5 text-sm text-slate-900 outline-none focus:border-indigo-500 focus:bg-white dark:border-slate-700 dark:bg-slate-950 dark:text-white"
+            class="w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-2.5 text-sm text-slate-900 outline-none transition focus:border-indigo-500 focus:bg-white dark:border-slate-700 dark:bg-slate-950 dark:text-white"
           />
         </div>
 
@@ -82,20 +116,109 @@ if (user) {
         >
           Sign In
         </button>
+
+        <div class="pt-2 text-center text-xs text-slate-500 dark:text-slate-400">
+          Account nahi hai?{" "}
+          <button
+            type="button"
+            id="switch-to-register-link"
+            class="font-bold text-indigo-600 hover:underline dark:text-indigo-400"
+          >
+            Naya account banayein →
+          </button>
+        </div>
       </form>
 
-      <!-- Footer switch -->
-      <div class="mt-6 border-t border-slate-100 pt-5 text-center text-xs text-slate-600 dark:border-slate-800 dark:text-slate-400">
-        Don't have an account?{" "}
-        <a
-          href={`/register${safeNext !== "/" ? `?next=${encodeURIComponent(safeNext)}` : ""}`}
-          class="font-bold text-indigo-600 hover:underline dark:text-indigo-400"
-        >
-          Create account for free →
-        </a>
-      </div>
+      <!-- ==================== CREATE ACCOUNT FORM ==================== -->
+      <form id="create-account-form" class="mt-5 hidden space-y-4" data-next={safeNext}>
+        <div class="rounded-xl border border-indigo-100 bg-indigo-50/70 p-3 text-[11px] text-indigo-900 dark:border-indigo-900/60 dark:bg-indigo-950/40 dark:text-indigo-200">
+          ✨ <strong>Free Account:</strong> Apna account banayein taaki aap deals upload kar sakein aur unka verification status dekh sakein.
+        </div>
 
-      <div class="mt-4 text-center">
+        <div>
+          <label for="reg-name" class="mb-1.5 block text-xs font-bold text-slate-700 uppercase dark:text-slate-300">
+            Full Name *
+          </label>
+          <input
+            id="reg-name"
+            name="name"
+            type="text"
+            required
+            autocomplete="name"
+            placeholder="e.g. Rahul Sharma"
+            class="w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-2.5 text-sm text-slate-900 outline-none transition focus:border-indigo-500 focus:bg-white dark:border-slate-700 dark:bg-slate-950 dark:text-white"
+          />
+        </div>
+
+        <div>
+          <label for="reg-email" class="mb-1.5 block text-xs font-bold text-slate-700 uppercase dark:text-slate-300">
+            Email Address *
+          </label>
+          <input
+            id="reg-email"
+            name="email"
+            type="email"
+            required
+            autocomplete="email"
+            placeholder="you@example.com"
+            class="w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-2.5 text-sm text-slate-900 outline-none transition focus:border-indigo-500 focus:bg-white dark:border-slate-700 dark:bg-slate-950 dark:text-white"
+          />
+        </div>
+
+        <div>
+          <label for="reg-password" class="mb-1.5 block text-xs font-bold text-slate-700 uppercase dark:text-slate-300">
+            Password (min 6 characters) *
+          </label>
+          <input
+            id="reg-password"
+            name="password"
+            type="password"
+            required
+            minlength="6"
+            autocomplete="new-password"
+            placeholder="••••••••"
+            class="w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-2.5 text-sm text-slate-900 outline-none transition focus:border-indigo-500 focus:bg-white dark:border-slate-700 dark:bg-slate-950 dark:text-white"
+          />
+        </div>
+
+        <div>
+          <label for="reg-confirm" class="mb-1.5 block text-xs font-bold text-slate-700 uppercase dark:text-slate-300">
+            Confirm Password *
+          </label>
+          <input
+            id="reg-confirm"
+            name="confirmPassword"
+            type="password"
+            required
+            minlength="6"
+            autocomplete="new-password"
+            placeholder="••••••••"
+            class="w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-2.5 text-sm text-slate-900 outline-none transition focus:border-indigo-500 focus:bg-white dark:border-slate-700 dark:bg-slate-950 dark:text-white"
+          />
+        </div>
+
+        <button
+          type="submit"
+          id="reg-btn"
+          class="w-full rounded-xl bg-emerald-600 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-emerald-700 disabled:opacity-60"
+        >
+          Create Account &amp; Continue
+        </button>
+
+        <div class="pt-2 text-center text-xs text-slate-500 dark:text-slate-400">
+          Already have an account?{" "}
+          <button
+            type="button"
+            id="switch-to-login-link"
+            class="font-bold text-indigo-600 hover:underline dark:text-indigo-400"
+          >
+            Sign In here →
+          </button>
+        </div>
+      </form>
+
+      <!-- Admin link -->
+      <div class="mt-6 border-t border-slate-100 pt-4 text-center dark:border-slate-800">
         <a href="/admin/login" class="text-[11px] text-slate-400 hover:text-slate-600 dark:hover:text-slate-300">
           Team Member? Admin Login
         </a>
@@ -104,51 +227,186 @@ if (user) {
   </div>
 </MainLayout>
 
-<script>
-  const form = document.getElementById("user-login-form") as HTMLFormElement | null;
-  const errorBox = document.getElementById("login-error");
-  const submitBtn = document.getElementById("login-btn") as HTMLButtonElement | null;
+<script define:vars={{ initialMode }}>
+  const tabLoginBtn = document.getElementById("tab-login-btn");
+  const tabRegisterBtn = document.getElementById("tab-register-btn");
+  const signInForm = document.getElementById("sign-in-form");
+  const createAccountForm = document.getElementById("create-account-form");
+  const authTitle = document.getElementById("auth-title");
+  const authSubtitle = document.getElementById("auth-subtitle");
+  const authAlert = document.getElementById("auth-alert");
+  const authAlertText = document.getElementById("auth-alert-text");
+  const authError = document.getElementById("auth-error");
 
-  form?.addEventListener("submit", async (event) => {
-    event.preventDefault();
-    if (errorBox) errorBox.classList.add("hidden");
-    if (submitBtn) {
-      submitBtn.disabled = true;
-      submitBtn.textContent = "Signing in...";
+  const loginEmailInput = document.getElementById("login-email");
+  const regNameInput = document.getElementById("reg-name");
+  const regEmailInput = document.getElementById("reg-email");
+
+  const loginBtn = document.getElementById("login-btn");
+  const regBtn = document.getElementById("reg-btn");
+
+  function setMode(mode, prefillEmail = "", alertMessage = "") {
+    if (authError) authError.classList.add("hidden");
+
+    if (alertMessage && authAlert && authAlertText) {
+      authAlertText.innerHTML = alertMessage;
+      authAlert.classList.remove("hidden");
+    } else if (!alertMessage && authAlert) {
+      authAlert.classList.add("hidden");
     }
 
-    const formData = new FormData(form);
-    const payload = {
-      email: String(formData.get("email") || ""),
-      password: String(formData.get("password") || ""),
-    };
+    if (mode === "register") {
+      signInForm?.classList.add("hidden");
+      createAccountForm?.classList.remove("hidden");
+
+      tabLoginBtn?.classList.remove("bg-white", "text-slate-900", "dark:bg-slate-900", "dark:text-white", "shadow-xs");
+      tabLoginBtn?.classList.add("text-slate-500", "dark:text-slate-400");
+
+      tabRegisterBtn?.classList.remove("text-slate-500", "dark:text-slate-400");
+      tabRegisterBtn?.classList.add("bg-white", "text-slate-900", "dark:bg-slate-900", "dark:text-white", "shadow-xs");
+
+      if (authTitle) authTitle.textContent = "Create an Account";
+      if (authSubtitle) authSubtitle.textContent = "Fill in your details below to create your free account.";
+
+      if (prefillEmail && regEmailInput) {
+        regEmailInput.value = prefillEmail;
+        regNameInput?.focus();
+      }
+    } else {
+      createAccountForm?.classList.add("hidden");
+      signInForm?.classList.remove("hidden");
+
+      tabRegisterBtn?.classList.remove("bg-white", "text-slate-900", "dark:bg-slate-900", "dark:text-white", "shadow-xs");
+      tabRegisterBtn?.classList.add("text-slate-500", "dark:text-slate-400");
+
+      tabLoginBtn?.classList.remove("text-slate-500", "dark:text-slate-400");
+      tabLoginBtn?.classList.add("bg-white", "text-slate-900", "dark:bg-slate-900", "dark:text-white", "shadow-xs");
+
+      if (authTitle) authTitle.textContent = "Sign In to CouponHub";
+      if (authSubtitle) authSubtitle.textContent = "Sign in is available for registered users only.";
+
+      if (prefillEmail && loginEmailInput) {
+        loginEmailInput.value = prefillEmail;
+      }
+    }
+  }
+
+  // Initialize mode
+  if (initialMode === "register") {
+    setMode("register");
+  }
+
+  tabLoginBtn?.addEventListener("click", () => setMode("login"));
+  tabRegisterBtn?.addEventListener("click", () => setMode("register"));
+  document.getElementById("switch-to-register-link")?.addEventListener("click", () => setMode("register"));
+  document.getElementById("switch-to-login-link")?.addEventListener("click", () => setMode("login"));
+
+  // Handle Sign In Submit
+  signInForm?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    if (authError) authError.classList.add("hidden");
+    if (authAlert) authAlert.classList.add("hidden");
+
+    if (loginBtn) {
+      loginBtn.disabled = true;
+      loginBtn.textContent = "Checking credentials...";
+    }
+
+    const formData = new FormData(signInForm);
+    const email = String(formData.get("email") || "").trim();
+    const password = String(formData.get("password") || "");
 
     try {
       const res = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        body: JSON.stringify({ email, password }),
       });
-      const data = (await res.json()) as { ok?: boolean; error?: string };
+      const data = await res.json();
 
       if (!res.ok || !data.ok) {
-        if (errorBox) {
-          errorBox.textContent = data.error || "Invalid email or password.";
-          errorBox.classList.remove("hidden");
+        // If account is not found -> approach user to create account!
+        if (data.notFound) {
+          setMode(
+            "register",
+            email,
+            `Aapka account nahi mila! <strong>${email}</strong> par abhi koi account register nahi hai. Kripya neeche apna naam aur password daal kar apna account banayein.`
+          );
+          return;
+        }
+
+        // Existing account, but invalid password
+        if (authError) {
+          authError.textContent = data.error || "Password galat hai. Kripya sahi password enter karein.";
+          authError.classList.remove("hidden");
         }
         return;
       }
 
-      window.location.href = form.dataset.next || "/";
+      window.location.href = signInForm.dataset.next || "/";
     } catch {
-      if (errorBox) {
-        errorBox.textContent = "Network error. Please try again.";
-        errorBox.classList.remove("hidden");
+      if (authError) {
+        authError.textContent = "Network error. Please try again.";
+        authError.classList.remove("hidden");
       }
     } finally {
-      if (submitBtn) {
-        submitBtn.disabled = false;
-        submitBtn.textContent = "Sign In";
+      if (loginBtn) {
+        loginBtn.disabled = false;
+        loginBtn.textContent = "Sign In";
+      }
+    }
+  });
+
+  // Handle Create Account Submit
+  createAccountForm?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    if (authError) authError.classList.add("hidden");
+
+    const formData = new FormData(createAccountForm);
+    const name = String(formData.get("name") || "").trim();
+    const email = String(formData.get("email") || "").trim();
+    const password = String(formData.get("password") || "");
+    const confirmPassword = String(formData.get("confirmPassword") || "");
+
+    if (password !== confirmPassword) {
+      if (authError) {
+        authError.textContent = "Passwords match nahi kar rahe. Kripya dono me same password dalein.";
+        authError.classList.remove("hidden");
+      }
+      return;
+    }
+
+    if (regBtn) {
+      regBtn.disabled = true;
+      regBtn.textContent = "Creating your account...";
+    }
+
+    try {
+      const res = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, password, confirmPassword }),
+      });
+      const data = await res.json();
+
+      if (!res.ok || !data.ok) {
+        if (authError) {
+          authError.textContent = data.error || "Account create nahi ho paya. Kripya dobara try karein.";
+          authError.classList.remove("hidden");
+        }
+        return;
+      }
+
+      window.location.href = createAccountForm.dataset.next || "/";
+    } catch {
+      if (authError) {
+        authError.textContent = "Network error. Please try again.";
+        authError.classList.remove("hidden");
+      }
+    } finally {
+      if (regBtn) {
+        regBtn.disabled = false;
+        regBtn.textContent = "Create Account & Continue";
       }
     }
   });
