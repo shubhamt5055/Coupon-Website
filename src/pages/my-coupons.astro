@@ -55,6 +55,13 @@ const justSubmitted = Boolean(submittedParam);
         >
           + Share Another Coupon
         </a>
+        <button
+          type="button"
+          id="user-logout-btn"
+          class="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-xs font-semibold text-slate-700 transition hover:border-rose-300 hover:bg-rose-50 hover:text-rose-600 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800"
+        >
+          Log Out
+        </button>
       </div>
     </div>
 
@@ -169,6 +176,12 @@ const justSubmitted = Boolean(submittedParam);
 </MainLayout>
 
 <script>
+  // Logout handler
+  document.getElementById("user-logout-btn")?.addEventListener("click", async () => {
+    await fetch("/api/auth/logout", { method: "POST" });
+    window.location.href = "/login";
+  });
+
   // Delete coupon handler
   document.querySelectorAll(".delete-coupon-btn").forEach((btn) => {
     btn.addEventListener("click", async (e) => {
