@@ -1,0 +1,229 @@
+<!-- Global Coupon Reveal Modal + Clipboard + Click Tracker + Quick Vote -->
+<div
+  id="coupon-reveal-modal"
+  class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/60 p-4 backdrop-blur-xs"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="modal-coupon-title"
+>
+  <div class="relative w-full max-w-md rounded-2xl border border-slate-200 bg-white p-6 shadow-2xl dark:border-slate-800 dark:bg-slate-900">
+    <button
+      type="button"
+      id="modal-close-btn"
+      aria-label="Close modal"
+      class="absolute top-4 right-4 flex h-8 w-8 items-center justify-center rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-700 dark:hover:bg-slate-800 dark:hover:text-slate-200"
+    >
+      ✕
+    </button>
+
+    <div class="mb-2 flex items-center gap-2">
+      <span id="modal-coupon-discount" class="rounded-full bg-emerald-100 px-3 py-1 text-xs font-extrabold text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300"></span>
+      <span id="modal-coupon-store" class="text-xs font-semibold text-slate-500 dark:text-slate-400"></span>
+    </div>
+
+    <h3 id="modal-coupon-title" class="pr-6 text-lg font-bold text-slate-900 dark:text-white"></h3>
+
+    <p id="modal-copy-status" class="mt-2 text-xs font-semibold text-emerald-600 dark:text-emerald-400">
+      ✓ Coupon code copied to clipboard! Paste it at checkout.
+    </p>
+
+    <div class="mt-4 flex items-center justify-between gap-2 rounded-xl border-2 border-dashed border-indigo-500 bg-indigo-50/70 px-4 py-3 dark:bg-indigo-950/40">
+      <span id="modal-coupon-code" class="font-mono text-xl font-extrabold tracking-widest text-indigo-700 dark:text-indigo-300"></span>
+      <button
+        type="button"
+        id="modal-copy-again-btn"
+        class="rounded-lg bg-indigo-600 px-3.5 py-2 text-xs font-bold text-white transition hover:bg-indigo-700"
+      >
+        Copy Again
+      </button>
+    </div>
+
+    <a
+      id="modal-store-link"
+      href="#"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="mt-4 block w-full rounded-xl bg-orange-500 py-3 text-center text-sm font-bold text-white shadow-sm transition hover:bg-orange-600"
+    >
+      Go to Store &amp; Redeem →
+    </a>
+
+    <!-- Quick Worked / Didn't Work Feedback -->
+    <div class="mt-5 border-t border-slate-200 pt-4 text-center dark:border-slate-800">
+      <p class="text-xs font-medium text-slate-500 dark:text-slate-400">Did this coupon work for you?</p>
+      <div class="mt-2.5 flex justify-center gap-3">
+        <button
+          type="button"
+          data-modal-vote="worked"
+          class="rounded-lg border border-emerald-200 bg-emerald-50 px-3.5 py-1.5 text-xs font-bold text-emerald-700 transition hover:bg-emerald-100 dark:border-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300"
+        >
+          👍 Worked
+        </button>
+        <button
+          type="button"
+          data-modal-vote="didnt_work"
+          class="rounded-lg border border-rose-200 bg-rose-50 px-3.5 py-1.5 text-xs font-bold text-rose-700 transition hover:bg-rose-100 dark:border-rose-800 dark:bg-rose-950/50 dark:text-rose-300"
+        >
+          👎 Didn't work
+        </button>
+      </div>
+      <p id="modal-vote-feedback" class="mt-2 hidden text-xs font-semibold text-indigo-600 dark:text-indigo-400"></p>
+    </div>
+  </div>
+</div>
+
+<script>
+  const modal = document.getElementById("coupon-reveal-modal");
+  const closeBtn = document.getElementById("modal-close-btn");
+  const titleEl = document.getElementById("modal-coupon-title");
+  const storeEl = document.getElementById("modal-coupon-store");
+  const discountEl = document.getElementById("modal-coupon-discount");
+  const codeEl = document.getElementById("modal-coupon-code");
+  const statusEl = document.getElementById("modal-copy-status");
+  const storeLinkEl = document.getElementById("modal-store-link") as HTMLAnchorElement | null;
+  const copyAgainBtn = document.getElementById("modal-copy-again-btn");
+  const voteFeedbackEl = document.getElementById("modal-vote-feedback");
+
+  let activeCouponId = "";
+  let activeCode = "";
+
+  async function copyToClipboard(text: string): Promise<boolean> {
+    try {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(text);
+        return true;
+      }
+    } catch {
+      // Fallback below
+    }
+    try {
+      const textarea = document.createElement("textarea");
+      textarea.value = text;
+      textarea.style.position = "fixed";
+      textarea.style.opacity = "0";
+      document.body.appendChild(textarea);
+      textarea.select();
+      const ok = document.execCommand("copy");
+      document.body.removeChild(textarea);
+      return ok;
+    } catch {
+      return false;
+    }
+  }
+
+  function closeModal() {
+    modal?.classList.add("hidden");
+    modal?.classList.remove("flex");
+  }
+
+  closeBtn?.addEventListener("click", closeModal);
+  modal?.addEventListener("click", (event) => {
+    if (event.target === modal) closeModal();
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") closeModal();
+  });
+
+  copyAgainBtn?.addEventListener("click", async () => {
+    if (!activeCode) return;
+    const ok = await copyToClipboard(activeCode);
+    if (copyAgainBtn) {
+      copyAgainBtn.textContent = ok ? "Copied!" : "Select & Copy";
+      setTimeout(() => {
+        copyAgainBtn.textContent = "Copy Again";
+      }, 1800);
+    }
+  });
+
+  document.querySelectorAll<HTMLButtonElement>("[data-modal-vote]").forEach((btn) => {
+    btn.addEventListener("click", async () => {
+      if (!activeCouponId) return;
+      const vote = btn.dataset.modalVote;
+      try {
+        const res = await fetch(`/api/coupons/${activeCouponId}/vote`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ vote }),
+        });
+        if (res.ok && voteFeedbackEl) {
+          voteFeedbackEl.textContent = "Thanks! Your feedback helps other shoppers.";
+          voteFeedbackEl.classList.remove("hidden");
+        }
+      } catch {
+        // ignore
+      }
+    });
+  });
+
+  document.addEventListener("click", async (event) => {
+    const target = event.target as HTMLElement | null;
+    const button = target?.closest<HTMLButtonElement>(".reveal-coupon-btn");
+    if (!button) return;
+
+    const id = button.dataset.couponId || "";
+    const code = button.dataset.couponCode || "";
+    const title = button.dataset.couponTitle || "";
+    const store = button.dataset.couponStore || "";
+    const discount = button.dataset.couponDiscount || "";
+    const url = button.dataset.couponUrl || "#";
+
+    activeCouponId = id;
+    activeCode = code;
+
+    // 1. Reveal full code inline on the card
+    const inlineCodeEl = document.querySelector(`[data-coupon-code-text="${id}"]`);
+    if (inlineCodeEl) {
+      inlineCodeEl.textContent = code;
+    }
+
+    // 2. Copy to clipboard
+    const copied = await copyToClipboard(code);
+    const originalLabel = button.textContent;
+    button.textContent = copied ? "Copied! ✓" : "Revealed";
+    setTimeout(() => {
+      button.textContent = originalLabel || "Copy Code";
+    }, 2200);
+
+    // 3. Populate & open confirmation modal
+    if (titleEl) titleEl.textContent = title;
+    if (storeEl) storeEl.textContent = store;
+    if (discountEl) discountEl.textContent = discount;
+    if (codeEl) codeEl.textContent = code;
+    if (storeLinkEl) storeLinkEl.href = url;
+    if (statusEl) {
+      statusEl.textContent = copied
+        ? "✓ Coupon code copied to clipboard! Paste it at checkout."
+        : "Code revealed below — tap Copy Again to copy it.";
+    }
+    if (voteFeedbackEl) {
+      voteFeedbackEl.classList.add("hidden");
+      voteFeedbackEl.textContent = "";
+    }
+    modal?.classList.remove("hidden");
+    modal?.classList.add("flex");
+
+    // 4. Open store link in a new tab (assignment requirement)
+    if (url && url !== "#") {
+      window.open(url, "_blank", "noopener,noreferrer");
+    }
+
+    // 5. Track click count in Cloudflare D1
+    if (id) {
+      try {
+        const res = await fetch(`/api/coupons/${id}/click`, { method: "POST" });
+        if (res.ok) {
+          const data = (await res.json()) as { click_count?: number };
+          if (typeof data.click_count === "number") {
+            document
+              .querySelectorAll(`[data-coupon-clicks="${id}"]`)
+              .forEach((el) => {
+                el.textContent = `${data.click_count} uses`;
+              });
+          }
+        }
+      } catch {
+        // non-blocking
+      }
+    }
+  });
+</script>

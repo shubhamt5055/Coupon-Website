@@ -1,0 +1,117 @@
+---
+import MainLayout from "../../layouts/MainLayout.astro";
+import CouponCard from "../../components/CouponCard.astro";
+import { getDb } from "../../lib/cloudflare";
+import { getCoupons, getStoreBySlug } from "../../lib/db";
+import {
+  getStoreColorClass,
+  getStoreInitials,
+  safeExternalUrl,
+  safeImageUrl,
+} from "../../lib/format";
+
+const slug = Astro.params.slug ?? "";
+const includeExpired = Astro.url.searchParams.get("includeExpired") === "1";
+
+const db = getDb();
+const store = await getStoreBySlug(db, slug);
+
+if (!store) {
+  Astro.response.status = 404;
+}
+
+const coupons = store
+  ? await getCoupons(db, {
+      storeSlug: store.slug,
+      includeExpired,
+      includeInactive: false,
+      sort: "popular",
+    })
+  : [];
+
+const logo = store ? safeImageUrl(store.logo_url) : "";
+const websiteUrl = store ? safeExternalUrl(store.website_url) : "#";
+---
+
+<MainLayout
+  title={store ? `${store.name} Coupon Codes & Discounts | CouponHub` : "Store Not Found | CouponHub"}
+  description={store ? `Verified ${store.name} promo codes and discount offers.` : "Store not found."}
+>
+  {!store ? (
+    <section class="mx-auto max-w-2xl px-4 py-20 text-center">
+      <h1 class="text-3xl font-extrabold text-slate-900 dark:text-white">Store Not Found</h1>
+      <a href="/stores" class="mt-6 inline-block rounded-xl bg-indigo-600 px-6 py-3 text-sm font-bold text-white">
+        Browse All Stores
+      </a>
+    </section>
+  ) : (
+    <section class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+      <!-- Store Header -->
+      <div class="mb-8 flex flex-col justify-between gap-5 rounded-2xl border border-slate-200 bg-white p-6 sm:flex-row sm:items-center dark:border-slate-800 dark:bg-slate-900">
+        <div class="flex items-start gap-4">
+          {logo ? (
+            <img
+              src={logo}
+              alt={`${store.name} logo`}
+              class="h-16 w-16 shrink-0 rounded-2xl border border-slate-200 bg-white object-contain p-1.5 dark:border-slate-700"
+            />
+          ) : (
+            <div
+              class:list={[
+                "flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl text-xl font-extrabold text-white shadow-sm",
+                getStoreColorClass(store.name),
+              ]}
+            >
+              {getStoreInitials(store.name)}
+            </div>
+          )}
+
+          <div>
+            <h1 class="text-2xl font-extrabold text-slate-900 sm:text-3xl dark:text-white">
+              {store.name} Coupons
+            </h1>
+            {store.description && (
+              <p class="mt-1 max-w-2xl text-sm text-slate-600 dark:text-slate-400">
+                {store.description}
+              </p>
+            )}
+          </div>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2.5">
+          <a
+            href={includeExpired ? `/stores/${store.slug}` : `/stores/${store.slug}?includeExpired=1`}
+            class="rounded-xl border border-slate-200 px-4 py-2 text-xs font-bold text-slate-700 hover:bg-slate-100 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800"
+          >
+            {includeExpired ? "Hide Expired" : "Show Expired"}
+          </a>
+          <a
+            href={websiteUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="rounded-xl bg-orange-500 px-4 py-2 text-xs font-bold text-white shadow-xs hover:bg-orange-600"
+          >
+            Visit {store.name} ↗
+          </a>
+        </div>
+      </div>
+
+      {coupons.length === 0 ? (
+        <div class="rounded-2xl border border-dashed border-slate-300 bg-white p-12 text-center dark:border-slate-700 dark:bg-slate-900">
+          <p class="text-lg font-bold text-slate-700 dark:text-slate-200">
+            No active coupons for {store.name} right now.
+          </p>
+          <a href="/coupons" class="mt-4 inline-block text-sm font-bold text-indigo-600 hover:underline">
+            Explore other deals →
+          </a>
+        </div>
+      ) : (
+        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {coupons.map((coupon) => (
+            <CouponCard coupon={coupon} />
+          ))}
+        </div>
+      )}
+    </section>
+  )}
+</MainLayout>

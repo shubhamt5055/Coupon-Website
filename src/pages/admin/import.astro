@@ -1,0 +1,177 @@
+---
+import AdminLayout from "../../layouts/AdminLayout.astro";
+import { getDb } from "../../lib/cloudflare";
+import { getCategoriesWithCounts, getStoresWithCounts } from "../../lib/db";
+
+const db = getDb();
+const [stores, categories] = await Promise.all([
+  getStoresWithCounts(db),
+  getCategoriesWithCounts(db),
+]);
+const adminUser = Astro.locals.adminUser ?? "admin";
+
+const sampleCsv = `title,code,discount_text,store,category,affiliate_or_store_url,expiry_date,description,terms,is_active
+"Flat 25% Off on Home Essentials",HOME25,"25% OFF",amazon,shopping,https://www.amazon.in/home,2027-06-30,"Save 25% on kitchen and home essentials.","Min order Rs. 799. Max discount Rs. 500.",1
+"Free Dessert on Orders Above Rs. 499",SWEETFREE,"FREE ITEM",zomato,food,https://www.zomato.com,2027-05-15,"Get a complimentary dessert at partner restaurants.","Valid on prepaid orders only.",1`;
+---
+
+<AdminLayout title="Bulk CSV Import — Admin | CouponHub" adminUser={adminUser}>
+  <div class="mx-auto max-w-4xl space-y-6">
+    <div class="flex flex-wrap items-center justify-between gap-3">
+      <div>
+        <h1 class="text-2xl font-extrabold text-slate-900 dark:text-white">
+          Bulk Upload Coupons via CSV
+        </h1>
+        <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
+          Upload a CSV file or paste rows below to publish multiple coupons to Cloudflare D1 in one click.
+        </p>
+      </div>
+      <button
+        type="button"
+        id="download-sample-btn"
+        data-sample={sampleCsv}
+        class="rounded-xl border border-indigo-300 bg-indigo-50 px-4 py-2 text-xs font-bold text-indigo-700 hover:bg-indigo-100 dark:border-indigo-800 dark:bg-indigo-950 dark:text-indigo-300"
+      >
+        ⬇ Download Sample CSV
+      </button>
+    </div>
+
+    <!-- Reference Slugs -->
+    <div class="grid gap-4 rounded-2xl border border-slate-200 bg-white p-5 text-xs sm:grid-cols-2 dark:border-slate-800 dark:bg-slate-900">
+      <div>
+        <p class="font-bold text-slate-700 uppercase dark:text-slate-300">Valid Store Slugs / Names</p>
+        <p class="mt-1.5 text-slate-600 dark:text-slate-400">
+          {stores.map((s) => s.slug).join(", ")}
+        </p>
+      </div>
+      <div>
+        <p class="font-bold text-slate-700 uppercase dark:text-slate-300">Valid Category Slugs / Names</p>
+        <p class="mt-1.5 text-slate-600 dark:text-slate-400">
+          {categories.map((c) => c.slug).join(", ")}
+        </p>
+      </div>
+    </div>
+
+    <!-- Upload Form -->
+    <form
+      id="csv-import-form"
+      class="space-y-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-xs dark:border-slate-800 dark:bg-slate-900"
+    >
+      <div>
+        <label for="csv-file" class="mb-1.5 block text-xs font-bold text-slate-700 uppercase dark:text-slate-300">
+          Choose .csv File
+        </label>
+        <input
+          id="csv-file"
+          type="file"
+          accept=".csv,text/csv"
+          class="block w-full text-sm text-slate-600 file:mr-4 file:rounded-xl file:border-0 file:bg-indigo-600 file:px-4 file:py-2 file:text-xs file:font-bold file:text-white hover:file:bg-indigo-700 dark:text-slate-300"
+        />
+      </div>
+
+      <div>
+        <label for="csv-text" class="mb-1.5 block text-xs font-bold text-slate-700 uppercase dark:text-slate-300">
+          CSV Content (editable preview)
+        </label>
+        <textarea
+          id="csv-text"
+          rows="8"
+          required
+          placeholder="Paste CSV rows here or select a .csv file above..."
+          class="w-full rounded-xl border border-slate-300 bg-slate-50 p-3.5 font-mono text-xs outline-none focus:border-indigo-500 dark:border-slate-700 dark:bg-slate-950"
+        >{sampleCsv}</textarea>
+      </div>
+
+      <button
+        type="submit"
+        id="csv-submit-btn"
+        class="rounded-xl bg-indigo-600 px-6 py-3 text-sm font-bold text-white shadow-xs hover:bg-indigo-700 disabled:opacity-60"
+      >
+        Import Coupons to Database
+      </button>
+    </form>
+
+    <!-- Import Report -->
+    <div id="import-result" class="hidden rounded-2xl border p-5 text-sm"></div>
+  </div>
+</AdminLayout>
+
+<script>
+  const fileInput = document.getElementById("csv-file") as HTMLInputElement | null;
+  const csvTextarea = document.getElementById("csv-text") as HTMLTextAreaElement | null;
+  const sampleBtn = document.getElementById("download-sample-btn");
+  const form = document.getElementById("csv-import-form");
+  const submitBtn = document.getElementById("csv-submit-btn") as HTMLButtonElement | null;
+  const resultBox = document.getElementById("import-result");
+
+  sampleBtn?.addEventListener("click", () => {
+    const csv = sampleBtn.getAttribute("data-sample") || "";
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "couponhub-sample.csv";
+    a.click();
+    URL.revokeObjectURL(url);
+  });
+
+  fileInput?.addEventListener("change", async () => {
+    const file = fileInput.files?.[0];
+    if (!file || !csvTextarea) return;
+    csvTextarea.value = await file.text();
+  });
+
+  form?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    if (!csvTextarea) return;
+
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Importing...";
+    }
+    resultBox?.classList.add("hidden");
+
+    try {
+      const res = await fetch("/api/admin/coupons-import", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ csv: csvTextarea.value }),
+      });
+      const data = (await res.json()) as {
+        ok?: boolean;
+        imported?: number;
+        failed?: number;
+        rowErrors?: { row: number; reason: string }[];
+        error?: string;
+      };
+
+      if (!resultBox) return;
+      resultBox.classList.remove("hidden");
+
+      if (!res.ok || !data.ok) {
+        resultBox.className =
+          "rounded-2xl border border-rose-200 bg-rose-50 p-5 text-sm text-rose-800 dark:border-rose-800 dark:bg-rose-950/60 dark:text-rose-200";
+        resultBox.textContent = data.error || "Import failed.";
+        return;
+      }
+
+      resultBox.className =
+        "rounded-2xl border border-emerald-200 bg-emerald-50 p-5 text-sm text-emerald-900 dark:border-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-200";
+
+      const errorItems = (data.rowErrors || [])
+        .map((err) => `<li>Row ${err.row}: ${err.reason}</li>`)
+        .join("");
+
+      resultBox.innerHTML = `
+        <p class="font-bold">Import complete: ${data.imported} coupon(s) added, ${data.failed} skipped.</p>
+        ${errorItems ? `<ul class="mt-2 list-disc pl-5 text-xs text-rose-700 dark:text-rose-300">${errorItems}</ul>` : ""}
+        <a href="/admin" class="mt-3 inline-block font-bold text-indigo-700 underline dark:text-indigo-300">Go to Admin Dashboard →</a>
+      `;
+    } finally {
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Import Coupons to Database";
+      }
+    }
+  });
+</script>

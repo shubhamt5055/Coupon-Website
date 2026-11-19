@@ -1,0 +1,321 @@
+---
+import AdminLayout from "../../layouts/AdminLayout.astro";
+import { getDb } from "../../lib/cloudflare";
+import {
+  getAdminStats,
+  getCategoriesWithCounts,
+  getCoupons,
+  getStoresWithCounts,
+} from "../../lib/db";
+import { formatDisplayDate, isCouponExpired } from "../../lib/format";
+
+const url = Astro.url;
+const q = url.searchParams.get("q")?.trim() ?? "";
+const statusParam = url.searchParams.get("status") ?? "all";
+const status =
+  statusParam === "active" ||
+  statusParam === "inactive" ||
+  statusParam === "expired"
+    ? statusParam
+    : "all";
+const categoryId = Number(url.searchParams.get("categoryId")) || undefined;
+const storeId = Number(url.searchParams.get("storeId")) || undefined;
+
+const db = getDb();
+const [stats, coupons, stores, categories] = await Promise.all([
+  getAdminStats(db),
+  getCoupons(db, {
+    search: q || undefined,
+    status: status === "all" ? undefined : status,
+    categoryId,
+    storeId,
+    includeExpired: true,
+    includeInactive: true,
+    sort: "newest",
+  }),
+  getStoresWithCounts(db),
+  getCategoriesWithCounts(db),
+]);
+
+const adminUser = Astro.locals.adminUser ?? "admin";
+---
+
+<AdminLayout title="Admin Dashboard — CouponHub" adminUser={adminUser}>
+  <!-- Header -->
+  <div class="mb-6 flex flex-wrap items-center justify-between gap-4">
+    <div>
+      <h1 class="text-2xl font-extrabold text-slate-900 dark:text-white">
+        Coupon Management
+      </h1>
+      <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
+        Changes here update Cloudflare D1 and appear on the live website immediately.
+      </p>
+    </div>
+    <div class="flex flex-wrap gap-2">
+      <a
+        href="/admin/import"
+        class="rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-bold text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800"
+      >
+        📄 Bulk CSV Upload
+      </a>
+      <a
+        href="/admin/coupons/new"
+        class="rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-bold text-white shadow-xs hover:bg-indigo-700"
+      >
+        + Add New Coupon
+      </a>
+    </div>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+    <div class="rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
+      <p class="text-xs font-semibold text-slate-500 dark:text-slate-400">Total Coupons</p>
+      <p class="mt-1 text-2xl font-extrabold text-slate-900 dark:text-white">{stats.totalCoupons}</p>
+    </div>
+    <div class="rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
+      <p class="text-xs font-semibold text-emerald-600 dark:text-emerald-400">Live Active</p>
+      <p class="mt-1 text-2xl font-extrabold text-emerald-600 dark:text-emerald-400">{stats.activeCoupons}</p>
+    </div>
+    <div class="rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
+      <p class="text-xs font-semibold text-rose-600 dark:text-rose-400">Expired</p>
+      <p class="mt-1 text-2xl font-extrabold text-rose-600 dark:text-rose-400">{stats.expiredCoupons}</p>
+    </div>
+    <div class="rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
+      <p class="text-xs font-semibold text-amber-600 dark:text-amber-400">Inactive</p>
+      <p class="mt-1 text-2xl font-extrabold text-amber-600 dark:text-amber-400">{stats.inactiveCoupons}</p>
+    </div>
+    <div class="rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
+      <p class="text-xs font-semibold text-indigo-600 dark:text-indigo-400">Total Clicks</p>
+      <p class="mt-1 text-2xl font-extrabold text-indigo-600 dark:text-indigo-400">{stats.totalClicks}</p>
+    </div>
+    <div class="rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
+      <p class="text-xs font-semibold text-slate-500 dark:text-slate-400">Stores / Cats</p>
+      <p class="mt-1 text-2xl font-extrabold text-slate-900 dark:text-white">
+        {stats.totalStores} / {stats.totalCategories}
+      </p>
+    </div>
+  </div>
+
+  <!-- Search & Filter Bar -->
+  <form
+    method="GET"
+    action="/admin"
+    class="mb-6 grid gap-3 rounded-2xl border border-slate-200 bg-white p-4 sm:grid-cols-2 lg:grid-cols-5 dark:border-slate-800 dark:bg-slate-900"
+  >
+    <input
+      type="search"
+      name="q"
+      value={q}
+      placeholder="Search title, code, store..."
+      class="rounded-xl border border-slate-300 bg-slate-50 px-3.5 py-2 text-sm outline-none focus:border-indigo-500 dark:border-slate-700 dark:bg-slate-950"
+    />
+
+    <select
+      name="status"
+      class="rounded-xl border border-slate-300 bg-slate-50 px-3 py-2 text-sm outline-none focus:border-indigo-500 dark:border-slate-700 dark:bg-slate-950"
+    >
+      <option value="all" selected={status === "all"}>All Statuses</option>
+      <option value="active" selected={status === "active"}>Live Active</option>
+      <option value="inactive" selected={status === "inactive"}>Deactivated</option>
+      <option value="expired" selected={status === "expired"}>Expired</option>
+    </select>
+
+    <select
+      name="storeId"
+      class="rounded-xl border border-slate-300 bg-slate-50 px-3 py-2 text-sm outline-none focus:border-indigo-500 dark:border-slate-700 dark:bg-slate-950"
+    >
+      <option value="">All Stores</option>
+      {stores.map((s) => (
+        <option value={s.id} selected={s.id === storeId}>{s.name}</option>
+      ))}
+    </select>
+
+    <select
+      name="categoryId"
+      class="rounded-xl border border-slate-300 bg-slate-50 px-3 py-2 text-sm outline-none focus:border-indigo-500 dark:border-slate-700 dark:bg-slate-950"
+    >
+      <option value="">All Categories</option>
+      {categories.map((c) => (
+        <option value={c.id} selected={c.id === categoryId}>{c.name}</option>
+      ))}
+    </select>
+
+    <div class="flex gap-2">
+      <button
+        type="submit"
+        class="flex-1 rounded-xl bg-slate-900 px-4 py-2 text-sm font-bold text-white hover:bg-slate-800 dark:bg-indigo-600 dark:hover:bg-indigo-700"
+      >
+        Filter
+      </button>
+      {(q || status !== "all" || storeId || categoryId) && (
+        <a
+          href="/admin"
+          class="rounded-xl border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-100 dark:border-slate-700 dark:text-slate-300"
+        >
+          Clear
+        </a>
+      )}
+    </div>
+  </form>
+
+  <!-- Toast Banner -->
+  <div
+    id="admin-toast"
+    class="mb-4 hidden rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-semibold text-emerald-800 dark:border-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300"
+  ></div>
+
+  <!-- Coupons Table -->
+  <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xs dark:border-slate-800 dark:bg-slate-900">
+    <div class="overflow-x-auto">
+      <table class="min-w-full divide-y divide-slate-200 text-left text-sm dark:divide-slate-800">
+        <thead class="bg-slate-50 text-xs font-bold text-slate-500 uppercase dark:bg-slate-950 dark:text-slate-400">
+          <tr>
+            <th class="px-4 py-3.5">Coupon &amp; Store</th>
+            <th class="px-4 py-3.5">Code / Discount</th>
+            <th class="px-4 py-3.5">Expiry</th>
+            <th class="px-4 py-3.5">Stats</th>
+            <th class="px-4 py-3.5">Status</th>
+            <th class="px-4 py-3.5 text-right">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+          {coupons.length === 0 ? (
+            <tr>
+              <td colspan="6" class="px-4 py-12 text-center text-slate-500 dark:text-slate-400">
+                No coupons found for the selected filter.
+              </td>
+            </tr>
+          ) : (
+            coupons.map((coupon) => {
+              const expired = isCouponExpired(coupon.expiry_date);
+              const active = coupon.is_active === 1;
+              return (
+                <tr data-coupon-row={coupon.id} class="hover:bg-slate-50/70 dark:hover:bg-slate-800/40">
+                  <td class="px-4 py-3.5">
+                    <p class="max-w-xs font-bold text-slate-900 dark:text-white">{coupon.title}</p>
+                    <p class="mt-0.5 text-xs text-slate-500 dark:text-slate-400">
+                      {coupon.store_name} · {coupon.category_name}
+                    </p>
+                  </td>
+                  <td class="px-4 py-3.5">
+                    <span class="inline-block rounded-md bg-indigo-50 px-2 py-0.5 font-mono text-xs font-bold text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300">
+                      {coupon.code}
+                    </span>
+                    <p class="mt-1 text-xs font-semibold text-emerald-700 dark:text-emerald-400">
+                      {coupon.discount_text}
+                    </p>
+                  </td>
+                  <td class="px-4 py-3.5 whitespace-nowrap">
+                    <p class="text-xs font-medium text-slate-700 dark:text-slate-300">
+                      {formatDisplayDate(coupon.expiry_date)}
+                    </p>
+                    {expired && (
+                      <span class="mt-1 inline-block rounded bg-rose-100 px-1.5 py-0.5 text-[10px] font-bold text-rose-700 uppercase dark:bg-rose-950 dark:text-rose-300">
+                        Expired
+                      </span>
+                    )}
+                  </td>
+                  <td class="px-4 py-3.5 whitespace-nowrap text-xs text-slate-600 dark:text-slate-400">
+                    <p>⚡ {coupon.click_count} clicks</p>
+                    <p class="mt-0.5">👍 {coupon.worked_count} / 👎 {coupon.didnt_work_count}</p>
+                  </td>
+                  <td class="px-4 py-3.5 whitespace-nowrap">
+                    <button
+                      type="button"
+                      data-toggle-id={coupon.id}
+                      data-current-active={active ? "1" : "0"}
+                      class:list={[
+                        "rounded-full px-3 py-1 text-xs font-bold transition",
+                        active
+                          ? "bg-emerald-100 text-emerald-800 hover:bg-emerald-200 dark:bg-emerald-950 dark:text-emerald-300"
+                          : "bg-slate-200 text-slate-700 hover:bg-slate-300 dark:bg-slate-800 dark:text-slate-300",
+                      ]}
+                    >
+                      {active ? "Active" : "Inactive"}
+                    </button>
+                  </td>
+                  <td class="px-4 py-3.5 text-right whitespace-nowrap">
+                    <div class="inline-flex items-center gap-2">
+                      <a
+                        href={`/admin/coupons/${coupon.id}/edit`}
+                        class="rounded-lg border border-slate-200 px-2.5 py-1.5 text-xs font-semibold text-slate-700 hover:border-indigo-400 hover:text-indigo-600 dark:border-slate-700 dark:text-slate-200"
+                      >
+                        Edit
+                      </a>
+                      <button
+                        type="button"
+                        data-delete-id={coupon.id}
+                        data-delete-title={coupon.title}
+                        class="rounded-lg border border-rose-200 px-2.5 py-1.5 text-xs font-semibold text-rose-600 hover:bg-rose-50 dark:border-rose-900 dark:text-rose-400 dark:hover:bg-rose-950/50"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              );
+            })
+          )}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</AdminLayout>
+
+<script>
+  const toast = document.getElementById("admin-toast");
+
+  function showToast(message: string) {
+    if (!toast) return;
+    toast.textContent = message;
+    toast.classList.remove("hidden");
+    setTimeout(() => toast.classList.add("hidden"), 3000);
+  }
+
+  // Toggle Active / Inactive
+  document.querySelectorAll<HTMLButtonElement>("[data-toggle-id]").forEach((btn) => {
+    btn.addEventListener("click", async () => {
+      const id = btn.dataset.toggleId;
+      const nextActive = btn.dataset.currentActive === "1" ? 0 : 1;
+      btn.disabled = true;
+      try {
+        const res = await fetch(`/api/admin/coupons/${id}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ is_active: nextActive }),
+        });
+        if (res.ok) {
+          btn.dataset.currentActive = String(nextActive);
+          btn.textContent = nextActive ? "Active" : "Inactive";
+          btn.className = nextActive
+            ? "rounded-full px-3 py-1 text-xs font-bold transition bg-emerald-100 text-emerald-800 hover:bg-emerald-200 dark:bg-emerald-950 dark:text-emerald-300"
+            : "rounded-full px-3 py-1 text-xs font-bold transition bg-slate-200 text-slate-700 hover:bg-slate-300 dark:bg-slate-800 dark:text-slate-300";
+          showToast(nextActive ? "Coupon activated on live site." : "Coupon deactivated.");
+        }
+      } finally {
+        btn.disabled = false;
+      }
+    });
+  });
+
+  // Delete Coupon
+  document.querySelectorAll<HTMLButtonElement>("[data-delete-id]").forEach((btn) => {
+    btn.addEventListener("click", async () => {
+      const id = btn.dataset.deleteId;
+      const title = btn.dataset.deleteTitle || "this coupon";
+      if (!confirm(`Delete "${title}" permanently?`)) return;
+
+      btn.disabled = true;
+      try {
+        const res = await fetch(`/api/admin/coupons/${id}`, { method: "DELETE" });
+        if (res.ok) {
+          document.querySelector(`[data-coupon-row="${id}"]`)?.remove();
+          showToast("Coupon deleted permanently.");
+        }
+      } finally {
+        btn.disabled = false;
+      }
+    });
+  });
+</script>

@@ -1,0 +1,120 @@
+---
+import "../styles/global.css";
+
+interface Props {
+  title?: string;
+  adminUser?: string;
+}
+
+const { title = "Admin Panel — CouponHub", adminUser = "admin" } = Astro.props;
+const currentPath = Astro.url.pathname;
+
+const navItems = [
+  { href: "/admin", label: "Coupons", exact: true },
+  { href: "/admin/coupons/new", label: "+ Add Coupon", exact: false },
+  { href: "/admin/stores", label: "Stores", exact: false },
+  { href: "/admin/categories", label: "Categories", exact: false },
+  { href: "/admin/import", label: "CSV Import", exact: false },
+];
+
+function isNavActive(href: string, exact: boolean): boolean {
+  if (exact) return currentPath === href || currentPath === `${href}/`;
+  return currentPath.startsWith(href);
+}
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <script is:inline>
+      (() => {
+        const stored = localStorage.getItem("couponhub-theme");
+        const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        if (stored === "dark" || (!stored && prefersDark)) {
+          document.documentElement.classList.add("dark");
+        }
+      })();
+    </script>
+  </head>
+
+  <body class="min-h-screen bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
+    <header class="sticky top-0 z-40 border-b border-slate-200 bg-white/95 backdrop-blur-md dark:border-slate-800 dark:bg-slate-900/95">
+      <div class="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:px-8">
+        <div class="flex items-center gap-3">
+          <a href="/admin" class="flex items-center gap-2 text-lg font-extrabold text-slate-900 dark:text-white">
+            <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-600 text-sm text-white">%</span>
+            <span>CouponHub <span class="rounded-md bg-indigo-100 px-2 py-0.5 text-xs font-bold text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300">Admin</span></span>
+          </a>
+        </div>
+
+        <nav class="flex flex-wrap items-center gap-1" aria-label="Admin Navigation">
+          {navItems.map((item) => (
+            <a
+              href={item.href}
+              class:list={[
+                "rounded-lg px-3 py-1.5 text-xs font-semibold transition sm:text-sm",
+                isNavActive(item.href, item.exact)
+                  ? "bg-indigo-600 text-white"
+                  : "text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white",
+              ]}
+            >
+              {item.label}
+            </a>
+          ))}
+        </nav>
+
+        <div class="flex items-center gap-2">
+          <a
+            href="/"
+            target="_blank"
+            class="rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-semibold text-slate-600 hover:border-indigo-300 hover:text-indigo-600 dark:border-slate-700 dark:text-slate-300"
+          >
+            Live Site ↗
+          </a>
+          <button
+            type="button"
+            data-theme-toggle
+            aria-label="Toggle dark mode"
+            class="flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 bg-slate-50 text-xs dark:border-slate-700 dark:bg-slate-800"
+          >
+            <span class="hidden dark:inline">☀️</span>
+            <span class="inline dark:hidden">🌙</span>
+          </button>
+          <span class="hidden text-xs text-slate-500 sm:inline dark:text-slate-400">
+            @{adminUser}
+          </span>
+          <button
+            type="button"
+            id="admin-logout-btn"
+            class="rounded-lg bg-rose-50 px-3 py-1.5 text-xs font-bold text-rose-700 transition hover:bg-rose-100 dark:bg-rose-950/60 dark:text-rose-300 dark:hover:bg-rose-950"
+          >
+            Logout
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+      <slot />
+    </main>
+
+    <script>
+      document.querySelectorAll("[data-theme-toggle]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const isDark = document.documentElement.classList.toggle("dark");
+          localStorage.setItem("couponhub-theme", isDark ? "dark" : "light");
+        });
+      });
+
+      document.getElementById("admin-logout-btn")?.addEventListener("click", async () => {
+        await fetch("/api/admin/logout", { method: "POST" });
+        window.location.href = "/admin/login";
+      });
+    </script>
+  </body>
+</html>

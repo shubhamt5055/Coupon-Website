@@ -1,0 +1,312 @@
+---
+import MainLayout from "../../layouts/MainLayout.astro";
+import CouponCard from "../../components/CouponCard.astro";
+import { getDb } from "../../lib/cloudflare";
+import { getCouponById, getRelatedCoupons } from "../../lib/db";
+import {
+  formatDisplayDate,
+  getDaysUntilExpiry,
+  getStoreColorClass,
+  getStoreInitials,
+  isCouponExpired,
+  safeExternalUrl,
+  safeImageUrl,
+} from "../../lib/format";
+
+const id = Number(Astro.params.id);
+if (!Number.isInteger(id) || id <= 0) {
+  return Astro.redirect("/coupons");
+}
+
+const db = getDb();
+const coupon = await getCouponById(db, id);
+
+if (!coupon || coupon.is_active !== 1) {
+  Astro.response.status = 404;
+}
+
+const related = coupon
+  ? await getRelatedCoupons(db, coupon.id, coupon.category_id, coupon.store_id, 3)
+  : [];
+
+const expired = coupon ? isCouponExpired(coupon.expiry_date) : false;
+const daysLeft = coupon ? getDaysUntilExpiry(coupon.expiry_date) : null;
+const storeUrl = coupon ? safeExternalUrl(coupon.affiliate_or_store_url) : "#";
+const logo = coupon ? safeImageUrl(coupon.store_logo_url) : "";
+const totalVotes = coupon ? coupon.worked_count + coupon.didnt_work_count : 0;
+const successRate =
+  coupon && totalVotes > 0 ? Math.round((coupon.worked_count / totalVotes) * 100) : null;
+---
+
+<MainLayout
+  title={coupon ? `${coupon.title} (${coupon.store_name}) | CouponHub` : "Coupon Not Found | CouponHub"}
+  description={coupon ? `${coupon.discount_text} at ${coupon.store_name} with code ${coupon.code}. ${coupon.description}` : "Coupon not found."}
+>
+  {!coupon || coupon.is_active !== 1 ? (
+    <section class="mx-auto max-w-2xl px-4 py-20 text-center">
+      <h1 class="text-3xl font-extrabold text-slate-900 dark:text-white">Coupon Not Found</h1>
+      <p class="mt-3 text-slate-600 dark:text-slate-400">
+        This coupon may have been removed or deactivated.
+      </p>
+      <a
+        href="/coupons"
+        class="mt-6 inline-block rounded-xl bg-indigo-600 px-6 py-3 text-sm font-bold text-white hover:bg-indigo-700"
+      >
+        Browse Active Coupons
+      </a>
+    </section>
+  ) : (
+    <section class="mx-auto max-w-5xl px-4 py-10 sm:px-6 lg:px-8">
+      <!-- Breadcrumb -->
+      <nav class="mb-6 flex flex-wrap items-center gap-2 text-xs font-medium text-slate-500 dark:text-slate-400" aria-label="Breadcrumb">
+        <a href="/" class="hover:text-indigo-600">Home</a>
+        <span>/</span>
+        <a href={`/categories/${coupon.category_slug}`} class="hover:text-indigo-600">{coupon.category_name}</a>
+        <span>/</span>
+        <a href={`/stores/${coupon.store_slug}`} class="hover:text-indigo-600">{coupon.store_name}</a>
+        <span>/</span>
+        <span class="truncate text-slate-800 dark:text-slate-200">{coupon.title}</span>
+      </nav>
+
+      <!-- Main Detail Card -->
+      <div class="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
+        {expired && (
+          <div class="bg-rose-600 px-6 py-2.5 text-center text-xs font-bold tracking-wide text-white uppercase">
+            This coupon expired on {formatDisplayDate(coupon.expiry_date)} — browse active {coupon.store_name} deals below.
+          </div>
+        )}
+
+        <div class="p-6 sm:p-8">
+          <div class="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
+            <!-- Left Info -->
+            <div class="flex-1">
+              <div class="mb-4 flex flex-wrap items-center gap-3">
+                <a href={`/stores/${coupon.store_slug}`} class="flex items-center gap-3">
+                  {logo ? (
+                    <img
+                      src={logo}
+                      alt={`${coupon.store_name} logo`}
+                      class="h-12 w-12 rounded-xl border border-slate-200 bg-white object-contain p-1 dark:border-slate-700"
+                    />
+                  ) : (
+                    <div
+                      class:list={[
+                        "flex h-12 w-12 items-center justify-center rounded-xl text-sm font-extrabold text-white",
+                        getStoreColorClass(coupon.store_name),
+                      ]}
+                    >
+                      {getStoreInitials(coupon.store_name)}
+                    </div>
+                  )}
+                  <div>
+                    <p class="text-sm font-bold text-slate-900 dark:text-white">{coupon.store_name}</p>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">
+                      {coupon.category_icon} {coupon.category_name}
+                    </p>
+                  </div>
+                </a>
+
+                <span
+                  class:list={[
+                    "rounded-full px-3.5 py-1 text-xs font-extrabold uppercase",
+                    expired
+                      ? "bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300"
+                      : "bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300",
+                  ]}
+                >
+                  {expired ? "EXPIRED" : coupon.discount_text}
+                </span>
+              </div>
+
+              <h1 class="text-2xl leading-tight font-extrabold text-slate-900 sm:text-3xl dark:text-white">
+                {coupon.title}
+              </h1>
+
+              {coupon.description && (
+                <p class="mt-3 text-base leading-relaxed text-slate-600 dark:text-slate-300">
+                  {coupon.description}
+                </p>
+              )}
+
+              <!-- Quick Facts -->
+              <div class="mt-5 flex flex-wrap gap-3 text-xs font-medium text-slate-600 dark:text-slate-400">
+                <span class="rounded-lg bg-slate-100 px-3 py-1.5 dark:bg-slate-800">
+                  📅 Expires: <strong class="text-slate-900 dark:text-white">{formatDisplayDate(coupon.expiry_date)}</strong>
+                  {!expired && daysLeft !== null && daysLeft <= 7 && (
+                    <span class="ml-1 text-orange-600 dark:text-orange-400">({daysLeft === 0 ? "Ends today" : `${daysLeft}d left`})</span>
+                  )}
+                </span>
+                <span class="rounded-lg bg-slate-100 px-3 py-1.5 dark:bg-slate-800">
+                  ⚡ Used <strong data-coupon-clicks={coupon.id} class="text-slate-900 dark:text-white">{coupon.click_count} uses</strong>
+                </span>
+                {successRate !== null && (
+                  <span class="rounded-lg bg-emerald-50 px-3 py-1.5 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-300">
+                    ✓ {successRate}% reported working
+                  </span>
+                )}
+              </div>
+            </div>
+
+            <!-- Right Action Box -->
+            <div class="w-full shrink-0 rounded-2xl border border-slate-200 bg-slate-50 p-5 md:w-80 dark:border-slate-700 dark:bg-slate-950">
+              <p class="text-xs font-bold tracking-wider text-slate-500 uppercase dark:text-slate-400">
+                Coupon Code
+              </p>
+
+              <div class="mt-2.5 flex items-center justify-center rounded-xl border-2 border-dashed border-indigo-400 bg-white px-4 py-3.5 dark:border-indigo-500/60 dark:bg-slate-900">
+                <span
+                  data-coupon-code-text={coupon.id}
+                  class:list={[
+                    "font-mono text-xl font-extrabold tracking-widest",
+                    expired
+                      ? "text-slate-400 line-through"
+                      : "text-indigo-700 dark:text-indigo-300",
+                  ]}
+                >
+                  {coupon.code}
+                </span>
+              </div>
+
+              {!expired ? (
+                <button
+                  type="button"
+                  class="reveal-coupon-btn mt-4 w-full rounded-xl bg-indigo-600 px-4 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-indigo-700"
+                  data-coupon-id={coupon.id}
+                  data-coupon-code={coupon.code}
+                  data-coupon-title={coupon.title}
+                  data-coupon-store={coupon.store_name}
+                  data-coupon-discount={coupon.discount_text}
+                  data-coupon-url={storeUrl}
+                >
+                  Copy Code &amp; Visit {coupon.store_name} →
+                </button>
+              ) : (
+                <a
+                  href={`/stores/${coupon.store_slug}`}
+                  class="mt-4 block w-full rounded-xl bg-slate-800 px-4 py-3 text-center text-sm font-bold text-white hover:bg-slate-700"
+                >
+                  See Active {coupon.store_name} Deals
+                </a>
+              )}
+
+              <a
+                href={storeUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="mt-2.5 block w-full rounded-xl border border-slate-200 bg-white py-2.5 text-center text-xs font-semibold text-slate-700 transition hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800"
+              >
+                Open Store Website Only ↗
+              </a>
+            </div>
+          </div>
+
+          <!-- Terms & Conditions -->
+          <div class="mt-8 border-t border-slate-200 pt-6 dark:border-slate-800">
+            <h2 class="text-sm font-extrabold tracking-wider text-slate-900 uppercase dark:text-white">
+              Terms &amp; Conditions
+            </h2>
+            <p class="mt-2 whitespace-pre-line text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+              {coupon.terms || "Standard merchant terms apply. Enter the promo code at checkout before completing payment. Cannot usually be combined with other offers."}
+            </p>
+          </div>
+
+          <!-- Bonus: Coupon Worked / Didn't Work Voting Widget -->
+          <div
+            id="vote-widget"
+            data-coupon-id={coupon.id}
+            class="mt-8 rounded-2xl border border-slate-200 bg-slate-50 p-5 dark:border-slate-800 dark:bg-slate-950"
+          >
+            <div class="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
+              <div>
+                <h2 class="text-base font-bold text-slate-900 dark:text-white">
+                  Did this coupon work for you?
+                </h2>
+                <p class="text-xs text-slate-500 dark:text-slate-400">
+                  Community verification keeps expired or broken codes out.
+                </p>
+              </div>
+              <div class="flex items-center gap-3">
+                <button
+                  type="button"
+                  data-vote-btn="worked"
+                  class="inline-flex items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-2 text-sm font-bold text-emerald-700 transition hover:bg-emerald-100 dark:border-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300"
+                >
+                  👍 Worked (<span id="worked-count">{coupon.worked_count}</span>)
+                </button>
+                <button
+                  type="button"
+                  data-vote-btn="didnt_work"
+                  class="inline-flex items-center gap-2 rounded-xl border border-rose-200 bg-rose-50 px-4 py-2 text-sm font-bold text-rose-700 transition hover:bg-rose-100 dark:border-rose-800 dark:bg-rose-950/60 dark:text-rose-300"
+                >
+                  👎 Didn't Work (<span id="didnt-work-count">{coupon.didnt_work_count}</span>)
+                </button>
+              </div>
+            </div>
+            <p id="vote-status-msg" class="mt-3 hidden text-xs font-semibold text-indigo-600 dark:text-indigo-400"></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Related Coupons -->
+      {related.length > 0 && (
+        <div class="mt-12">
+          <h2 class="mb-5 text-2xl font-extrabold text-slate-900 dark:text-white">
+            More Deals You May Like
+          </h2>
+          <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {related.map((item) => (
+              <CouponCard coupon={item} />
+            ))}
+          </div>
+        </div>
+      )}
+    </section>
+  )}
+</MainLayout>
+
+<script>
+  const widget = document.getElementById("vote-widget");
+  const couponId = widget?.dataset.couponId;
+  const workedEl = document.getElementById("worked-count");
+  const didntWorkEl = document.getElementById("didnt-work-count");
+  const statusMsg = document.getElementById("vote-status-msg");
+
+  if (widget && couponId) {
+    const storageKey = `couponhub-voted-${couponId}`;
+    widget.querySelectorAll<HTMLButtonElement>("[data-vote-btn]").forEach((btn) => {
+      btn.addEventListener("click", async () => {
+        if (localStorage.getItem(storageKey)) {
+          if (statusMsg) {
+            statusMsg.textContent = "You already voted on this coupon. Thank you!";
+            statusMsg.classList.remove("hidden");
+          }
+          return;
+        }
+        const vote = btn.dataset.voteBtn;
+        btn.disabled = true;
+        try {
+          const res = await fetch(`/api/coupons/${couponId}/vote`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ vote }),
+          });
+          if (res.ok) {
+            const data = (await res.json()) as {
+              worked_count: number;
+              didnt_work_count: number;
+            };
+            if (workedEl) workedEl.textContent = String(data.worked_count);
+            if (didntWorkEl) didntWorkEl.textContent = String(data.didnt_work_count);
+            localStorage.setItem(storageKey, vote || "1");
+            if (statusMsg) {
+              statusMsg.textContent = "Thanks for voting! Your feedback has been saved.";
+              statusMsg.classList.remove("hidden");
+            }
+          }
+        } finally {
+          btn.disabled = false;
+        }
+      });
+    });
+  }
+</script>

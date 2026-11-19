@@ -1,0 +1,30 @@
+---
+import MainLayout from "../../layouts/MainLayout.astro";
+import StoreCard from "../../components/StoreCard.astro";
+import { getDb } from "../../lib/cloudflare";
+import { getStoresWithCounts } from "../../lib/db";
+
+const stores = await getStoresWithCounts(getDb());
+---
+
+<MainLayout
+  title="All Stores & Brand Coupons | CouponHub"
+  description="Find promo codes and verified discounts for top online stores including Amazon, Flipkart, Zomato, Swiggy, Myntra, and more."
+>
+  <section class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+    <div class="mb-8">
+      <h1 class="text-3xl font-extrabold text-slate-900 dark:text-white">
+        All Partner Stores
+      </h1>
+      <p class="mt-2 text-sm text-slate-600 dark:text-slate-400">
+        Select your favorite store to see all active promo codes and verified offers.
+      </p>
+    </div>
+
+    <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      {stores.map((store) => (
+        <StoreCard store={store} />
+      ))}
+    </div>
+  </section>
+</MainLayout>

@@ -1,11 +1,20 @@
 ---
 import "../styles/global.css";
+import Navbar from "../components/Navbar.astro";
+import Footer from "../components/Footer.astro";
+import CouponRevealModal from "../components/CouponRevealModal.astro";
 
 interface Props {
   title?: string;
+  description?: string;
 }
 
-const { title = "CouponHub" } = Astro.props;
+const {
+  title = "CouponHub — Verified Discount Coupons & Promo Codes",
+  description = "Browse, search, and copy verified discount coupons and promo codes from top online stores across Food, Fashion, Electronics, and Travel.",
+} = Astro.props;
+
+const currentPath = Astro.url.pathname;
 ---
 
 <!DOCTYPE html>
@@ -14,13 +23,40 @@ const { title = "CouponHub" } = Astro.props;
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
-    <meta
-      name="description"
-      content="Find the best discount coupons and deals from your favorite stores."
-    />
+    <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <!-- Prevent dark mode flash before paint -->
+    <script is:inline>
+      (() => {
+        const stored = localStorage.getItem("couponhub-theme");
+        const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        if (stored === "dark" || (!stored && prefersDark)) {
+          document.documentElement.classList.add("dark");
+        }
+      })();
+    </script>
   </head>
 
-  <body>
-    <slot />
+  <body class="flex min-h-screen flex-col">
+    <Navbar currentPath={currentPath} />
+
+    <main class="flex-1">
+      <slot />
+    </main>
+
+    <Footer />
+    <CouponRevealModal />
+
+    <script>
+      document.querySelectorAll("[data-theme-toggle]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const isDark = document.documentElement.classList.toggle("dark");
+          localStorage.setItem("couponhub-theme", isDark ? "dark" : "light");
+        });
+      });
+    </script>
   </body>
 </html>
