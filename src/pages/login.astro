@@ -12,8 +12,6 @@ const safeNext =
     : "/my-coupons";
 
 const reason = Astro.url.searchParams.get("reason");
-const initialMode =
-  Astro.url.searchParams.get("mode") === "register" ? "register" : "login";
 
 if (user) {
   return Astro.redirect(safeNext);
@@ -21,8 +19,8 @@ if (user) {
 ---
 
 <MainLayout
-  title="Sign In / Create Account — CouponHub | Save On Everything"
-  description="Sign in with your Google account or email to share and manage coupons on CouponHub."
+  title="Sign In — CouponHub | Save On Everything"
+  description="Sign in with your Google account or email to view and manage coupons on CouponHub."
   compactFooter={true}
 >
   <div class="mx-auto grid min-h-[calc(100vh-140px)] max-w-5xl items-center gap-10 px-4 py-10 sm:px-6 lg:grid-cols-2 lg:px-8">
@@ -47,19 +45,19 @@ if (user) {
           <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-[#eef5ff] text-[#2491ef] font-bold">
             🎟️
           </span>
-          <span>Submit promo codes without even signing in</span>
+          <span>Submit promo codes without signing in</span>
         </div>
         <div class="flex items-center gap-3">
           <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-[#f0fdf4] text-[#60a600] font-bold">
             ⚡
           </span>
-          <span>Instant live publishing — zero admin waiting</span>
+          <span>Instant live publishing — zero waiting</span>
         </div>
         <div class="flex items-center gap-3">
           <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-50 text-[#60a600] font-bold">
             📊
           </span>
-          <span>One-click Google login to manage all your submitted deals</span>
+          <span>One-click Google login to manage your deals</span>
         </div>
       </div>
     </div>
@@ -94,7 +92,7 @@ if (user) {
         <button
           type="button"
           id="login-google-btn"
-          class="w-full flex items-center justify-center gap-3 rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-xs sm:text-sm font-bold text-slate-700 shadow-2xs transition hover:bg-slate-50 hover:border-slate-400 active:scale-98"
+          class="w-full flex items-center justify-center gap-3 rounded-xl border border-slate-300 bg-white px-4 py-3 text-xs sm:text-sm font-bold text-slate-700 shadow-2xs transition hover:bg-slate-50 hover:border-slate-400 active:scale-98"
         >
           <!-- Multi-color Google SVG -->
           <svg class="h-4 w-4 sm:h-5 sm:w-5 shrink-0" viewBox="0 0 24 24">
@@ -108,38 +106,20 @@ if (user) {
       </div>
 
       <!-- Divider -->
-      <div class="relative my-4">
+      <div class="relative my-5">
         <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-slate-200"></div></div>
-        <div class="relative flex justify-center text-[10px] uppercase tracking-wider"><span class="bg-white px-2 text-slate-400 font-bold">Or with email &amp; password</span></div>
-      </div>
-
-      <!-- Mode Tabs (GrabOn Style) -->
-      <div class="flex rounded-lg border border-slate-200 bg-slate-100 p-1">
-        <button
-          type="button"
-          id="tab-login-btn"
-          class="flex-1 rounded-md bg-[#2491ef] py-2 text-xs font-bold text-white shadow-2xs transition"
-        >
-          Sign In
-        </button>
-        <button
-          type="button"
-          id="tab-register-btn"
-          class="flex-1 rounded-md py-2 text-xs font-bold text-slate-600 transition hover:text-[#2491ef]"
-        >
-          Create Account
-        </button>
+        <div class="relative flex justify-center text-[10px] uppercase tracking-wider"><span class="bg-white px-2 text-slate-400 font-bold">Or sign in with email</span></div>
       </div>
 
       {reason === "signin-required" && (
-        <div class="mt-3.5 rounded-lg border border-amber-200 bg-amber-50 p-2.5 text-xs font-semibold text-amber-900">
+        <div class="mb-3.5 rounded-lg border border-amber-200 bg-amber-50 p-2.5 text-xs font-semibold text-amber-900">
           🔒 <strong>Sign-in required:</strong> Please sign in to view and manage your account.
         </div>
       )}
 
       <div
         id="auth-alert"
-        class="mt-3.5 hidden rounded-lg border border-amber-300 bg-amber-50 p-3 text-xs font-semibold text-amber-900"
+        class="mb-3.5 hidden rounded-lg border border-amber-300 bg-amber-50 p-3 text-xs font-semibold text-amber-900"
       >
         <div class="flex items-start gap-2">
           <span class="text-sm">⚠️</span>
@@ -149,11 +129,11 @@ if (user) {
 
       <div
         id="auth-error"
-        class="mt-3.5 hidden rounded-lg border border-rose-200 bg-rose-50 p-3 text-xs font-semibold text-rose-700"
+        class="mb-3.5 hidden rounded-lg border border-rose-200 bg-rose-50 p-3 text-xs font-semibold text-rose-700"
       ></div>
 
       <!-- SIGN IN FORM -->
-      <form id="sign-in-form" class="mt-5 space-y-4" data-next={safeNext}>
+      <form id="sign-in-form" class="space-y-4" data-next={safeNext}>
         <div>
           <label for="login-email" class="mb-1 block text-xs font-bold text-[#191f2e]">
             Email Address
@@ -190,110 +170,9 @@ if (user) {
         >
           Sign In to Account
         </button>
-
-        <p class="text-center text-xs text-slate-500">
-          Don’t have an account?
-          <button
-            type="button"
-            id="switch-to-register-link"
-            class="font-bold text-[#2491ef] hover:underline"
-          >
-            Create account →
-          </button>
-        </p>
       </form>
 
-      <!-- CREATE ACCOUNT FORM -->
-      <form
-        id="create-account-form"
-        class="mt-5 hidden space-y-4"
-        data-next={safeNext}
-      >
-        <div class="grid grid-cols-2 gap-3">
-          <div>
-            <label for="reg-name" class="mb-1 block text-xs font-bold text-[#191f2e]">
-              Full Name *
-            </label>
-            <input
-              id="reg-name"
-              name="name"
-              type="text"
-              required
-              autocomplete="name"
-              placeholder="e.g. Rahul S."
-              class="w-full rounded-lg border border-slate-300 bg-[#f8fafc] px-3 py-2.5 text-xs sm:text-sm text-[#191f2e] outline-none transition focus:border-[#2491ef] focus:bg-white focus:ring-2 focus:ring-[#2491ef]/20"
-            />
-          </div>
-          <div>
-            <label for="reg-email" class="mb-1 block text-xs font-bold text-[#191f2e]">
-              Email *
-            </label>
-            <input
-              id="reg-email"
-              name="email"
-              type="email"
-              required
-              autocomplete="email"
-              placeholder="you@example.com"
-              class="w-full rounded-lg border border-slate-300 bg-[#f8fafc] px-3 py-2.5 text-xs sm:text-sm text-[#191f2e] outline-none transition focus:border-[#2491ef] focus:bg-white focus:ring-2 focus:ring-[#2491ef]/20"
-            />
-          </div>
-        </div>
-
-        <div class="grid grid-cols-2 gap-3">
-          <div>
-            <label for="reg-password" class="mb-1 block text-xs font-bold text-[#191f2e]">
-              Password *
-            </label>
-            <input
-              id="reg-password"
-              name="password"
-              type="password"
-              required
-              minlength="6"
-              autocomplete="new-password"
-              placeholder="••••••••"
-              class="w-full rounded-lg border border-slate-300 bg-[#f8fafc] px-3 py-2.5 text-xs sm:text-sm text-[#191f2e] outline-none transition focus:border-[#2491ef] focus:bg-white focus:ring-2 focus:ring-[#2491ef]/20"
-            />
-          </div>
-          <div>
-            <label for="reg-confirm" class="mb-1 block text-xs font-bold text-[#191f2e]">
-              Confirm Password *
-            </label>
-            <input
-              id="reg-confirm"
-              name="confirmPassword"
-              type="password"
-              required
-              minlength="6"
-              autocomplete="new-password"
-              placeholder="••••••••"
-              class="w-full rounded-lg border border-slate-300 bg-[#f8fafc] px-3 py-2.5 text-xs sm:text-sm text-[#191f2e] outline-none transition focus:border-[#2491ef] focus:bg-white focus:ring-2 focus:ring-[#2491ef]/20"
-            />
-          </div>
-        </div>
-
-        <button
-          type="submit"
-          id="reg-btn"
-          class="w-full rounded-lg bg-[#2491ef] py-2.5 text-xs font-bold uppercase tracking-wider text-white shadow-2xs transition hover:bg-[#129fea] active:scale-95 disabled:opacity-60"
-        >
-          Create Account &amp; Continue
-        </button>
-
-        <p class="text-center text-xs text-slate-500">
-          Already have an account?
-          <button
-            type="button"
-            id="switch-to-login-link"
-            class="font-bold text-[#2491ef] hover:underline"
-          >
-            Sign in here →
-          </button>
-        </p>
-      </form>
-
-      <div class="mt-5 border-t border-slate-100 pt-3 text-center">
+      <div class="mt-6 border-t border-slate-100 pt-3 text-center">
         <a
           href="/admin/login"
           class="text-[11px] font-medium text-slate-400 hover:text-slate-600"
@@ -324,7 +203,7 @@ if (user) {
       </div>
 
       <p class="mt-3 text-xs text-slate-500">
-        Enter your Google account email to sign in instantly or access your submitted coupons.
+        Enter your Google account email to sign in instantly and view your submitted coupons.
       </p>
 
       <form id="login-google-form" class="mt-4 space-y-3.5" data-next={safeNext}>
@@ -376,30 +255,18 @@ if (user) {
   </div>
 </MainLayout>
 
-<script define:vars={{ initialMode }}>
-  const tabLoginBtn = document.getElementById("tab-login-btn");
-  const tabRegisterBtn = document.getElementById("tab-register-btn");
-  const signInForm = document.getElementById("sign-in-form");
-  const createAccountForm = document.getElementById("create-account-form");
-  const authTitle = document.getElementById("auth-title");
-  const authSubtitle = document.getElementById("auth-subtitle");
-  const authAlert = document.getElementById("auth-alert");
-  const authAlertText = document.getElementById("auth-alert-text");
+<script>
+  const signInForm = document.getElementById("sign-in-form") as HTMLFormElement | null;
   const authError = document.getElementById("auth-error");
-
-  const loginEmailInput = document.getElementById("login-email");
-  const regNameInput = document.getElementById("reg-name");
-  const regEmailInput = document.getElementById("reg-email");
-
-  const loginBtn = document.getElementById("login-btn");
-  const regBtn = document.getElementById("reg-btn");
+  const authAlert = document.getElementById("auth-alert");
+  const loginBtn = document.getElementById("login-btn") as HTMLButtonElement | null;
 
   // Google Modal Controls
   const googleBtn = document.getElementById("login-google-btn");
   const googleModal = document.getElementById("login-google-modal");
   const closeModalBtn = document.getElementById("close-login-google-modal");
   const cancelModalBtn = document.getElementById("cancel-login-google-btn");
-  const googleForm = document.getElementById("login-google-form");
+  const googleForm = document.getElementById("login-google-form") as HTMLFormElement | null;
   const googleEmailInput = document.getElementById("modal-google-email") as HTMLInputElement | null;
   const googleNameInput = document.getElementById("modal-google-name") as HTMLInputElement | null;
   const googleErrorMsg = document.getElementById("modal-google-error");
@@ -474,74 +341,6 @@ if (user) {
     }
   });
 
-  function setMode(mode, prefillEmail = "", alertMessage = "") {
-    if (authError) authError.classList.add("hidden");
-
-    if (alertMessage && authAlert && authAlertText) {
-      authAlertText.innerHTML = alertMessage;
-      authAlert.classList.remove("hidden");
-    } else if (!alertMessage && authAlert) {
-      authAlert.classList.add("hidden");
-    }
-
-    if (mode === "register") {
-      signInForm?.classList.add("hidden");
-      createAccountForm?.classList.remove("hidden");
-
-      tabLoginBtn?.classList.remove("bg-[#2491ef]", "text-white", "shadow-2xs");
-      tabLoginBtn?.classList.add("text-slate-600");
-
-      tabRegisterBtn?.classList.remove("text-slate-600");
-      tabRegisterBtn?.classList.add("bg-[#2491ef]", "text-white", "shadow-2xs");
-
-      if (authTitle) authTitle.textContent = "Create an Account";
-      if (authSubtitle)
-        authSubtitle.textContent =
-          "Fill in your details below to create your free account.";
-
-      if (prefillEmail && regEmailInput) {
-        regEmailInput.value = prefillEmail;
-        regNameInput?.focus();
-      }
-    } else {
-      createAccountForm?.classList.add("hidden");
-      signInForm?.classList.remove("hidden");
-
-      tabRegisterBtn?.classList.remove(
-        "bg-[#2491ef]",
-        "text-white",
-        "shadow-2xs",
-      );
-      tabRegisterBtn?.classList.add("text-slate-600");
-
-      tabLoginBtn?.classList.remove("text-slate-600");
-      tabLoginBtn?.classList.add("bg-[#2491ef]", "text-white", "shadow-2xs");
-
-      if (authTitle) authTitle.textContent = "Sign In to CouponHub";
-      if (authSubtitle)
-        authSubtitle.textContent =
-          "Sign in with your registered email and password.";
-
-      if (prefillEmail && loginEmailInput) {
-        loginEmailInput.value = prefillEmail;
-      }
-    }
-  }
-
-  // Initialize mode
-  if (initialMode === "register") {
-    setMode("register");
-  }
-
-  tabLoginBtn?.addEventListener("click", () => setMode("login"));
-  tabRegisterBtn?.addEventListener("click", () => setMode("register"));
-  document
-    .getElementById("switch-to-register-link")
-    ?.addEventListener("click", () => setMode("register"));
-  document
-    .getElementById("switch-to-login-link")
-    ?.addEventListener("click", () => setMode("login"));
-
   // Handle Sign In Submit
   signInForm?.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -566,19 +365,10 @@ if (user) {
       const data = await res.json();
 
       if (!res.ok || !data.ok) {
-        if (data.notFound) {
-          setMode(
-            "register",
-            email,
-            `No account found! <strong>${email}</strong> is not registered yet. Please enter your name and password below to create your account.`,
-          );
-          return;
-        }
-
         if (authError) {
           authError.textContent =
             data.error ||
-            "Incorrect password. Please verify your password and try again.";
+            "Invalid email or password. Please try again or sign in with Google.";
           authError.classList.remove("hidden");
         }
         return;
@@ -594,62 +384,6 @@ if (user) {
       if (loginBtn) {
         loginBtn.disabled = false;
         loginBtn.textContent = "Sign In to Account";
-      }
-    }
-  });
-
-  // Handle Create Account Submit
-  createAccountForm?.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    if (authError) authError.classList.add("hidden");
-
-    const formData = new FormData(createAccountForm);
-    const name = String(formData.get("name") || "").trim();
-    const email = String(formData.get("email") || "").trim();
-    const password = String(formData.get("password") || "");
-    const confirmPassword = String(formData.get("confirmPassword") || "");
-
-    if (password !== confirmPassword) {
-      if (authError) {
-        authError.textContent =
-          "Passwords do not match. Please ensure both passwords match.";
-        authError.classList.remove("hidden");
-      }
-      return;
-    }
-
-    if (regBtn) {
-      regBtn.disabled = true;
-      regBtn.textContent = "Creating your account...";
-    }
-
-    try {
-      const res = await fetch("/api/auth/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, password, confirmPassword }),
-      });
-      const data = await res.json();
-
-      if (!res.ok || !data.ok) {
-        if (authError) {
-          authError.textContent =
-            data.error || "Failed to create account. Please try again.";
-          authError.classList.remove("hidden");
-        }
-        return;
-      }
-
-      window.location.href = createAccountForm.dataset.next || "/my-coupons";
-    } catch {
-      if (authError) {
-        authError.textContent = "Network error. Please try again.";
-        authError.classList.remove("hidden");
-      }
-    } finally {
-      if (regBtn) {
-        regBtn.disabled = false;
-        regBtn.textContent = "Create Account & Continue";
       }
     }
   });

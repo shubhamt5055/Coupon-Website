@@ -1,8 +1,4 @@
 ---
-const search = Astro.url.search;
-const target = search
-  ? `/login?mode=register&${search.replace(/^\?/, "")}`
-  : "/login?mode=register";
-
-return Astro.redirect(target);
+// Clean redirect: Sign up removed in favor of direct Sign In / Google login
+return Astro.redirect("/login");
 ---
