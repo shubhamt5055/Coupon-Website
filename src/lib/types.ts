@@ -20,24 +20,6 @@ export interface Store {
   total_coupon_count?: number;
 }
 
-export interface User {
-  id: number;
-  name: string;
-  email: string;
-  password_hash: string;
-  password_salt: string;
-  role: "user" | "admin";
-  created_at: string;
-}
-
-export interface UserProfile {
-  id: number;
-  name: string;
-  email: string;
-  role: string;
-  created_at?: string;
-}
-
 export interface Coupon {
   id: number;
   title: string;
@@ -76,8 +58,7 @@ export interface CouponQueryFilters {
   storeSlug?: string;
   categoryId?: number;
   storeId?: number;
-  userId?: number;
-  status?: "all" | "active" | "inactive" | "expired" | "pending";
+  status?: "all" | "active" | "inactive" | "expired";
   includeExpired?: boolean;
   includeInactive?: boolean;
   sort?: "newest" | "popular" | "expiring";
@@ -115,7 +96,6 @@ export interface CategoryInput {
 export interface AdminStats {
   totalCoupons: number;
   activeCoupons: number;
-  pendingCoupons: number;
   expiredCoupons: number;
   inactiveCoupons: number;
   totalClicks: number;

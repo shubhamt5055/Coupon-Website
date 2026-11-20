@@ -7,7 +7,6 @@ import type {
   CouponWithRelations,
   Store,
   StoreInput,
-  User,
 } from "./types";
 import {
   CACHE_KEYS,
@@ -79,7 +78,6 @@ export async function getCoupons(
     !filters.storeSlug &&
     !filters.categoryId &&
     !filters.storeId &&
-    !filters.userId &&
     !filters.status &&
     !filters.includeExpired &&
     !filters.includeInactive &&
@@ -97,8 +95,6 @@ export async function getCoupons(
   if (filters.status === "active") {
     conditions.push("c.is_active = 1 AND c.expiry_date >= ?");
     params.push(today);
-  } else if (filters.status === "pending") {
-    conditions.push("c.is_active = 0 AND c.user_id IS NOT NULL");
   } else if (filters.status === "inactive") {
     conditions.push("c.is_active = 0");
   } else if (filters.status === "expired") {
@@ -127,10 +123,6 @@ export async function getCoupons(
   if (filters.storeId) {
     conditions.push("c.store_id = ?");
     params.push(filters.storeId);
-  }
-  if (filters.userId) {
-    conditions.push("c.user_id = ?");
-    params.push(filters.userId);
   }
   if (filters.search && filters.search.trim().length > 0) {
     const term = `%${filters.search.trim().toLowerCase()}%`;
@@ -354,7 +346,6 @@ export async function getAdminStats(db: D1Database): Promise<AdminStats> {
     queryFirst<{
       total: number;
       active: number;
-      pending: number;
       expired: number;
       inactive: number;
       clicks: number;
@@ -363,7 +354,6 @@ export async function getAdminStats(db: D1Database): Promise<AdminStats> {
       `SELECT
         COUNT(*) AS total,
         SUM(CASE WHEN is_active = 1 AND expiry_date >= ? THEN 1 ELSE 0 END) AS active,
-        SUM(CASE WHEN is_active = 0 AND user_id IS NOT NULL THEN 1 ELSE 0 END) AS pending,
         SUM(CASE WHEN expiry_date < ? THEN 1 ELSE 0 END) AS expired,
         SUM(CASE WHEN is_active = 0 THEN 1 ELSE 0 END) AS inactive,
         COALESCE(SUM(click_count), 0) AS clicks
@@ -377,80 +367,10 @@ export async function getAdminStats(db: D1Database): Promise<AdminStats> {
   return {
     totalCoupons: couponStats?.total ?? 0,
     activeCoupons: couponStats?.active ?? 0,
-    pendingCoupons: couponStats?.pending ?? 0,
     expiredCoupons: couponStats?.expired ?? 0,
     inactiveCoupons: couponStats?.inactive ?? 0,
     totalClicks: couponStats?.clicks ?? 0,
     totalStores: storeCount?.count ?? 0,
     totalCategories: categoryCount?.count ?? 0,
-  };
-}
-
-// ========================
-// User Queries
-// ========================
-
-export async function getUserByEmail(db: D1Database, email: string): Promise<User | null> {
-  return queryFirst<User>(db, "SELECT * FROM users WHERE LOWER(email) = ? LIMIT 1", [
-    email.trim().toLowerCase(),
-  ]);
-}
-
-export async function getUserById(db: D1Database, id: number): Promise<User | null> {
-  return queryFirst<User>(db, "SELECT id, name, email, role, created_at FROM users WHERE id = ? LIMIT 1", [id]);
-}
-
-export async function createUser(
-  db: D1Database,
-  input: { name: string; email: string; password_hash: string; password_salt: string; role?: string }
-): Promise<number> {
-  return runInsert(
-    db,
-    "INSERT INTO users (name, email, password_hash, password_salt, role) VALUES (?, ?, ?, ?, ?)",
-    [
-      input.name,
-      input.email.trim().toLowerCase(),
-      input.password_hash,
-      input.password_salt,
-      input.role || "user",
-    ]
-  );
-}
-
-export async function getUserStats(
-  db: D1Database,
-  userId: number
-): Promise<{
-  totalCoupons: number;
-  activeCoupons: number;
-  pendingCoupons: number;
-  totalClicks: number;
-  totalWorkedVotes: number;
-}> {
-  const today = getTodayIsoDate();
-  const row = await queryFirst<{
-    totalCoupons: number;
-    activeCoupons: number;
-    pendingCoupons: number;
-    totalClicks: number;
-    totalWorkedVotes: number;
-  }>(
-    db,
-    `SELECT
-      COUNT(*) AS totalCoupons,
-      SUM(CASE WHEN is_active = 1 AND expiry_date >= ? THEN 1 ELSE 0 END) AS activeCoupons,
-      SUM(CASE WHEN is_active = 0 THEN 1 ELSE 0 END) AS pendingCoupons,
-      COALESCE(SUM(click_count), 0) AS totalClicks,
-      COALESCE(SUM(worked_count), 0) AS totalWorkedVotes
-    FROM coupons WHERE user_id = ?`,
-    [today, userId]
-  );
-
-  return {
-    totalCoupons: row?.totalCoupons ?? 0,
-    activeCoupons: row?.activeCoupons ?? 0,
-    pendingCoupons: row?.pendingCoupons ?? 0,
-    totalClicks: row?.totalClicks ?? 0,
-    totalWorkedVotes: row?.totalWorkedVotes ?? 0,
   };
 }

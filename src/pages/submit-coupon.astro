@@ -3,9 +3,6 @@ import MainLayout from "../layouts/MainLayout.astro";
 import { getDb } from "../lib/cloudflare";
 import { getCategoriesWithCounts, getStoresWithCounts } from "../lib/db";
 
-const user = Astro.locals.user;
-// Note: Visitors can submit coupons without signing in!
-
 const db = getDb();
 const [stores, categories] = await Promise.all([
   getStoresWithCounts(db),

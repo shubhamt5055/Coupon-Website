@@ -1,10 +1,7 @@
 import { getEnv } from "./cloudflare";
 
 export const SESSION_COOKIE_NAME = "couponhub_admin_session";
-export const USER_SESSION_COOKIE_NAME = "couponhub_user_session";
-
 const ADMIN_SESSION_TTL_SECONDS = 60 * 60 * 12; // 12 hours
-const USER_SESSION_TTL_SECONDS = 60 * 60 * 24 * 7; // 7 days
 
 const encoder = new TextEncoder();
 const decoder = new TextDecoder();
@@ -20,18 +17,6 @@ function b64UrlDecode(str: string): Uint8Array {
   const binary = atob(padded);
   const bytes = new Uint8Array(binary.length);
   for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
-  return bytes;
-}
-
-function bytesToHex(bytes: Uint8Array): string {
-  return Array.from(bytes, (b) => b.toString(16).padStart(2, "0")).join("");
-}
-
-function hexToBytes(hex: string): Uint8Array {
-  const bytes = new Uint8Array(hex.length / 2);
-  for (let i = 0; i < bytes.length; i++) {
-    bytes[i] = parseInt(hex.substring(i * 2, i * 2 + 2), 16);
-  }
   return bytes;
 }
 
@@ -104,39 +89,6 @@ export function getAuthConfig() {
   };
 }
 
-export async function hashPassword(
-  password: string,
-  saltHex?: string
-): Promise<{ hash: string; salt: string }> {
-  const saltBytes = saltHex ? hexToBytes(saltHex) : crypto.getRandomValues(new Uint8Array(16));
-  const keyMaterial = await crypto.subtle.importKey(
-    "raw",
-    encoder.encode(password),
-    { name: "PBKDF2" },
-    false,
-    ["deriveBits"]
-  );
-  const derived = await crypto.subtle.deriveBits(
-    {
-      name: "PBKDF2",
-      salt: saltBytes as unknown as BufferSource,
-      iterations: 100000,
-      hash: "SHA-256",
-    },
-    keyMaterial,
-    256
-  );
-  return {
-    hash: bytesToHex(new Uint8Array(derived)),
-    salt: bytesToHex(saltBytes),
-  };
-}
-
-export async function verifyPassword(password: string, hash: string, salt: string): Promise<boolean> {
-  const derived = await hashPassword(password, salt);
-  return constantTimeEqual(derived.hash, hash);
-}
-
 export function verifyAdminCredentials(username: string, password: string): { ok: boolean; reason?: string } {
   const config = getAuthConfig();
   if (!config.configured) {
@@ -151,7 +103,7 @@ export async function createSessionToken(username: string): Promise<string> {
 }
 
 export async function verifySessionToken(token: string | undefined): Promise<{ valid: boolean; username?: string }> {
-  const res = await verifySignedToken<{ sub?: string; exp?: number }> (token, getAuthConfig().secret);
+  const res = await verifySignedToken<{ sub?: string; exp?: number }>(token, getAuthConfig().secret);
   return res && res.sub ? { valid: true, username: res.sub } : { valid: false };
 }
 
@@ -178,45 +130,4 @@ export function buildSessionCookie(token: string, requestUrl: string): string {
 
 export function buildClearSessionCookie(requestUrl: string): string {
   return buildCookie(SESSION_COOKIE_NAME, "", 0, requestUrl);
-}
-
-export interface UserSessionPayload {
-  id: number;
-  sub: number;
-  email: string;
-  name: string;
-  role: string;
-  exp: number;
-}
-
-export async function createUserSessionToken(user: { id: number; email: string; name: string; role?: string }): Promise<string> {
-  const payload = {
-    id: user.id,
-    sub: user.id,
-    email: user.email,
-    name: user.name,
-    role: user.role || "user",
-  };
-  return createSignedToken(payload, USER_SESSION_TTL_SECONDS, getAuthConfig().secret);
-}
-
-export async function verifyUserSessionToken(token: string | undefined): Promise<UserSessionPayload | null> {
-  const decoded = await verifySignedToken<UserSessionPayload>(token, getAuthConfig().secret);
-  if (!decoded) return null;
-  const userId = Number(decoded.id ?? decoded.sub);
-  if (!userId) return null;
-  return { ...decoded, id: userId, sub: userId };
-}
-
-export async function getAuthenticatedUser(request: Request): Promise<UserSessionPayload | null> {
-  const token = extractCookie(request.headers.get("cookie"), USER_SESSION_COOKIE_NAME);
-  return verifyUserSessionToken(token);
-}
-
-export function buildUserSessionCookie(token: string, requestUrl: string): string {
-  return buildCookie(USER_SESSION_COOKIE_NAME, token, USER_SESSION_TTL_SECONDS, requestUrl);
-}
-
-export function buildClearUserSessionCookie(requestUrl: string): string {
-  return buildCookie(USER_SESSION_COOKIE_NAME, "", 0, requestUrl);
 }
