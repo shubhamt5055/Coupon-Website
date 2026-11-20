@@ -6,15 +6,15 @@
 > **Design Inspiration:** GrabOn (https://www.grabon.in/)  
 > **Target Deployment:** Cloudflare Pages / Cloudflare Workers  
 > **Framework:** Astro 5 (SSR) + Tailwind CSS v4 + TypeScript + Cloudflare D1 (SQLite)  
-> **Date:** November 2026  
+> **Last Updated:** November 2026  
 
 ---
 
 ## 1. Executive Summary
 
-CouponHub is a high-performance, mobile-responsive, community-driven discount coupon and deals platform tailored for Indian and global online shoppers.
+CouponHub is a high-performance, mobile-responsive, community-powered discount coupon and deals platform tailored for Indian and global online shoppers.
 
-Inspired by industry leaders like **GrabOn**, CouponHub combines a clean, trust-building visual aesthetic with robust server-side rendering, cryptographic user authentication, real-time community verification, and a complete admin management portal.
+Inspired by industry leader **GrabOn**, CouponHub combines a clean, trust-building visual aesthetic (`#2491ef`, `#60a600`, `#191f2e`, `#f4f7fb`) with server-side rendering, instant public coupon contributions, community verification, and a comprehensive admin management portal.
 
 ---
 
@@ -22,138 +22,194 @@ Inspired by industry leaders like **GrabOn**, CouponHub combines a clean, trust-
 
 | Component | Technology | Description |
 |---|---|---|
-| **Framework** | **Astro 5 (SSR)** | Server-side rendering using `@astrojs/cloudflare` adapter. Fast page loads, zero client JS bloat, and full SEO metadata. |
-| **Styling** | **Tailwind CSS v4** | Modern utility-first CSS with customized GrabOn design tokens (Primary `#2491ef`, Accent `#60a600`, Navy `#191f2e`). |
-| **Language** | **TypeScript (Strict)** | End-to-end type safety for models, bindings, API routes, and database entities. |
+| **Framework** | **Astro 5 (SSR)** | Server-side rendering with `@astrojs/cloudflare` adapter. Fast page loads, zero client JS bloat, and full SEO metadata. |
+| **Styling** | **Tailwind CSS v4** | Modern utility-first CSS with GrabOn design tokens (Primary `#2491ef`, Accent `#60a600`, Midnight Navy `#191f2e`, Soft Canvas `#f4f7fb`). |
+| **Language** | **TypeScript (Strict)** | Strict type safety for models, bindings, API routes, and database entities. |
 | **Database** | **Cloudflare D1 (SQLite)** | Serverless edge SQL database executing queries with sub-10ms global latency. |
-| **Session Cache** | **Cloudflare KV** | Edge key-value storage (`SESSION` & `COUPON_CACHE`) for signed user sessions and response caching. |
+| **Cache & Sessions** | **Cloudflare KV** | Edge key-value storage (`COUPON_CACHE` & `SESSION`) for response caching and admin HMAC sessions. |
 | **Asset Storage** | **Cloudflare R2** | S3-compatible zero-egress bucket (`STORE_LOGOS`) for merchant logo uploads and fast delivery. |
-| **Security & Auth** | **WebCrypto API** | HMAC-SHA256 session token signatures, PBKDF2 password hashing (100,000 rounds) with cryptographically random salts. |
+| **Admin Security** | **WebCrypto API** | HMAC-SHA256 session token signatures with timing-safe credential verification. |
 | **Edge Deployment** | **Wrangler** | Direct single-command build and edge deployment (`npm run deploy`). |
 
 ---
 
 ## 3. GrabOn UI/UX Design System Transformation
 
-Following a deep visual and interaction inspection of **https://www.grabon.in/**, the entire CouponHub UI was redesigned to replicate GrabOn’s high-converting, clean aesthetic:
+Following a deep visual and interaction analysis of **https://www.grabon.in/**, the CouponHub UI adheres strictly to GrabOn’s high-converting, clean aesthetic:
 
 ### A. Color Palette & Visual Tokens
 - **Primary Brand Blue (`#2491ef`)**: Used for primary action buttons, hover states, active links, and search buttons.
-- **Primary Blue Hover (`#129fea`)**: Smooth active and hover feedback for buttons.
-- **Smile & Verified Green (`#60a600` / `#10b981`)**: Used for the CouponHub smile arc under the logo, *"SAVE ON EVERYTHING"* tagline, verified checkmarks, and positive vote badges.
-- **Midnight Navy (`#191f2e`)**: Used for top announcement strips, dark footer background, and high-impact festival pills.
+- **Smile & Verified Green (`#60a600` / `#10b981`)**: Used for the CouponHub smile arc under the logo, verified checkmarks, positive vote badges, and the prominent `+ Add Coupon` button.
+- **Midnight Navy (`#191f2e`)**: Used for top announcement strips, dark footer background, and high-impact festival campaign badges.
 - **Clean Page Background (`#f4f7fb`)**: Crisp light grayish-blue background providing high contrast against pure white cards.
 - **Card Background (`#ffffff`)**: Rounded cards (`10px`–`12px`) with subtle borders (`#e2e8f0`) and soft elevation.
-- **Pre-Footer Container (`#eef5ff`)**: Pale ice-blue background for newsletter subscription.
 - **Flash Deal Ribbon (`#e65100` / `#ff5722`)**: Vibrant burnt orange for urgent flash deals and top discounts.
 
-### B. Header (3-Tier Navigation Architecture)
+### B. Header Navigation
 1. **Tier 1 (Top Announcement Strip)**:
-   - Deep navy background (`#191f2e`) with live deal counter badge (`LIVE`), site announcement, *"Trending Offers"* link, and `+ Share & Earn` button.
+   - Deep navy background (`#191f2e`) with live deal counter badge (`LIVE`), site announcement, and trending offers shortcut.
 2. **Tier 2 (Main White Navbar)**:
-   - **CouponHub Logo**: Distinctive wordmark with GrabOn's signature green smile curve underneath and `"SAVE ON EVERYTHING"` slogan.
+   - **CouponHub Logo**: Distinctive wordmark with signature green smile curve underneath and `"SAVE ON EVERYTHING"` slogan.
    - **Central Global Search Bar**: Large rounded search bar with soft border and brand blue Search CTA.
-   - **Right User Controls**: `+ Submit Coupon` button, authenticated user avatar with name, single universal Logout button, and Sign In / Sign Up buttons.
+   - **User Controls**: Direct green **`+ Add Coupon`** button that opens an instant submission modal without login or registration.
 3. **Tier 3 (Category & Deals Bar)**:
-   - Sub-navigation links: `Top Stores`, `Categories`, `All Coupons`, `🔥 Deals Of The Day`.
+   - Quick navigation links: `Top Stores`, `Categories`, `All Coupons`, `🔥 Deals Of The Day`.
    - Dark navy campaign capsule pill: `⚡ Festival Mega Deals (UP TO 80% OFF)`.
 
-### C. Coupon Card Anatomy (High-Converting Cards)
-- **Top / Left Ribbon Badge**: `RECOMMENDED` in royal navy (`#191f2e`) or `FLASH DEAL` in vibrant orange (`#ff5722`).
-- **Store & Discount Identity**: Store logo in a rounded box, store title, category badge, and prominent discount tag (`e.g. 50% OFF`).
-- **Social Proof & Verification Strip**:
-  - `✔ Verified` in green (`#60a600`)
-  - `• 96% Success`
-  - `• XX Uses Today`
-- **Bottom Code Action Box**: Dashed coupon code preview with masked code (`SWIG•••`) and GrabOn blue button `SHOW CODE >`.
-
-### D. 2-Step Coupon Reveal Modal
-- **Success Banner**: Green checkmark icon with `"Code Successfully Copied!"`
-- **Dashed Code Container**: Huge uppercase coupon code (`letter-spacing: 2px`) with `Copy Again` button.
-- **Store Redirect Button**: Direct button `"Go to Store & Apply Coupon ↗"` in `#2491ef` (opens merchant in new tab).
-- **Community Feedback Voting**: `"Did this coupon work for you?"` with `[ 👍 Yes, Worked! ]` and `[ 👎 No, Expired ]` buttons directly connected to the API.
-
-### E. Pre-Footer & Footer Directory
-- **Pre-Footer Newsletter Banner**: Ice-blue container (`#eef5ff`) with email input and `SUBSCRIBE NOW` button.
-- **Main Dark Footer (`#191f2e`)**: CouponHub logo, 4-column directory with lime-green headers (`#c2f03e`), affiliate FTC disclosure, and copyright strip.
+### C. High-Converting Coupon Cards & 2-Step Reveal Modal
+- **Coupon Card**: Store logo, verified badge (`✔ Verified`), discount tag (`e.g. 50% OFF`), masked code preview (`SWIG•••`), and `SHOW CODE >` CTA.
+- **2-Step Reveal Modal**:
+  - Automatically copies the promo code to the visitor's clipboard.
+  - Redirects the shopper to the store in a new background tab.
+  - Displays large code with 1-click re-copy.
+  - Direct community feedback widget: `"Did this coupon work for you?"` (`[ 👍 Yes, Worked! ]` and `[ 👎 No, Expired ]`).
 
 ---
 
-## 4. Complete Features Implemented
+## 4. Active Features in the Codebase
 
-### 1. Public Visitor Features
+### 1. Public Visitor Experience (Zero Login Required)
 - **Homepage (`/`)**: Hero banner, live stats, popular store quick pills, 3 Trust Value Cards, Top Stores grid, Category grid, Trending deals feed, and Shopper FAQ guide.
-- **Search & Multi-criteria Filter (`/coupons`)**: Search by store name, deal title, or promo code; filter by category, store, sort order (`newest`, `popular`, `expiring`), and include expired archive toggle.
+- **Frictionless Coupon Submission**:
+  - Visitors can add coupons instantly from anywhere via the **`+ Add Coupon`** navbar button (opens `AddCouponModal.astro`) or via the dedicated page `/submit-coupon` (alias `/add-coupon`).
+  - **No Sign-In / Sign-Up / Google Account required.**
+  - **Instant Live Publishing**: Submissions are immediately saved into Cloudflare D1 with `is_active: 1` and `user_id: null` so they appear publicly across the site right away.
+- **Search & Multi-criteria Filter (`/coupons`)**: Search by store name, deal title, or promo code; filter by category, store, sort order (`newest`, `popular`, `expiring`).
 - **Store Directory (`/stores`) & Store Pages (`/stores/[slug]`)**: Alphabetical search filter, store logo display, verified merchant tag, active offer count, and direct merchant website links.
 - **Categories Directory (`/categories`) & Category Pages (`/categories/[slug]`)**: Icon grid with active deal counts and instant category search.
-- **Coupon Details Page (`/coupons/[id]`)**: SEO breadcrumbs, coupon description, validity period, terms & conditions, working/didn't work voting widget, and related deal recommendations.
-- **1-Click Auto-Copy & Affiliate Redirect**: Clicking `SHOW CODE` automatically copies the promo code to the clipboard, tracks the click in Cloudflare D1, and redirects the shopper to the merchant's checkout page in a background tab.
+- **Coupon Details Page (`/coupons/[id]`)**: SEO breadcrumbs, coupon terms, validity, voting widget, and related deal recommendations.
+- **Click Tracking & Voting APIs**:
+  - `POST /api/coupons/[id]/click`: Increments click counts when shoppers view or reveal codes.
+  - `POST /api/coupons/[id]/vote`: Records community thumbs-up / thumbs-down votes.
 
-### 2. Community & User Account Features
-- **Visitor Coupon Submission (`/submit-coupon`)**: Visitors can now submit coupons **without signing in or creating an account**! Optional name and email fields allow linking deals to a Google account.
-- **Instant Live Publishing**: Admin verification requirement is removed. Coupons submitted by any visitor or user go live immediately across CouponHub (`is_active = 1`).
-- **Google Sign-In Option (`/my-coupons` & `/login`)**: If a visitor wants to view and manage their submitted coupons, they can sign in with their Google account via one-click Google Sign-In.
-- **Visitor Registration (`/login?mode=register` or `/register`)**: Create an account with name, email, and password, or use one-click Google Sign-In.
-- **Cryptographic Security**: PBKDF2 password hashing with 100,000 iterations and cryptographic random salt. Signed session cookies (`couponhub_user_session`) via WebCrypto HMAC-SHA256.
-- **Single Universal Logout**: Consolidated logout button in desktop header and mobile menu with instant session invalidation.
-- **User Dashboard (`/my-coupons`)**: Track total coupons submitted, live active deals, total redemptions/clicks, and delete submitted coupons with one click.
-
-### 3. Admin Panel & Editorial Operations
-- **Protected Routes (`/admin/*`)**: Middleware-enforced server-side authentication with session tokens.
-- **Dashboard (`/admin`)**: Real-time KPI stats (Total coupons, pending review, active live, expired, total clicks, stores, categories).
-- **Coupon Moderation & CRUD (`/admin/coupons/new`, `/admin/coupons/[id]/edit`)**: Create, edit, delete, and toggle coupons between Active and Inactive without redeployment.
-- **Store Management (`/admin/stores`)**: Add stores, define custom slugs, and upload store logos directly to Cloudflare R2.
-- **Category Management (`/admin/categories`)**: Add categories, custom slugs, and emoji icons.
-- **Bulk CSV Import (`/admin/import`)**: Bulk-upload hundreds of coupons via CSV file or copy-paste with server-side validation and downloadable sample template.
+### 2. Admin Portal & Operations (`/admin/*`)
+- **Secure Authentication (`/admin/login`, `/api/admin/login`, `/api/admin/logout`)**:
+  - Environment-based credentials (`ADMIN_USERNAME`, `ADMIN_PASSWORD`, `SESSION_SECRET`).
+  - Secure signed HMAC-SHA256 session cookie (`couponhub_admin_session`).
+- **Live Coupons Sync & Management (`/admin`)**:
+  - Newly added visitor coupons appear immediately at the top of the admin dashboard.
+  - 1-click toggle between **Active** and **Inactive** states.
+  - Edit coupon details (`/admin/coupons/[id]/edit`) or delete invalid deals.
+  - Create new coupons (`/admin/coupons/new`).
+- **Store Management (`/admin/stores`)**: Add, edit, and delete stores, configure affiliate links, upload merchant logos to Cloudflare R2 (`/api/admin/upload-logo`).
+- **Category Management (`/admin/categories`)**: Create and manage categories with custom emoji icons and slugs.
+- **Bulk CSV Import (`/admin/import`)**: Import hundreds of coupons in bulk from CSV files.
 
 ---
 
-## 5. Code Audit & Dead Code Clean-up Report
+## 5. Code Cleanup & Pruned Unused Code
 
-To ensure the application is 100% production-ready and lightweight, a comprehensive line-by-line audit was conducted:
+In accordance with requirements to remove all unused code, dead auth files, and obsolete functionality:
 
-| Removed Item | Location | Reason for Removal | Impact |
-|---|---|---|---|
-| **Legacy Theme Tables** | `src/lib/format.ts` | 173 lines of hardcoded brand styles (`StoreBrandTheme`, `CategoryTheme`, `getStoreBrandTheme`, `getCategoryTheme`) left over from previous prototypes. | Saved 173 lines of dead code; zero runtime dependency. |
-| **Obsolete Punch-hole CSS** | `src/styles/global.css` | `.ticket-notch-left` and `.ticket-notch-right` rules (23 lines) from an old ticket design. | CSS bundle size reduced. |
-| **Unused Ticket Dashed CSS** | `src/styles/global.css` | `.ticket-dashed-line` and `.ticket-dashed-vertical` (9 lines) replaced by standard Tailwind utility classes (`border-dashed`). | CSS file simplified to 33 lines of clean code. |
-| **Unused Theme Imports** | `src/pages/categories/[slug].astro` | Unused `getCategoryTheme` import and unused `theme` variable declaration. | Clean template frontmatter. |
-| **Unused Store Theme Imports** | `src/pages/stores/[slug].astro` | Unused `getStoreBrandTheme` import and fallback simplified to static clean string. | Clean template frontmatter. |
-| **Redundant Dark Overlays** | `src/pages/index.astro`, `src/pages/login.astro`, `src/pages/submit-coupon.astro` | Heavy dark background image overlays removed in favor of GrabOn's clean light-mode aesthetic. | Modern, fast-rendering UI. |
-| **Total Lines Cleaned** | Entire Codebase | **Over 230 lines of dead code removed.** | Faster build, lower memory, zero feature loss. |
+### A. Deleted Dead Files & Endpoints
+1. `src/pages/login.astro` (Deleted — user sign-in page removed)
+2. `src/pages/register.astro` (Deleted — user sign-up page removed)
+3. `src/pages/my-coupons.astro` (Deleted — user coupon dashboard removed)
+4. `src/pages/api/auth/google.ts` (Deleted — Google OAuth endpoint removed)
+5. `src/pages/api/auth/login.ts` (Deleted — user password login API removed)
+6. `src/pages/api/auth/logout.ts` (Deleted — user session logout API removed)
+7. `src/pages/api/auth/register.ts` (Deleted — user registration API removed)
+8. `src/pages/api/coupons/[id]/index.ts` (Deleted — old user coupon delete API removed; admin operations use `/api/admin/coupons/[id]`)
+
+### B. Pruned Functions & Dead Code Across Modules
+- **`src/lib/auth.ts`**: Removed PBKDF2 password hashing, salt generation, user session cookies (`couponhub_user_session`), and user token helpers. Retained clean Admin HMAC-SHA256 authentication.
+- **`src/lib/db.ts`**: Removed `getUserByEmail`, `getUserById`, `createUser`, `getUserStats`, and obsolete "Pending Review" user queries. Submissions now insert with `is_active: 1`.
+- **`src/lib/types.ts`**: Removed `User`, `UserProfile`, `userId` filters, and `pendingCoupons` fields.
+- **`src/lib/validation.ts`**: Removed `validateRegisterInput`, `validateLoginInput`, and `validateEmail`.
+- **`src/middleware.ts`**: Removed visitor session extraction and redirects; retained clean Admin route protection (`/admin/*` and `/api/admin/*`).
+- **`src/env.d.ts`**: Removed `user?: User` from `App.Locals`, retained `adminUser?: string`.
+- **`src/components/Navbar.astro`**: Removed user avatars, sign-in/sign-up links, and visitor session menus. Added clean, single green `+ Add Coupon` action button.
+- **`src/components/Footer.astro`**: Cleaned dead links to `/login` and `/my-coupons`.
+- **`src/pages/admin/index.astro`**: Removed obsolete "Pending Review" stat card and filter, allowing direct Active/Inactive toggles for all coupons.
 
 ---
 
-## 6. Verification & Build Status
+## 6. Project Directory Tree (Clean & Active Code Only)
 
-- **Type Check & Build**: `npm run build` executed and verified.
-- **Result**: **Exit code 0 (`[build] Complete! in 6.11s`)** without errors or warnings.
-- **Git Commit**: All modifications safely committed to branch `main`.
-
----
-
-## 7. Local Development & Deployment Guide
-
-### Local Development
-```bash
-# Install dependencies
-npm install
-
-# Apply database migrations to local D1
-npx wrangler d1 migrations apply coupon_db --local
-
-# Seed initial stores and categories
-npx wrangler d1 execute coupon_db --local --file=./db/seed.sql
-
-# Start development server
-npm run dev
+```
+coupon-website/
+├── db/
+│   ├── schema.sql             # Cloudflare D1 database schema
+│   └── seed.sql               # Seed data for stores, categories, and verified coupons
+├── public/                    # Static assets & favicon
+├── src/
+│   ├── components/
+│   │   ├── AddCouponModal.astro     # Zero-login instant coupon addition popup
+│   │   ├── AdminCouponForm.astro    # Admin add/edit coupon form
+│   │   ├── CategoryCard.astro       # Category showcase card
+│   │   ├── CouponCard.astro         # GrabOn-style high-converting coupon card
+│   │   ├── CouponRevealModal.astro  # 2-step code reveal, auto-copy & vote modal
+│   │   ├── Footer.astro             # GrabOn-style dark footer & FTC disclaimer
+│   │   ├── Navbar.astro             # 3-tier header with search & + Add Coupon CTA
+│   │   ├── SearchBar.astro          # Hero & directory search bar
+│   │   ├── StoreCard.astro          # Store card with active offers count
+│   │   └── StoreLogo.astro          # Merchant logo component with fallback
+│   ├── layouts/
+│   │   ├── AdminLayout.astro        # Admin portal layout with navigation sidebar
+│   │   └── MainLayout.astro         # Public site layout with SEO metadata & modals
+│   ├── lib/
+│   │   ├── api.ts                   # JSON response, error, and parsing helpers
+│   │   ├── auth.ts                  # Admin HMAC-SHA256 session security
+│   │   ├── cloudflare.ts            # Cloudflare D1, KV, and R2 client bindings
+│   │   ├── db.ts                    # Optimized SQL queries for coupons, stores & categories
+│   │   ├── format.ts                # Date formatting, discount tags & URL utils
+│   │   ├── types.ts                 # Clean TypeScript interface definitions
+│   │   └── validation.ts            # Coupon, store & category input validators
+│   ├── pages/
+│   │   ├── index.astro              # Homepage
+│   │   ├── add-coupon.astro         # Direct alias redirecting to /submit-coupon
+│   │   ├── submit-coupon.astro      # Full-page zero-login coupon submission
+│   │   ├── admin/
+│   │   │   ├── index.astro          # Admin dashboard (live coupons list & toggle)
+│   │   │   ├── login.astro          # Admin secure login page
+│   │   │   ├── stores.astro         # Admin stores management
+│   │   │   ├── categories.astro     # Admin categories management
+│   │   │   ├── import.astro         # Bulk CSV coupons import
+│   │   │   └── coupons/
+│   │   │       ├── new.astro        # Admin create coupon
+│   │   │       └── [id]/edit.astro  # Admin edit coupon
+│   │   ├── api/
+│   │   │   ├── categories.ts        # GET categories API
+│   │   │   ├── stores.ts            # GET stores API
+│   │   │   ├── coupons/
+│   │   │   │   ├── index.ts         # GET coupons query API
+│   │   │   │   ├── submit.ts        # POST public coupon submission (live instant publish)
+│   │   │   │   └── [id]/
+│   │   │   │       ├── click.ts     # POST click tracking API
+│   │   │   │       └── vote.ts      # POST community feedback vote API
+│   │   │   ├── logos/[key].ts       # Store logo proxy & SVG fallback
+│   │   │   └── admin/
+│   │   │       ├── login.ts         # POST admin login
+│   │   │       ├── logout.ts        # POST admin logout
+│   │   │       ├── coupons-import.ts# POST bulk CSV import
+│   │   │       ├── upload-logo.ts   # POST R2 store logo upload
+│   │   │       ├── categories/      # Category CRUD APIs
+│   │   │       ├── stores/          # Store CRUD APIs
+│   │   │       └── coupons/         # Admin coupon CRUD APIs
+│   │   ├── categories/
+│   │   │   ├── index.astro          # All categories directory
+│   │   │   └── [slug].astro         # Category-specific coupons page
+│   │   ├── coupons/
+│   │   │   ├── index.astro          # All coupons directory with search & filters
+│   │   │   └── [id].astro           # Single coupon details page
+│   │   └── stores/
+│   │       ├── index.astro          # Stores directory
+│   │       └── [slug].astro         # Store-specific coupons page
+│   ├── env.d.ts                     # Astro & Cloudflare environment types
+│   ├── middleware.ts                # Route protection for admin portal
+│   └── styles/global.css            # Tailwind CSS v4 styling
+├── astro.config.mjs                 # Astro configuration with Cloudflare adapter
+├── package.json                     # Project scripts and dependencies
+├── tsconfig.json                    # Strict TypeScript configuration
+└── wrangler.jsonc                   # Cloudflare Pages / Workers configuration
 ```
 
-### Production Deployment to Cloudflare
-```bash
-# Apply migrations to remote production Cloudflare D1
-npx wrangler d1 migrations apply coupon_db --remote
+---
 
-# Build and deploy application
-npm run deploy
-```
+## 7. Build & Production Verification
+
+- **Build Command**: `npm run build`
+- **Adapter**: `@astrojs/cloudflare`
+- **Output Mode**: `server`
+- **Compilation Status**: **Complete! (Exit Code 0, 0 Errors)**
+- **Working Tree**: Clean (`git status` reports nothing to commit).
