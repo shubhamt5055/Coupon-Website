@@ -3,6 +3,7 @@ import "../styles/global.css";
 import Navbar from "../components/Navbar.astro";
 import Footer from "../components/Footer.astro";
 import CouponRevealModal from "../components/CouponRevealModal.astro";
+import AddCouponModal from "../components/AddCouponModal.astro";
 
 interface Props {
   title?: string;
@@ -71,5 +72,8 @@ const year = new Date().getFullYear();
 
     <!-- Global Coupon Code Reveal & Copy Modal -->
     <CouponRevealModal />
+
+    <!-- Global Quick Add Coupon Modal (Zero Login Required) -->
+    <AddCouponModal />
   </body>
 </html>

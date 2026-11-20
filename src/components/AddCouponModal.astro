@@ -1,0 +1,328 @@
+---
+import { getDb } from "../lib/cloudflare";
+import { getCategoriesWithCounts, getStoresWithCounts } from "../lib/db";
+
+const db = getDb();
+const [stores, categories] = await Promise.all([
+  getStoresWithCounts(db),
+  getCategoriesWithCounts(db),
+]);
+
+const defaultExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+  .toISOString()
+  .slice(0, 10);
+---
+
+<!-- Quick Add Coupon Modal (Zero Login Required) -->
+<div
+  id="add-coupon-modal"
+  class="fixed inset-0 z-50 hidden items-center justify-center bg-black/60 p-4 backdrop-blur-xs overflow-y-auto"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="add-coupon-modal-title"
+>
+  <div class="relative w-full max-w-2xl my-8 rounded-2xl bg-white p-6 sm:p-8 shadow-2xl transition max-h-[90vh] overflow-y-auto">
+    <!-- Header -->
+    <div class="flex items-start justify-between border-b border-slate-100 pb-4">
+      <div>
+        <span class="inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-0.5 text-[11px] font-bold text-emerald-800">
+          <span class="h-1.5 w-1.5 rounded-full bg-[#60a600] animate-pulse"></span>
+          No Login Required • Instant Live Publishing
+        </span>
+        <h2 id="add-coupon-modal-title" class="mt-2 text-2xl font-black tracking-tight text-[#191f2e]">
+          Add a Working Coupon
+        </h2>
+        <p class="mt-0.5 text-xs text-slate-500">
+          Share a discount code with the CouponHub community. No account or password needed!
+        </p>
+      </div>
+      <button
+        type="button"
+        id="close-add-coupon-modal"
+        class="rounded-xl border border-slate-200 p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition"
+        aria-label="Close modal"
+      >
+        <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Error Alert Box -->
+    <div
+      id="modal-submit-alert"
+      class="mt-4 hidden rounded-xl border border-rose-200 bg-rose-50 p-3 text-xs font-semibold text-rose-700"
+    ></div>
+
+    <!-- Success Box -->
+    <div
+      id="modal-submit-success"
+      class="mt-4 hidden rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-xs font-bold text-emerald-800"
+    >
+      🎉 Coupon published live successfully! Redirecting you now...
+    </div>
+
+    <!-- Add Coupon Form -->
+    <form id="modal-coupon-form" class="mt-5 space-y-4">
+      <!-- Offer Title -->
+      <div>
+        <label for="modal-coupon-title" class="mb-1 block text-xs font-bold text-[#191f2e]">
+          Coupon Title *
+        </label>
+        <input
+          id="modal-coupon-title"
+          name="title"
+          type="text"
+          required
+          maxlength="140"
+          placeholder="e.g. Flat 50% Off on Food Orders"
+          class="w-full rounded-lg border border-slate-300 bg-[#f8fafc] px-3.5 py-2.5 text-xs sm:text-sm font-medium text-[#191f2e] outline-none transition focus:border-[#2491ef] focus:bg-white focus:ring-2 focus:ring-[#2491ef]/20"
+        />
+      </div>
+
+      <!-- Store & Category -->
+      <div class="grid gap-3 sm:grid-cols-2">
+        <div>
+          <label for="modal-coupon-store" class="mb-1 block text-xs font-bold text-[#191f2e]">
+            Store / Brand *
+          </label>
+          <select
+            id="modal-coupon-store"
+            name="store_id"
+            required
+            class="w-full rounded-lg border border-slate-300 bg-[#f8fafc] px-3.5 py-2.5 text-xs sm:text-sm font-medium text-[#191f2e] outline-none transition focus:border-[#2491ef] focus:bg-white focus:ring-2 focus:ring-[#2491ef]/20"
+          >
+            <option value="">Select store</option>
+            {stores.map((s) => (
+              <option value={s.id}>{s.name}</option>
+            ))}
+          </select>
+        </div>
+
+        <div>
+          <label for="modal-coupon-category" class="mb-1 block text-xs font-bold text-[#191f2e]">
+            Category *
+          </label>
+          <select
+            id="modal-coupon-category"
+            name="category_id"
+            required
+            class="w-full rounded-lg border border-slate-300 bg-[#f8fafc] px-3.5 py-2.5 text-xs sm:text-sm font-medium text-[#191f2e] outline-none transition focus:border-[#2491ef] focus:bg-white focus:ring-2 focus:ring-[#2491ef]/20"
+          >
+            <option value="">Select category</option>
+            {categories.map((c) => (
+              <option value={c.id}>
+                {c.icon} {c.name}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      <!-- Promo Code & Discount Badge -->
+      <div class="grid gap-3 sm:grid-cols-2">
+        <div>
+          <label for="modal-coupon-code" class="mb-1 block text-xs font-bold text-[#191f2e]">
+            Promo Code *
+          </label>
+          <input
+            id="modal-coupon-code"
+            name="code"
+            type="text"
+            required
+            maxlength="40"
+            placeholder="e.g. SWIGGY50"
+            class="w-full rounded-lg border border-slate-300 bg-[#f8fafc] px-3.5 py-2.5 font-mono text-xs sm:text-sm uppercase tracking-widest text-[#191f2e] outline-none transition focus:border-[#2491ef] focus:bg-white focus:ring-2 focus:ring-[#2491ef]/20"
+          />
+        </div>
+
+        <div>
+          <label for="modal-coupon-discount" class="mb-1 block text-xs font-bold text-[#191f2e]">
+            Discount Text / Badge *
+          </label>
+          <input
+            id="modal-coupon-discount"
+            name="discount_text"
+            type="text"
+            required
+            maxlength="40"
+            placeholder="e.g. 50% OFF or ₹100 CASHBACK"
+            class="w-full rounded-lg border border-slate-300 bg-[#f8fafc] px-3.5 py-2.5 text-xs sm:text-sm font-medium text-[#191f2e] outline-none transition focus:border-[#2491ef] focus:bg-white focus:ring-2 focus:ring-[#2491ef]/20"
+          />
+        </div>
+      </div>
+
+      <!-- Deal Link & Expiry Date -->
+      <div class="grid gap-3 sm:grid-cols-2">
+        <div>
+          <label for="modal-coupon-url" class="mb-1 block text-xs font-bold text-[#191f2e]">
+            Store / Deal Link *
+          </label>
+          <input
+            id="modal-coupon-url"
+            name="affiliate_or_store_url"
+            type="url"
+            required
+            placeholder="https://www.store.com/deal"
+            class="w-full rounded-lg border border-slate-300 bg-[#f8fafc] px-3.5 py-2.5 text-xs sm:text-sm font-medium text-[#191f2e] outline-none transition focus:border-[#2491ef] focus:bg-white focus:ring-2 focus:ring-[#2491ef]/20"
+          />
+        </div>
+
+        <div>
+          <label for="modal-coupon-expiry" class="mb-1 block text-xs font-bold text-[#191f2e]">
+            Expiry Date *
+          </label>
+          <input
+            id="modal-coupon-expiry"
+            name="expiry_date"
+            type="date"
+            required
+            value={defaultExpiry}
+            class="w-full rounded-lg border border-slate-300 bg-[#f8fafc] px-3.5 py-2.5 text-xs sm:text-sm font-medium text-[#191f2e] outline-none transition focus:border-[#2491ef] focus:bg-white focus:ring-2 focus:ring-[#2491ef]/20"
+          />
+        </div>
+      </div>
+
+      <!-- Description (Optional) -->
+      <div>
+        <label for="modal-coupon-desc" class="mb-1 block text-xs font-bold text-[#191f2e]">
+          Description (Optional)
+        </label>
+        <textarea
+          id="modal-coupon-desc"
+          name="description"
+          rows="2"
+          maxlength="500"
+          placeholder="e.g. Valid on minimum order value of ₹249 on selected restaurants."
+          class="w-full rounded-lg border border-slate-300 bg-[#f8fafc] px-3.5 py-2 text-xs sm:text-sm font-medium text-[#191f2e] outline-none transition focus:border-[#2491ef] focus:bg-white focus:ring-2 focus:ring-[#2491ef]/20"
+        ></textarea>
+      </div>
+
+      <!-- Submit Actions -->
+      <div class="mt-6 flex items-center justify-end gap-3 border-t border-slate-100 pt-4">
+        <button
+          type="button"
+          id="cancel-add-coupon-modal"
+          class="rounded-lg border border-slate-200 px-4 py-2.5 text-xs font-bold text-slate-600 hover:bg-slate-50 transition"
+        >
+          Cancel
+        </button>
+        <button
+          type="submit"
+          id="modal-submit-btn"
+          class="rounded-lg bg-[#60a600] px-6 py-2.5 text-xs font-extrabold uppercase tracking-wider text-white shadow-xs transition hover:bg-[#528f00] active:scale-95 disabled:opacity-60"
+        >
+          Publish Coupon Instantly 🚀
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  const addModal = document.getElementById("add-coupon-modal");
+  const closeModalBtn = document.getElementById("close-add-coupon-modal");
+  const cancelModalBtn = document.getElementById("cancel-add-coupon-modal");
+  const form = document.getElementById("modal-coupon-form") as HTMLFormElement | null;
+  const alertBox = document.getElementById("modal-submit-alert");
+  const successBox = document.getElementById("modal-submit-success");
+  const submitBtn = document.getElementById("modal-submit-btn") as HTMLButtonElement | null;
+
+  function openAddModal() {
+    if (addModal) {
+      addModal.classList.remove("hidden");
+      addModal.classList.add("flex");
+      document.body.style.overflow = "hidden";
+      const titleInput = document.getElementById("modal-coupon-title");
+      titleInput?.focus();
+    }
+  }
+
+  function closeAddModal() {
+    if (addModal) {
+      addModal.classList.add("hidden");
+      addModal.classList.remove("flex");
+      document.body.style.overflow = "";
+    }
+    if (alertBox) alertBox.classList.add("hidden");
+  }
+
+  // Intercept all clicks to "+ Add Coupon" buttons to open the modal immediately
+  document.querySelectorAll('a[href="/submit-coupon"], a[href="/add-coupon"], [data-open-add-coupon]').forEach((el) => {
+    el.addEventListener("click", (e) => {
+      // If user is already on /submit-coupon page, let default link work, otherwise open modal directly!
+      if (window.location.pathname !== "/submit-coupon") {
+        e.preventDefault();
+        openAddModal();
+      }
+    });
+  });
+
+  closeModalBtn?.addEventListener("click", closeAddModal);
+  cancelModalBtn?.addEventListener("click", closeAddModal);
+
+  // Close when clicking outside dialog
+  addModal?.addEventListener("click", (e) => {
+    if (e.target === addModal) {
+      closeAddModal();
+    }
+  });
+
+  form?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    if (alertBox) alertBox.classList.add("hidden");
+    if (successBox) successBox.classList.add("hidden");
+
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Publishing Instantly...";
+    }
+
+    const fd = new FormData(form);
+    const payload = {
+      title: String(fd.get("title") || "").trim(),
+      code: String(fd.get("code") || "").trim(),
+      discount_text: String(fd.get("discount_text") || "").trim(),
+      store_id: Number(fd.get("store_id")),
+      category_id: Number(fd.get("category_id")),
+      affiliate_or_store_url: String(fd.get("affiliate_or_store_url") || "").trim(),
+      expiry_date: String(fd.get("expiry_date") || "").trim(),
+      description: String(fd.get("description") || "").trim(),
+      terms: "",
+    };
+
+    try {
+      const res = await fetch("/api/coupons/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      const data = (await res.json()) as { ok?: boolean; id?: number; error?: string };
+
+      if (!res.ok || !data.ok) {
+        if (alertBox) {
+          alertBox.textContent = data.error || "Please check all fields and try again.";
+          alertBox.classList.remove("hidden");
+        }
+        return;
+      }
+
+      // Success! Show live message and redirect to live coupon
+      if (successBox) successBox.classList.remove("hidden");
+      setTimeout(() => {
+        window.location.href = `/coupons/${data.id}?created=live`;
+      }, 700);
+    } catch {
+      if (alertBox) {
+        alertBox.textContent = "Network error. Please try again.";
+        alertBox.classList.remove("hidden");
+      }
+    } finally {
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Publish Coupon Instantly 🚀";
+      }
+    }
+  });
+</script>

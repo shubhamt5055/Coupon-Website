@@ -23,32 +23,17 @@ const defaultExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
 >
   <div class="mx-auto max-w-3xl px-4 py-8 sm:px-6 lg:px-8">
     <!-- Header (GrabOn Style) -->
-    <div class="mb-6 flex flex-wrap items-start justify-between gap-3">
-      <div>
-        {user ? (
-          <span class="inline-flex items-center gap-1.5 rounded-full border border-[#2491ef]/20 bg-[#eef5ff] px-3.5 py-1 text-xs font-bold text-[#2491ef]">
-            <span class="h-2 w-2 rounded-full bg-[#60a600] animate-pulse"></span>
-            Signed in as {user.name} ({user.email})
-          </span>
-        ) : (
-          <span class="inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-3.5 py-1 text-xs font-bold text-emerald-800">
-            <span class="h-2 w-2 rounded-full bg-[#60a600] animate-pulse"></span>
-            Visitor Mode: No Login Required!
-          </span>
-        )}
-        <h1 class="mt-3 text-3xl font-extrabold tracking-tight text-[#191f2e] sm:text-4xl">
-          Add a Working Coupon
-        </h1>
-        <p class="mt-1 text-xs sm:text-sm text-slate-500">
-          Anyone can add a coupon. No account or password needed! Your deal goes live immediately across CouponHub.
-        </p>
-      </div>
-      <a
-        href="/my-coupons"
-        class="rounded-lg border border-slate-200 bg-white px-3.5 py-1.5 text-xs font-bold text-slate-700 shadow-2xs transition hover:border-[#2491ef] hover:text-[#2491ef]"
-      >
-        View my coupons →
-      </a>
+    <div class="mb-6">
+      <span class="inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-3.5 py-1 text-xs font-bold text-emerald-800">
+        <span class="h-2 w-2 rounded-full bg-[#60a600] animate-pulse"></span>
+        100% Free &amp; Open: No Login Required!
+      </span>
+      <h1 class="mt-3 text-3xl font-extrabold tracking-tight text-[#191f2e] sm:text-4xl">
+        Add a Working Coupon
+      </h1>
+      <p class="mt-1 text-xs sm:text-sm text-slate-500">
+        Anyone can add a coupon. Fill out the details below and your deal goes live immediately across CouponHub!
+      </p>
     </div>
 
     <!-- Instant Publishing Notification Banner -->
@@ -67,47 +52,6 @@ const defaultExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
     <!-- Form Container -->
     <div class="rounded-xl border border-slate-200 bg-white p-6 shadow-2xs sm:p-8">
       <form id="user-coupon-form" class="space-y-6">
-        <!-- Guest Details (Optional when not signed in) -->
-        {!user && (
-          <div class="rounded-xl border border-[#2491ef]/20 bg-[#eef5ff]/60 p-4">
-            <div class="flex items-center gap-2 mb-1.5">
-              <span class="text-base">👤</span>
-              <h3 class="text-xs font-bold text-[#191f2e] uppercase tracking-wider">
-                Guest Info (Optional — Can be left blank)
-              </h3>
-            </div>
-            <p class="text-xs text-slate-600 mb-3">
-              No login needed! You can submit directly. If you want to track redemptions later, you may enter your email below.
-            </p>
-            <div class="grid gap-3 sm:grid-cols-2">
-              <div>
-                <label for="guest-email" class="mb-1 block text-xs font-bold text-[#191f2e]">
-                  Your Email (Optional)
-                </label>
-                <input
-                  id="guest-email"
-                  name="user_email"
-                  type="email"
-                  placeholder="e.g. yourname@gmail.com"
-                  class="w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2 text-xs sm:text-sm font-medium text-[#191f2e] outline-none transition focus:border-[#2491ef] focus:ring-2 focus:ring-[#2491ef]/20"
-                />
-              </div>
-              <div>
-                <label for="guest-name" class="mb-1 block text-xs font-bold text-[#191f2e]">
-                  Your Name (Optional)
-                </label>
-                <input
-                  id="guest-name"
-                  name="user_name"
-                  type="text"
-                  placeholder="e.g. Rahul"
-                  class="w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2 text-xs sm:text-sm font-medium text-[#191f2e] outline-none transition focus:border-[#2491ef] focus:ring-2 focus:ring-[#2491ef]/20"
-                />
-              </div>
-            </div>
-          </div>
-        )}
-
         <!-- Coupon Basics -->
         <div>
           <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">
@@ -309,8 +253,6 @@ const defaultExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
       expiry_date: String(fd.get("expiry_date") || ""),
       description: String(fd.get("description") || ""),
       terms: String(fd.get("terms") || ""),
-      user_email: String(fd.get("user_email") || ""),
-      user_name: String(fd.get("user_name") || ""),
     };
 
     try {
