@@ -11,7 +11,6 @@ const navLinks = [
   { href: "/categories", label: "Categories" },
   { href: "/coupons", label: "All Coupons" },
   { href: "/coupons?sort=popular", label: "🔥 Deals Of The Day" },
-  { href: "/submit-coupon", label: "+ Add Coupon" },
 ];
 
 function isActive(href: string): boolean {
@@ -36,8 +35,6 @@ function isActive(href: string): boolean {
 
       <div class="hidden sm:flex items-center gap-4 shrink-0 text-slate-300 text-[11px]">
         <a href="/coupons?sort=popular" class="hover:text-white transition">Trending Offers</a>
-        <span>•</span>
-        <a href="/submit-coupon" class="text-[#60a600] hover:text-[#c2f03e] font-bold transition">+ Add Coupon</a>
         <span>•</span>
         <a href="/admin" class="hover:text-white transition" title="Admin Portal">🛡️ Admin</a>
       </div>
@@ -138,20 +135,15 @@ function isActive(href: string): boolean {
             </button>
           </div>
         ) : (
-          <div class="flex items-center gap-2">
-            <a
-              href="/login"
-              class="px-2.5 py-1.5 text-xs font-bold text-[#2491ef] hover:underline"
-            >
-              Sign In
-            </a>
-            <a
-              href="/login?mode=register"
-              class="rounded-lg bg-[#2491ef] px-3.5 py-1.5 text-xs font-bold text-white shadow-xs transition hover:bg-[#129fea] active:scale-95"
-            >
-              Sign Up
-            </a>
-          </div>
+          <a
+            href="/login"
+            class="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3.5 py-1.5 text-xs font-bold text-slate-700 shadow-2xs transition hover:border-[#2491ef] hover:text-[#2491ef]"
+          >
+            <svg class="h-3.5 w-3.5 text-[#2491ef]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+            </svg>
+            <span>Sign In</span>
+          </a>
         )}
 
         <!-- Mobile Drawer Toggle -->
@@ -254,12 +246,9 @@ function isActive(href: string): boolean {
           </button>
         </div>
       ) : (
-        <div class="mt-3 flex gap-2 border-t border-slate-100 pt-3">
-          <a href="/login" class="flex-1 rounded-lg border border-slate-300 py-2 text-center text-xs font-bold text-slate-700">
-            Sign In
-          </a>
-          <a href="/login?mode=register" class="flex-1 rounded-lg bg-[#2491ef] py-2 text-center text-xs font-bold text-white">
-            Sign Up
+        <div class="mt-3 border-t border-slate-100 pt-3">
+          <a href="/login" class="block w-full rounded-lg border border-slate-300 py-2.5 text-center text-xs font-bold text-slate-700 hover:border-[#2491ef] hover:text-[#2491ef]">
+            Sign In to Account
           </a>
         </div>
       )}
