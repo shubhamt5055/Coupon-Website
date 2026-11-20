@@ -1,4 +1,4 @@
 ---
-// Clean redirect: Sign up removed in favor of direct Sign In / Google login
-return Astro.redirect("/login");
+// Redirect directly to login page with Sign Up mode active
+return Astro.redirect("/login?mode=register");
 ---
