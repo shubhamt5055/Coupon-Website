@@ -25,15 +25,6 @@
   }
 }
 
-/* GrabOn ticket dashed lines */
-.ticket-dashed-line {
-  border-bottom: 2px dashed #cbd5e1;
-}
-
-.ticket-dashed-vertical {
-  border-right: 2px dashed #cbd5e1;
-}
-
 /* Subtle pulse glow for live verified badges */
 @keyframes soft-pulse {
   0%, 100% { opacity: 1; transform: scale(1); }

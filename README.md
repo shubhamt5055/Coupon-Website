@@ -32,7 +32,7 @@ Visitors can browse, search, filter, reveal/copy coupon codes, vote on coupon ac
 ### Bonus Features Included
 - **Top Coupons Today**: Ranked live by `click_count`.
 - **Coupon Worked / Didn't Work Voting**: Visitors can vote on coupon validity with live success-rate indicators.
-- **Dark Mode**: System-aware light/dark toggle persisted in `localStorage` with zero flash on page load.
+- **GrabOn Design System**: High-converting light-mode UI inspired by GrabOn with primary blue (`#2491ef`), verified lime-green (`#60a600`), and 3-tier navigation.
 - **Bulk CSV Upload (`/admin/import`)**: Upload or paste CSV rows with server-side validation, downloadable sample CSV, and per-row import report.
 - **Cloudflare R2 Logo Upload (`/api/admin/upload-logo`, `/api/logos/[key]`)**: Automatically stores uploaded store logos in Cloudflare R2 when the `STORE_LOGOS` binding is configured (with an automatic lightweight fallback when R2 is not bound yet).
 - **Optional Cloudflare KV Caching**: Automatically caches popular and homepage lists when `COUPON_CACHE` is bound and invalidates cache on admin updates.
