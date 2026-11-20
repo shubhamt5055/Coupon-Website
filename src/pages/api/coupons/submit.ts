@@ -1,41 +1,18 @@
 import type { APIRoute } from "astro";
 import { getDb, invalidateCouponCache } from "../../../lib/cloudflare";
-import { createCoupon, getUserByEmail, createUser } from "../../../lib/db";
-import { getAuthenticatedUser, hashPassword } from "../../../lib/auth";
+import { createCoupon } from "../../../lib/db";
 import { validateCouponInput } from "../../../lib/validation";
 import { jsonError, jsonResponse, parseBody } from "../../../lib/api";
 
-export const POST: APIRoute = async ({ request, locals }) => {
+export const POST: APIRoute = async ({ request }) => {
   try {
-    const user = locals.user ?? (await getAuthenticatedUser(request));
     const body = await parseBody<Record<string, unknown>>(request);
     const db = getDb();
 
-    let userId: number | null = user?.id ?? null;
-
-    // If visitor is not signed in but provided an optional email, link to that account
-    const rawEmail = typeof body.user_email === "string" ? body.user_email.trim().toLowerCase() : "";
-    if (!userId && rawEmail && rawEmail.includes("@")) {
-      const existingUser = await getUserByEmail(db, rawEmail);
-      if (!existingUser) {
-        const { hash, salt } = await hashPassword(crypto.randomUUID());
-        const newId = await createUser(db, {
-          name: typeof body.user_name === "string" && body.user_name.trim() ? body.user_name.trim() : rawEmail.split("@")[0],
-          email: rawEmail,
-          password_hash: hash,
-          password_salt: salt,
-          role: "user",
-        });
-        userId = newId;
-      } else {
-        userId = existingUser.id;
-      }
-    }
-
     const validation = validateCouponInput({
       ...body,
-      user_id: userId,
-      is_active: 1, // Immediately live! No admin verification required.
+      user_id: null,
+      is_active: 1, // Immediately public across CouponHub and visible in Admin Panel!
     });
 
     if (!validation.ok || !validation.data) {
