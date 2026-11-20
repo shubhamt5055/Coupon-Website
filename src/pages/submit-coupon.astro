@@ -18,8 +18,8 @@ const defaultExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
 ---
 
 <MainLayout
-  title="Submit a Coupon — CouponHub | Save On Everything"
-  description="Share a discount coupon or promo code with the CouponHub community. No account required."
+  title="Add a Coupon — CouponHub | Save On Everything"
+  description="Add a working promo code or coupon with no login or sign-up required. Live publishing immediately."
 >
   <div class="mx-auto max-w-3xl px-4 py-8 sm:px-6 lg:px-8">
     <!-- Header (GrabOn Style) -->
@@ -33,14 +33,14 @@ const defaultExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
         ) : (
           <span class="inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-3.5 py-1 text-xs font-bold text-emerald-800">
             <span class="h-2 w-2 rounded-full bg-[#60a600] animate-pulse"></span>
-            Guest / Visitor Mode (No sign-in required)
+            Visitor Mode: No Login or Google Sign-up Required!
           </span>
         )}
         <h1 class="mt-3 text-3xl font-extrabold tracking-tight text-[#191f2e] sm:text-4xl">
-          Share a Working Coupon
+          Add a Working Coupon
         </h1>
         <p class="mt-1 text-xs sm:text-sm text-slate-500">
-          Found a discount code or offer? Submit it below. It goes live immediately across CouponHub without any admin verification barrier!
+          Anyone can add a coupon. No account or password needed! Your deal goes live immediately across CouponHub.
         </p>
       </div>
       <a
@@ -55,7 +55,7 @@ const defaultExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
     <div class="mb-6 flex items-center gap-3 rounded-xl border border-emerald-200 bg-emerald-50/70 p-3.5 text-xs text-emerald-900">
       <span class="text-xl">⚡</span>
       <p>
-        <strong>Instant Live Publishing:</strong> Any visitor or user can publish deals immediately. Your coupon is active right away for all shoppers!
+        <strong>Zero Barrier Live Publishing:</strong> No sign-in or admin approval required. Fill the coupon details below and it goes live instantly!
       </p>
     </div>
 
@@ -73,11 +73,11 @@ const defaultExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
             <div class="flex items-center gap-2 mb-1.5">
               <span class="text-base">👤</span>
               <h3 class="text-xs font-bold text-[#191f2e] uppercase tracking-wider">
-                Guest Info (Optional)
+                Guest Info (Optional — Can be left blank)
               </h3>
             </div>
             <p class="text-xs text-slate-600 mb-3">
-              No account needed! If you enter your email, you can track this coupon anytime by signing in with your Google account.
+              No login or sign-up needed! You can submit directly. If you want to track redemptions later, you may enter your email below.
             </p>
             <div class="grid gap-3 sm:grid-cols-2">
               <div>

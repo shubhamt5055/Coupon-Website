@@ -11,7 +11,7 @@ const navLinks = [
   { href: "/categories", label: "Categories" },
   { href: "/coupons", label: "All Coupons" },
   { href: "/coupons?sort=popular", label: "🔥 Deals Of The Day" },
-  { href: "/submit-coupon", label: "Submit Coupon" },
+  { href: "/submit-coupon", label: "+ Add Coupon" },
 ];
 
 function isActive(href: string): boolean {
@@ -37,7 +37,7 @@ function isActive(href: string): boolean {
       <div class="hidden sm:flex items-center gap-4 shrink-0 text-slate-300 text-[11px]">
         <a href="/coupons?sort=popular" class="hover:text-white transition">Trending Offers</a>
         <span>•</span>
-        <a href="/submit-coupon" class="text-[#60a600] hover:text-[#c2f03e] font-bold transition">+ Share &amp; Earn</a>
+        <a href="/submit-coupon" class="text-[#60a600] hover:text-[#c2f03e] font-bold transition">+ Add Coupon</a>
         <span>•</span>
         <a href="/admin" class="hover:text-white transition" title="Admin Portal">🛡️ Admin</a>
       </div>
@@ -91,12 +91,17 @@ function isActive(href: string): boolean {
       </form>
 
       <!-- Right User Controls -->
-      <div class="flex items-center gap-2.5">
+      <div class="flex items-center gap-2">
+        <!-- "+ Add Coupon" Button: Visible on ALL devices without login! -->
         <a
           href="/submit-coupon"
-          class="hidden xl:inline-flex items-center gap-1.5 rounded-lg border border-[#2491ef]/30 bg-[#eef5ff] px-3 py-1.5 text-xs font-bold text-[#2491ef] hover:bg-[#2491ef] hover:text-white transition"
+          class="inline-flex items-center gap-1.5 rounded-lg bg-[#60a600] px-3 sm:px-3.5 py-1.5 text-xs font-black text-white shadow-xs transition hover:bg-[#528f00] active:scale-95 shrink-0"
+          title="Add a coupon (No login required)"
         >
-          <span>+ Submit Coupon</span>
+          <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+          </svg>
+          <span class="whitespace-nowrap">Add Coupon</span>
         </a>
 
         {user ? (
@@ -230,7 +235,10 @@ function isActive(href: string): boolean {
       <a href="/categories" class="rounded-lg px-3 py-2 hover:bg-[#eef5ff] hover:text-[#2491ef]">Categories</a>
       <a href="/coupons" class="rounded-lg px-3 py-2 hover:bg-[#eef5ff] hover:text-[#2491ef]">All Coupons</a>
       <a href="/coupons?sort=popular" class="rounded-lg px-3 py-2 text-[#e65100] font-bold hover:bg-orange-50">🔥 Deals of the Day</a>
-      <a href="/submit-coupon" class="rounded-lg px-3 py-2 text-[#2491ef] font-bold hover:bg-[#eef5ff]">+ Submit Coupon</a>
+      <a href="/submit-coupon" class="flex items-center gap-2 rounded-lg bg-[#60a600] text-white px-3.5 py-2.5 font-bold hover:bg-[#528f00] shadow-xs">
+        <span class="text-base font-black">+</span>
+        <span>Add Coupon (No Login Needed)</span>
+      </a>
 
       {user ? (
         <div class="mt-2 border-t border-slate-100 pt-2">
