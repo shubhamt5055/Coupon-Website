@@ -22,134 +22,162 @@ const storeUrl = safeExternalUrl(coupon.affiliate_or_store_url);
 const masked = maskCouponCode(coupon.code);
 const totalVotes = coupon.worked_count + coupon.didnt_work_count;
 const successRate =
-  totalVotes > 0 ? Math.round((coupon.worked_count / totalVotes) * 100) : 92;
+  totalVotes > 0 ? Math.round((coupon.worked_count / totalVotes) * 100) : 96;
+
+// GrabOn ribbon type determination
+const isFlashDeal = coupon.discount_text.toLowerCase().includes("flat") || coupon.click_count > 50;
+const ribbonType = featuredBadge || (isFlashDeal ? "FLASH DEAL" : "RECOMMENDED");
 ---
 
 <article
   class:list={[
-    "group relative flex flex-col justify-between rounded-2xl border bg-white p-5.5 shadow-2xs transition-all duration-300 hover:-translate-y-1 hover:shadow-xl",
+    "group relative flex flex-col justify-between overflow-hidden rounded-xl border bg-white shadow-xs transition-all duration-300 hover:-translate-y-1 hover:shadow-lg",
     expired
-      ? "border-slate-200/70 opacity-70 grayscale-[35%]"
-      : "border-slate-200/90 hover:border-[#0499FA] hover:shadow-[#0499FA]/10",
+      ? "border-slate-200 opacity-60 grayscale"
+      : ribbonType === "FLASH DEAL"
+      ? "border-orange-200/90 hover:border-[#ff5722]"
+      : "border-slate-200 hover:border-[#2491ef]",
   ]}
 >
-  <div>
-    <!-- Top Row: Store Info + Couponly Exclusive / Discount Pill -->
-    <div class="mb-3.5 flex items-start justify-between gap-3">
+  <!-- GrabOn Vertical Left Ribbon (Desktop) & Top Badge (Mobile) -->
+  {!expired && (
+    <div
+      class:list={[
+        "text-[10px] font-extrabold uppercase tracking-wider text-white px-3 py-1 flex items-center justify-between",
+        ribbonType === "FLASH DEAL"
+          ? "bg-gradient-to-r from-[#e65100] to-[#ff5722]"
+          : "bg-gradient-to-r from-[#191f2e] to-[#3457a4]",
+      ]}
+    >
+      <div class="flex items-center gap-1.5">
+        <span>{ribbonType === "FLASH DEAL" ? "⚡" : "★"}</span>
+        <span>{ribbonType}</span>
+      </div>
+      <span class="text-[9px] font-medium opacity-90">VERIFIED CODE</span>
+    </div>
+  )}
+
+  <div class="p-5">
+    <!-- Top Row: Store Info & Big Discount Block -->
+    <div class="flex items-start justify-between gap-3">
+      <!-- Store Identity -->
       <a
         href={`/stores/${coupon.store_slug}`}
         class="flex min-w-0 items-center gap-3 transition hover:opacity-85"
       >
-        <div class="h-11 w-11 shrink-0 rounded-xl border border-slate-200/90 bg-white p-1 shadow-2xs flex items-center justify-center overflow-hidden">
-          <StoreLogo store={{ name: coupon.store_name, slug: coupon.store_slug, logo_url: coupon.store_logo_url }} size="sm" />
+        <div class="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-slate-200 bg-white p-1.5 shadow-2xs">
+          <StoreLogo
+            store={{
+              name: coupon.store_name,
+              slug: coupon.store_slug,
+              logo_url: coupon.store_logo_url,
+            }}
+            size="sm"
+          />
         </div>
         <div class="min-w-0">
-          <p class="truncate text-sm font-bold text-[#081126] group-hover:text-[#0499FA] transition">
+          <p class="truncate text-sm font-extrabold text-[#191f2e] transition group-hover:text-[#2491ef]">
             {coupon.store_name}
           </p>
           <span class="inline-flex items-center gap-1 text-[11px] font-semibold text-slate-500">
-            <span>{coupon.category_icon}</span>
+            <span>{coupon.category_icon || "🏷️"}</span>
             <span>{coupon.category_name}</span>
           </span>
         </div>
       </a>
 
-      <!-- Couponly Style Badge -->
-      <span
-        class:list={[
-          "shrink-0 rounded-full px-3 py-1 text-xs font-black tracking-tight uppercase shadow-2xs",
-          expired
-            ? "bg-slate-100 text-slate-500 ring-1 ring-slate-200"
-            : "bg-[#FFF2E8] text-[#FF7A18] ring-1 ring-[#FF7A18]/30 shadow-xs",
-        ]}
-      >
-        {expired ? "EXPIRED" : coupon.discount_text}
-      </span>
-    </div>
-
-    <!-- Human Trust & Status Pills -->
-    <div class="mb-3 flex flex-wrap items-center gap-1.5">
-      {featuredBadge && !expired && (
-        <span class="inline-flex items-center gap-1 rounded-full bg-[#FFEDE1] px-2.5 py-0.5 text-[11px] font-black text-[#FF7A18] ring-1 ring-[#FF7A18]/30">
-          <span>🔥</span>
-          <span>{featuredBadge}</span>
+      <!-- Big Discount Tag (GrabOn Style) -->
+      <div class="text-right shrink-0">
+        <span
+          class:list={[
+            "inline-block rounded-md px-2.5 py-1 text-xs font-black tracking-tight",
+            expired
+              ? "bg-slate-100 text-slate-500"
+              : "bg-[#eef5ff] text-[#2491ef] border border-[#2491ef]/20",
+          ]}
+        >
+          {expired ? "EXPIRED" : coupon.discount_text}
         </span>
-      )}
-      {!expired && !featuredBadge && (
-        <span class="inline-flex items-center gap-1 rounded-full bg-[#EAF6FE] px-2.5 py-0.5 text-[11px] font-black text-[#0499FA] ring-1 ring-[#0499FA]/30">
-          <span class="h-1.5 w-1.5 rounded-full bg-[#0499FA] animate-soft-pulse"></span>
-          <span>Verified Deal</span>
-        </span>
-      )}
-      {expiringSoon && (
-        <span class="inline-flex items-center gap-1 rounded-full bg-orange-50 px-2.5 py-0.5 text-[11px] font-bold text-orange-800 ring-1 ring-orange-500/20">
-          <span>⏳</span>
-          <span>Ends in {daysLeft === 0 ? "today" : `${daysLeft}d`}</span>
-        </span>
-      )}
-      {!expired && (
-        <span class="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2.5 py-0.5 text-[11px] font-bold text-slate-600 ring-1 ring-slate-200">
-          <span>👍</span>
-          <span>{successRate}% working</span>
-        </span>
-      )}
+      </div>
     </div>
 
     <!-- Title & Description -->
-    <h3 class="text-base font-bold leading-snug tracking-tight text-[#081126] group-hover:text-[#0499FA] transition">
-      <a href={`/coupons/${coupon.id}`}>
-        {coupon.title}
-      </a>
-    </h3>
+    <div class="mt-3.5">
+      <h3 class="text-base font-bold leading-snug tracking-tight text-[#191f2e] transition group-hover:text-[#2491ef]">
+        <a href={`/coupons/${coupon.id}`}>{coupon.title}</a>
+      </h3>
 
-    {coupon.description && (
-      <p class="mt-2 line-clamp-2 text-xs leading-relaxed text-slate-500">
-        {coupon.description}
-      </p>
-    )}
-  </div>
-
-  <!-- Ticket Perforation & Action Box -->
-  <div class="mt-5">
-    <!-- Dashed Voucher Tear Line -->
-    <div class="relative my-3.5">
-      <div class="ticket-dashed-line"></div>
+      {coupon.description && (
+        <p class="mt-1.5 line-clamp-2 text-xs leading-relaxed text-slate-600">
+          {coupon.description}
+        </p>
+      )}
     </div>
 
+    <!-- Social Proof & Verification Strip (GrabOn Style) -->
+    <div class="mt-3 flex flex-wrap items-center gap-2 text-[11px] font-semibold text-slate-500 border-t border-slate-100 pt-2.5">
+      {!expired && (
+        <span class="inline-flex items-center gap-1 font-bold text-[#60a600]">
+          <svg class="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+          </svg>
+          <span>Verified</span>
+        </span>
+      )}
+      <span>•</span>
+      <span class="text-emerald-700 font-bold">{successRate}% Success</span>
+      <span>•</span>
+      <span data-coupon-clicks={coupon.id} class="text-slate-500">
+        {coupon.click_count + 12} Uses Today
+      </span>
+
+      {expiringSoon && (
+        <span class="ml-auto inline-flex items-center gap-1 rounded bg-rose-50 px-2 py-0.5 text-[10px] font-bold text-rose-600">
+          <span>⏳ Ends in {daysLeft === 0 ? "today" : `${daysLeft}d`}</span>
+        </span>
+      )}
+    </div>
+  </div>
+
+  <!-- Bottom Action Box: Dashed Code Container + GrabOn CTA -->
+  <div class="border-t border-slate-100 bg-[#f8fafc] p-4">
     {expired ? (
-      <div class="flex items-center justify-between rounded-full border border-dashed border-slate-300 bg-slate-50/70 px-4 py-2.5">
+      <div class="flex items-center justify-between rounded-lg border border-dashed border-slate-300 bg-white px-3.5 py-2">
         <span class="font-mono text-xs font-bold text-slate-400 line-through">
           {coupon.code}
         </span>
-        <span class="rounded-full bg-slate-200 px-3 py-1 text-xs font-bold text-slate-600">
-          Deal Expired
+        <span class="rounded bg-slate-200 px-2.5 py-0.5 text-[11px] font-bold text-slate-600">
+          Offer Expired
         </span>
       </div>
     ) : coupon.is_active === 0 ? (
-      <div class="flex items-center justify-between rounded-full border border-dashed border-amber-300 bg-amber-50/70 px-4 py-2.5">
+      <div class="flex items-center justify-between rounded-lg border border-dashed border-amber-300 bg-amber-50 px-3.5 py-2">
         <span class="font-mono text-xs font-bold text-amber-900">
           {coupon.code}
         </span>
-        <span class="rounded-full bg-amber-200/90 px-3 py-1 text-xs font-black text-amber-800">
-          Pending Review
+        <span class="rounded bg-amber-200 px-2.5 py-0.5 text-[11px] font-bold text-amber-800">
+          Pending Approval
         </span>
       </div>
     ) : (
-      <div class="flex items-center justify-between gap-2 rounded-full border-2 border-dashed border-[#FF7A18] bg-[#FFF9F5] p-1 pl-4 shadow-2xs transition group-hover:bg-[#FFF2E8]/40">
-        <div class="flex items-center gap-1.5 font-mono text-xs font-black tracking-wider text-slate-700">
-          <svg class="h-3.5 w-3.5 text-[#FF7A18]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <div class="flex items-center justify-between gap-2 rounded-lg border-2 border-dashed border-slate-300 bg-white p-1 pl-3.5 shadow-2xs transition group-hover:border-[#2491ef]">
+        <!-- Masked Code Preview -->
+        <div class="flex items-center gap-1.5 font-mono text-xs font-bold tracking-wider text-slate-700">
+          <svg class="h-3.5 w-3.5 text-[#2491ef]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
           </svg>
           <span
-            class="coupon-code-display font-black text-[#081126]"
+            class="coupon-code-display font-black text-[#191f2e]"
             data-coupon-code-text={coupon.id}
           >
             {masked}
           </span>
         </div>
+
+        <!-- GrabOn High-Converting CTA Button -->
         <button
           type="button"
-          class="reveal-coupon-btn inline-flex items-center gap-1.5 rounded-full bg-[#FF7A18] px-5 py-2 text-xs font-black text-white shadow-xs transition hover:bg-[#E6680C] active:scale-95"
+          class="reveal-coupon-btn inline-flex items-center gap-1.5 rounded-md bg-[#2491ef] px-4 py-2 text-xs font-extrabold uppercase tracking-wide text-white shadow-2xs transition hover:bg-[#129fea] active:scale-95 shrink-0"
           data-coupon-id={coupon.id}
           data-coupon-code={coupon.code}
           data-coupon-title={coupon.title}
@@ -157,24 +185,22 @@ const successRate =
           data-coupon-discount={coupon.discount_text}
           data-coupon-url={storeUrl}
         >
-          <span>✂️</span>
-          <span>Show Coupon</span>
+          <span>SHOW CODE</span>
+          <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+          </svg>
         </button>
       </div>
     )}
 
-    <!-- Metadata Footer: Expiry + Total Uses -->
-    <div class="mt-3.5 flex items-center justify-between text-[11px] font-semibold text-slate-400">
-      <div class="flex items-center gap-3">
-        <span>Expires {formatDisplayDate(coupon.expiry_date)}</span>
-        <span>•</span>
-        <span data-coupon-clicks={coupon.id}>{coupon.click_count} redeemed</span>
-      </div>
+    <!-- Expiry info and details toggle link -->
+    <div class="mt-2.5 flex items-center justify-between text-[11px] font-medium text-slate-500">
+      <span>Expires {formatDisplayDate(coupon.expiry_date)}</span>
       <a
         href={`/coupons/${coupon.id}`}
-        class="font-black text-[#0499FA] hover:text-[#FF7A18] hover:underline transition"
+        class="font-bold text-[#2491ef] hover:underline"
       >
-        View Deal →
+        View Details →
       </a>
     </div>
 

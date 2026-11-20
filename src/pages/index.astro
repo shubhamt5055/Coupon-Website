@@ -16,7 +16,11 @@ import {
 const db = getDb();
 const [topCoupons, activeCoupons, categories, stores] = await Promise.all([
   getTopCouponsToday(db, 3),
-  getCoupons(db, { includeExpired: false, includeInactive: false, sort: "newest" }),
+  getCoupons(db, {
+    includeExpired: false,
+    includeInactive: false,
+    sort: "newest",
+  }),
   getCategoriesWithCounts(db),
   getStoresWithCounts(db),
 ]);
@@ -26,324 +30,257 @@ const totalStores = stores.length;
 ---
 
 <MainLayout
-  title="CouponHub — Best Verified Promo Codes & Discount Coupons"
-  description="Save money every day with 100% verified coupon codes and deals from top online stores."
+  title="CouponHub — Save on Everything | India's Verified Coupons & Promo Codes"
+  description="Save money online with verified promo codes, discount coupons, and daily deals for Amazon, Flipkart, Swiggy, Myntra, and 50+ top brands."
 >
-  <!-- Hero Section (Couponly Index-3 Style) -->
-  <section class="relative bg-gradient-to-b from-[#FFF9F5] via-[#F8FAFC] to-[#F8FAFC] px-4 pt-10 pb-16 sm:px-6 lg:px-8">
-    <div class="mx-auto max-w-7xl">
-      <!-- Hero Top Heading & Search Bar -->
+  <!-- GrabOn Hero Section -->
+  <section class="border-b border-slate-200/80 bg-gradient-to-b from-[#eef5ff] via-[#f4f7fb] to-[#f4f7fb] pb-14 pt-10 sm:pb-16 sm:pt-14">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <div class="mx-auto max-w-3xl text-center">
-        <!-- Live Trust Badge -->
-        <span class="inline-flex items-center gap-2 rounded-full border border-[#FF7A18]/25 bg-[#FFF2E8] px-4 py-1 text-xs font-black text-[#FF7A18] shadow-2xs">
-          <span class="h-2 w-2 rounded-full bg-[#FF7A18] animate-soft-pulse"></span>
-          <span>{totalActiveDeals} Verified Working Deals Across {totalStores} Stores</span>
-        </span>
+        <!-- Live Verified Badge (GrabOn Style) -->
+        <div class="inline-flex items-center gap-2 rounded-full border border-[#2491ef]/20 bg-white px-4 py-1.5 text-xs font-bold text-[#2491ef] shadow-xs">
+          <span class="h-2 w-2 rounded-full bg-[#60a600] animate-soft-pulse"></span>
+          <span>{totalActiveDeals} Verified Coupons Live Across {totalStores} Top Stores</span>
+        </div>
 
-        <!-- Main Title -->
-        <h1 class="mt-4 text-3xl font-black leading-tight tracking-tight text-[#081126] sm:text-5xl">
-          Get The Best <span class="text-[#0499FA]">Discounts &amp; Vouchers</span> <br class="hidden sm:inline" />
-          For Your Favorite Stores
+        <!-- Headline -->
+        <h1 class="mt-5 text-4xl font-extrabold tracking-tight text-[#191f2e] sm:text-6xl sm:leading-tight">
+          Save On Everything.
+          <span class="block text-[#2491ef]">Verified Coupons &amp; Daily Deals.</span>
         </h1>
-        <p class="mx-auto mt-3 max-w-2xl text-sm leading-relaxed text-slate-600 sm:text-base">
-          Tested daily by deal hunters. Click to copy exclusive discount codes and save instantly at checkout.
+
+        <p class="mx-auto mt-4 max-w-2xl text-sm font-medium leading-relaxed text-slate-600 sm:text-base">
+          Never pay full price again. Copy hand-tested promo codes for Amazon, Flipkart, Swiggy, Myntra, and 50+ favorite shopping sites.
         </p>
 
-        <!-- Search Bar -->
-        <div class="mx-auto mt-7 max-w-2xl">
+        <!-- Big GrabOn Search Box -->
+        <div class="mt-8">
           <SearchBar variant="hero" />
         </div>
 
-        <!-- Quick Store Chips with Mini Logos -->
-        <div class="mt-5 flex flex-wrap items-center justify-center gap-2 text-xs">
-          <span class="font-bold text-slate-400">Popular:</span>
+        <!-- Popular Store Quick Pills (GrabOn Style) -->
+        <div class="mt-6 flex flex-wrap items-center justify-center gap-2 text-xs">
+          <span class="font-bold text-slate-500">Popular Stores:</span>
           {stores.slice(0, 6).map((s) => (
             <a
               href={`/stores/${s.slug}`}
-              class="group inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1 font-bold text-[#081126] shadow-2xs transition hover:border-[#0499FA] hover:bg-[#EAF6FE] hover:text-[#0499FA]"
+              class="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1 font-semibold text-slate-700 shadow-2xs transition hover:border-[#2491ef] hover:text-[#2491ef] hover:scale-105"
             >
-              <div class="h-4 w-4 shrink-0 overflow-hidden rounded-full flex items-center justify-center">
+              <span class="flex h-4 w-4 items-center justify-center overflow-hidden rounded-full">
                 <StoreLogo store={s} size="sm" />
-              </div>
+              </span>
               <span>{s.name}</span>
             </a>
           ))}
         </div>
       </div>
 
-      <!-- Couponly Index-3: 3-Banner Promotional Showcase -->
-      <div class="mt-12 grid gap-6 md:grid-cols-3">
-        <!-- Banner 1: Left Special Offer -->
-        <div class="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#EAF6FE] to-white border border-[#0499FA]/20 p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-md">
-          <span class="inline-block rounded-full bg-[#0499FA] px-3 py-1 text-[11px] font-black uppercase tracking-wider text-white">
-            Daily Flash Deal
-          </span>
-          <h3 class="mt-3 text-xl font-black text-[#081126]">
-            Up to 50% Off Top Brands
-          </h3>
-          <p class="mt-1 text-xs text-slate-600">
-            Exclusive verified vouchers on electronics &amp; fashion.
-          </p>
-          <div class="mt-5 flex items-center justify-between">
-            <span class="text-xs font-bold text-[#0499FA]">Updated 10m ago</span>
-            <a
-              href="/coupons"
-              class="inline-flex items-center gap-1 text-xs font-black text-[#081126] hover:text-[#0499FA] transition"
-            >
-              <span>Explore</span>
-              <span>→</span>
-            </a>
-          </div>
-        </div>
-
-        <!-- Banner 2: Center Super Sale (Accent Sunset Orange) -->
-        <div class="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#FF7A18] to-[#E6680C] p-6 text-white shadow-lg shadow-[#FF7A18]/25 transition hover:-translate-y-1">
-          <span class="inline-block rounded-full bg-white/20 backdrop-blur-xs px-3 py-1 text-[11px] font-black uppercase tracking-wider text-white">
-            Super Sale Week
-          </span>
-          <h3 class="mt-3 text-2xl font-black text-white">
-            Flat 60% OFF Today
-          </h3>
-          <p class="mt-1 text-xs text-orange-100">
-            Special coupon codes for online food orders &amp; flights.
-          </p>
-          <div class="mt-5 flex items-center justify-between">
-            <span class="rounded-lg bg-white/20 px-2.5 py-1 font-mono text-xs font-black tracking-widest text-white">
-              SAVEBIG60
-            </span>
-            <a
-              href="/coupons?sort=popular"
-              class="inline-flex items-center gap-1 rounded-full bg-white px-3.5 py-1.5 text-xs font-black text-[#FF7A18] shadow-xs hover:bg-orange-50 transition"
-            >
-              <span>Claim Deals</span>
-              <span>→</span>
-            </a>
-          </div>
-        </div>
-
-        <!-- Banner 3: Right Cashback & Rewards -->
-        <div class="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#FFF9F5] to-white border border-[#FF7A18]/25 p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-md">
-          <span class="inline-block rounded-full bg-[#FF7A18] px-3 py-1 text-[11px] font-black uppercase tracking-wider text-white">
-            Verified Codes
-          </span>
-          <h3 class="mt-3 text-xl font-black text-[#081126]">
-            100% Guaranteed To Work
-          </h3>
-          <p class="mt-1 text-xs text-slate-600">
-            Every coupon is human-checked to guarantee real savings.
-          </p>
-          <div class="mt-5 flex items-center justify-between">
-            <span class="text-xs font-bold text-emerald-600">✓ Tested Today</span>
-            <a
-              href="/coupons"
-              class="inline-flex items-center gap-1 text-xs font-black text-[#081126] hover:text-[#FF7A18] transition"
-            >
-              <span>View Codes</span>
-              <span>→</span>
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Couponly 3-Step "How It Works" Section -->
-  <section class="border-y border-slate-200/80 bg-white py-12 px-4 sm:px-6 lg:px-8">
-    <div class="mx-auto max-w-7xl">
-      <div class="text-center mb-9">
-        <span class="text-xs font-black uppercase tracking-wider text-[#0499FA]">Easy Savings</span>
-        <h2 class="mt-1 text-2xl font-black text-[#081126] sm:text-3xl">How CouponHub Works</h2>
-      </div>
-
-      <div class="grid gap-6 sm:grid-cols-3">
-        <!-- Step 1 -->
-        <div class="flex items-start gap-4 rounded-2xl border border-slate-100 bg-[#F8FAFC] p-5">
-          <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#EAF6FE] text-lg font-black text-[#0499FA]">
-            1
+      <!-- GrabOn 3 Trust Value Cards -->
+      <div class="mx-auto mt-12 grid max-w-4xl grid-cols-1 gap-4 sm:grid-cols-3">
+        <div class="flex items-center gap-3.5 rounded-xl border border-slate-200 bg-white p-4 shadow-2xs">
+          <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#eef5ff] text-[#2491ef]">
+            <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+            </svg>
           </div>
           <div>
-            <h3 class="text-base font-black text-[#081126]">Find Your Store</h3>
-            <p class="mt-1 text-xs text-slate-600 leading-relaxed">
-              Search Amazon, Flipkart, Swiggy or pick from our trending partner stores.
-            </p>
+            <h4 class="text-xs font-bold text-[#191f2e]">100% Hand-Verified</h4>
+            <p class="text-[11px] text-slate-500">Tested daily by real shoppers</p>
           </div>
         </div>
 
-        <!-- Step 2 -->
-        <div class="flex items-start gap-4 rounded-2xl border border-slate-100 bg-[#F8FAFC] p-5">
-          <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#FFF2E8] text-lg font-black text-[#FF7A18]">
-            2
-          </div>
-          <div>
-            <h3 class="text-base font-black text-[#081126]">Reveal &amp; Copy Code</h3>
-            <p class="mt-1 text-xs text-slate-600 leading-relaxed">
-              Click "Show Coupon" — the promo code copies automatically to your clipboard.
-            </p>
-          </div>
-        </div>
-
-        <!-- Step 3 -->
-        <div class="flex items-start gap-4 rounded-2xl border border-slate-100 bg-[#F8FAFC] p-5">
-          <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-emerald-50 text-lg font-black text-emerald-600">
-            3
+        <div class="flex items-center gap-3.5 rounded-xl border border-slate-200 bg-white p-4 shadow-2xs">
+          <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#f0fdf4] text-[#60a600]">
+            <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
           </div>
           <div>
-            <h3 class="text-base font-black text-[#081126]">Paste &amp; Save Money</h3>
-            <p class="mt-1 text-xs text-slate-600 leading-relaxed">
-              Apply code at checkout on the store site and enjoy instant discount!
-            </p>
+            <h4 class="text-xs font-bold text-[#191f2e]">Maximum Savings</h4>
+            <p class="text-[11px] text-slate-500">Up to 80% off on top brands</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3.5 rounded-xl border border-slate-200 bg-white p-4 shadow-2xs">
+          <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-orange-50 text-[#ff5722]">
+            <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+          </div>
+          <div>
+            <h4 class="text-xs font-bold text-[#191f2e]">Instant Auto-Copy</h4>
+            <p class="text-[11px] text-slate-500">One click copy and apply</p>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Popular Partner Stores (Couponly Style) -->
-  <section class="mx-auto max-w-7xl px-4 pt-14 sm:px-6 lg:px-8">
-    <div class="mb-7 flex flex-wrap items-end justify-between gap-3">
-      <div>
-        <div class="flex items-center gap-2">
-          <span class="inline-flex items-center rounded-md bg-[#EAF6FE] px-2.5 py-0.5 text-[11px] font-black uppercase tracking-wider text-[#0499FA]">
-            Top Partners
-          </span>
-          <span class="text-xs font-semibold text-slate-400">Verified Stores</span>
-        </div>
-        <h2 class="mt-1.5 text-2xl font-black tracking-tight text-[#081126] sm:text-3xl">
-          Popular Partner Stores
-        </h2>
-        <p class="mt-1 text-xs text-slate-500 sm:text-sm">
-          Browse exclusive discounts, coupon codes, and seasonal savings from India's favorite shopping platforms.
-        </p>
-      </div>
-      <a
-        href="/stores"
-        class="inline-flex items-center gap-1 text-sm font-black text-[#0499FA] hover:text-[#FF7A18] hover:underline transition"
-      >
-        <span>All {stores.length} Stores</span>
-        <span>→</span>
-      </a>
-    </div>
-
-    <!-- Store Cards Grid -->
-    <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-      {stores.slice(0, 8).map((store) => (
-        <StoreCard store={store} />
-      ))}
-    </div>
-  </section>
-
-  <!-- Browse by Category Section -->
-  <section class="mx-auto max-w-7xl px-4 pt-16 sm:px-6 lg:px-8">
-    <div class="mb-7 flex flex-wrap items-end justify-between gap-3">
-      <div>
-        <div class="flex items-center gap-2">
-          <span class="inline-flex items-center rounded-md bg-[#FFF2E8] px-2.5 py-0.5 text-[11px] font-black uppercase tracking-wider text-[#FF7A18]">
-            Explore Deals
-          </span>
-          <span class="text-xs font-semibold text-slate-400">Organized by Interest</span>
-        </div>
-        <h2 class="mt-1.5 text-2xl font-black tracking-tight text-[#081126] sm:text-3xl">
-          Browse Categories
-        </h2>
-        <p class="mt-1 text-xs text-slate-500 sm:text-sm">
-          Select a category to find active discount codes across Food, Fashion, Electronics, Travel, and more.
-        </p>
-      </div>
-      <a
-        href="/categories"
-        class="inline-flex items-center gap-1 text-sm font-black text-[#0499FA] hover:text-[#FF7A18] hover:underline transition"
-      >
-        <span>All Categories</span>
-        <span>→</span>
-      </a>
-    </div>
-
-    <!-- Category Cards Grid -->
-    <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
-      {categories.map((category) => (
-        <CategoryCard category={category} />
-      ))}
-    </div>
-  </section>
-
-  <!-- Trending / Top Coupons Today -->
-  {topCoupons.length > 0 && (
-    <section class="mx-auto max-w-7xl px-4 pt-16 sm:px-6 lg:px-8">
-      <div class="mb-7 flex flex-wrap items-end justify-between gap-3">
+  <!-- Main Content Grid -->
+  <div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 space-y-14">
+    <!-- TOP STORES SECTION (GrabOn Style) -->
+    <section>
+      <div class="mb-6 flex items-center justify-between">
         <div>
           <div class="flex items-center gap-2">
-            <span class="inline-flex items-center rounded-md bg-[#FFF2E8] px-2.5 py-0.5 text-[11px] font-black uppercase tracking-wider text-[#FF7A18]">
-              🔥 Trending Today
+            <h2 class="text-xl font-extrabold tracking-tight text-[#191f2e] sm:text-2xl">
+              Top Stores Of The Day
+            </h2>
+            <span class="rounded-full bg-[#eef5ff] px-2.5 py-0.5 text-[11px] font-bold text-[#2491ef]">
+              {totalStores} Brands
             </span>
-            <span class="text-xs font-semibold text-slate-400">Most Redeemed Offers</span>
           </div>
-          <h2 class="mt-1.5 text-2xl font-black tracking-tight text-[#081126] sm:text-3xl">
-            Today's Top Discount Codes
-          </h2>
+          <p class="mt-0.5 text-xs text-slate-500">Browse trending coupons and exclusive merchant deals</p>
         </div>
         <a
-          href="/coupons?sort=popular"
-          class="text-sm font-black text-[#0499FA] hover:text-[#FF7A18] hover:underline transition"
+          href="/stores"
+          class="inline-flex items-center gap-1 text-xs font-bold text-[#2491ef] hover:underline"
         >
-          View Most Popular Deals →
+          <span>View All Stores</span>
+          <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+          </svg>
         </a>
       </div>
 
-      <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {topCoupons.map((coupon, idx) => (
-          <CouponCard
-            coupon={coupon}
-            featuredBadge={idx === 0 ? "#1 Trending" : "Top Pick"}
-          />
+      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {stores.slice(0, 8).map((store) => (
+          <StoreCard store={store} />
         ))}
       </div>
     </section>
-  )}
 
-  <!-- All Active Coupons Grid -->
-  <section id="active-coupons" class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-    <div class="mb-7 flex flex-wrap items-end justify-between gap-3">
-      <div>
-        <div class="flex items-center gap-2">
-          <span class="inline-flex items-center rounded-md bg-emerald-50 px-2.5 py-0.5 text-[11px] font-black uppercase tracking-wider text-emerald-600">
-            Fresh Codes
-          </span>
-          <span class="text-xs font-semibold text-slate-400">Verified &amp; Working</span>
+    <!-- POPULAR CATEGORIES (GrabOn Style) -->
+    <section>
+      <div class="mb-6 flex items-center justify-between">
+        <div>
+          <h2 class="text-xl font-extrabold tracking-tight text-[#191f2e] sm:text-2xl">
+            Browse By Category
+          </h2>
+          <p class="mt-0.5 text-xs text-slate-500">Explore coupons tailored to your favorite shopping interests</p>
         </div>
-        <h2 class="mt-1.5 text-2xl font-black tracking-tight text-[#081126] sm:text-3xl">
-          All Active Coupons
-        </h2>
-      </div>
-      <div class="flex items-center gap-3 text-xs font-bold sm:text-sm">
         <a
-          href="/coupons?includeExpired=1"
-          class="font-semibold text-slate-400 hover:text-[#081126] transition"
+          href="/categories"
+          class="inline-flex items-center gap-1 text-xs font-bold text-[#2491ef] hover:underline"
         >
-          View Expired
-        </a>
-        <span>•</span>
-        <a
-          href="/coupons"
-          class="font-black text-[#0499FA] hover:text-[#FF7A18] hover:underline transition"
-        >
-          Filter &amp; Search All ({activeCoupons.length}) →
+          <span>All Categories</span>
+          <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+          </svg>
         </a>
       </div>
-    </div>
 
-    {activeCoupons.length === 0 ? (
-      <div class="rounded-2xl border border-dashed border-slate-300 bg-white p-12 text-center shadow-xs">
-        <p class="text-base font-extrabold text-[#081126]">No active coupons right now.</p>
-        <p class="mt-1 text-xs text-slate-500">
-          Check back soon or share a coupon from your account.
-        </p>
-      </div>
-    ) : (
-      <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {activeCoupons.map((coupon) => (
-          <CouponCard coupon={coupon} />
+      <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
+        {categories.map((category) => (
+          <CategoryCard category={category} />
         ))}
       </div>
+    </section>
+
+    <!-- TOP CODES TODAY (GrabOn Recommended & Flash Deals) -->
+    {topCoupons.length > 0 && (
+      <section>
+        <div class="mb-6 flex items-center justify-between">
+          <div>
+            <div class="flex items-center gap-2">
+              <h2 class="text-xl font-extrabold tracking-tight text-[#191f2e] sm:text-2xl">
+                🔥 Trending Coupons &amp; Flash Deals
+              </h2>
+              <span class="rounded-full bg-orange-100 px-2.5 py-0.5 text-[11px] font-bold text-[#e65100]">
+                Most Popular
+              </span>
+            </div>
+            <p class="mt-0.5 text-xs text-slate-500">Highest rated and most redeemed discount codes today</p>
+          </div>
+          <a
+            href="/coupons?sort=popular"
+            class="inline-flex items-center gap-1 text-xs font-bold text-[#2491ef] hover:underline"
+          >
+            <span>See All Trending</span>
+            <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+            </svg>
+          </a>
+        </div>
+
+        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {topCoupons.slice(0, 3).map((coupon, idx) => (
+            <CouponCard
+              coupon={coupon}
+              featuredBadge={idx === 0 ? "RECOMMENDED" : "FLASH DEAL"}
+            />
+          ))}
+        </div>
+      </section>
     )}
-  </section>
+
+    <!-- FRESH ACTIVE DEALS FEED -->
+    <section id="active-coupons">
+      <div class="mb-6 flex items-center justify-between">
+        <div>
+          <h2 class="text-xl font-extrabold tracking-tight text-[#191f2e] sm:text-2xl">
+            ⚡ Latest Verified Promo Codes
+          </h2>
+          <p class="mt-0.5 text-xs text-slate-500">Freshly updated discounts ready to use at checkout</p>
+        </div>
+        <a
+          href="/coupons"
+          class="inline-flex items-center gap-1 text-xs font-bold text-[#2491ef] hover:underline"
+        >
+          <span>Search All ({activeCoupons.length})</span>
+          <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+          </svg>
+        </a>
+      </div>
+
+      {activeCoupons.length === 0 ? (
+        <div class="rounded-xl border border-dashed border-slate-300 bg-white p-12 text-center">
+          <p class="font-bold text-slate-700">No active coupons right now.</p>
+          <p class="mt-1 text-xs text-slate-500">Check back soon for fresh deals.</p>
+        </div>
+      ) : (
+        <>
+          <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {activeCoupons.slice(0, 6).map((coupon) => (
+              <CouponCard coupon={coupon} />
+            ))}
+          </div>
+
+          <div class="mt-8 text-center">
+            <a
+              href="/coupons"
+              class="inline-flex items-center gap-2 rounded-lg bg-[#2491ef] px-8 py-3 text-xs font-bold text-white uppercase tracking-wider shadow-sm transition hover:bg-[#129fea] active:scale-95"
+            >
+              <span>Explore All {activeCoupons.length} Coupons</span>
+              <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+              </svg>
+            </a>
+          </div>
+        </>
+      )}
+    </section>
+
+    <!-- GrabOn Style FAQ / Content Guide -->
+    <section class="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8">
+      <h3 class="text-lg font-extrabold text-[#191f2e]">
+        Frequently Asked Questions About Saving on CouponHub
+      </h3>
+      <div class="mt-6 grid gap-6 md:grid-cols-2 text-xs leading-relaxed text-slate-600">
+        <div class="space-y-1.5">
+          <h4 class="font-bold text-slate-800 text-sm">How do I use promo codes on CouponHub?</h4>
+          <p>
+            Simply browse your favorite store or coupon offer, click on <strong>SHOW CODE</strong>, and CouponHub will automatically copy the promo code to your clipboard and open the merchant's official checkout page in a new tab. Paste the code at checkout to apply your discount instantly.
+          </p>
+        </div>
+        <div class="space-y-1.5">
+          <h4 class="font-bold text-slate-800 text-sm">Are all coupons on CouponHub free to use?</h4>
+          <p>
+            Yes, 100%! All promo codes, discount vouchers, and shopping deals published on CouponHub are completely free for all shoppers without any membership or hidden charges.
+          </p>
+        </div>
+      </div>
+    </section>
+  </div>
 </MainLayout>

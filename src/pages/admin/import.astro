@@ -30,22 +30,22 @@ const sampleCsv = `title,code,discount_text,store,category,affiliate_or_store_ur
         type="button"
         id="download-sample-btn"
         data-sample={sampleCsv}
-        class="rounded-full border border-[#0499FA]/30 bg-[#EAF6FE] px-4 py-2 text-xs font-bold text-[#0499FA] transition hover:bg-[#0499FA]/15 shadow-2xs"
+        class="rounded-lg border border-[#2491ef]/30 bg-[#eef5ff] px-4 py-2 text-xs font-bold text-[#2491ef] transition hover:bg-[#2491ef] hover:text-white shadow-2xs"
       >
         ⬇ Download Sample CSV
       </button>
     </div>
 
     <!-- Reference Slugs -->
-    <div class="grid gap-4 rounded-2xl border border-slate-200 bg-white p-5 text-xs sm:grid-cols-2">
+    <div class="grid gap-4 rounded-xl border border-slate-200 bg-white p-5 text-xs sm:grid-cols-2">
       <div>
-        <p class="font-bold text-[#081126] uppercase">Valid Store Slugs / Names</p>
+        <p class="font-bold text-[#191f2e] uppercase">Valid Store Slugs / Names</p>
         <p class="mt-1.5 text-slate-600">
           {stores.map((s) => s.slug).join(", ")}
         </p>
       </div>
       <div>
-        <p class="font-bold text-[#081126] uppercase">Valid Category Slugs / Names</p>
+        <p class="font-bold text-[#191f2e] uppercase">Valid Category Slugs / Names</p>
         <p class="mt-1.5 text-slate-600">
           {categories.map((c) => c.slug).join(", ")}
         </p>
@@ -55,22 +55,22 @@ const sampleCsv = `title,code,discount_text,store,category,affiliate_or_store_ur
     <!-- Upload Form -->
     <form
       id="csv-import-form"
-      class="space-y-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-xs"
+      class="space-y-4 rounded-xl border border-slate-200 bg-white p-6 shadow-xs"
     >
       <div>
-        <label for="csv-file" class="mb-1.5 block text-xs font-bold text-[#081126] uppercase">
+        <label for="csv-file" class="mb-1.5 block text-xs font-bold text-[#191f2e] uppercase">
           Choose .csv File
         </label>
         <input
           id="csv-file"
           type="file"
           accept=".csv,text/csv"
-          class="block w-full text-sm text-slate-600 file:mr-4 file:rounded-xl file:border-0 file:bg-[#0499FA] file:px-4 file:py-2 file:text-xs file:font-bold file:text-white hover:file:bg-[#0377C4] transition"
+          class="block w-full text-sm text-slate-600 file:mr-4 file:rounded-lg file:border-0 file:bg-[#2491ef] file:px-4 file:py-2 file:text-xs file:font-bold file:text-white hover:file:bg-[#129fea] transition"
         />
       </div>
 
       <div>
-        <label for="csv-text" class="mb-1.5 block text-xs font-bold text-[#081126] uppercase">
+        <label for="csv-text" class="mb-1.5 block text-xs font-bold text-[#191f2e] uppercase">
           CSV Content (editable preview)
         </label>
         <textarea
@@ -78,14 +78,14 @@ const sampleCsv = `title,code,discount_text,store,category,affiliate_or_store_ur
           rows="8"
           required
           placeholder="Paste CSV rows here or select a .csv file above..."
-          class="w-full rounded-xl border border-slate-300 bg-slate-50 p-3.5 font-mono text-xs outline-none transition focus:border-[#0499FA] focus:bg-white focus:ring-4 focus:ring-[#0499FA]/15"
+          class="w-full rounded-lg border border-slate-300 bg-slate-50 p-3.5 font-mono text-xs outline-none transition focus:border-[#2491ef] focus:bg-white focus:ring-4 focus:ring-[#2491ef]/15"
         >{sampleCsv}</textarea>
       </div>
 
       <button
         type="submit"
         id="csv-submit-btn"
-        class="rounded-full bg-[#0499FA] px-7 py-3 text-sm font-bold text-white shadow-xs transition hover:bg-[#0377C4] disabled:opacity-60"
+        class="rounded-lg bg-[#2491ef] px-7 py-2.5 text-xs font-extrabold uppercase tracking-wider text-white shadow-xs transition hover:bg-[#129fea] disabled:opacity-60"
       >
         Import Coupons to Database
       </button>
@@ -156,7 +156,7 @@ const sampleCsv = `title,code,discount_text,store,category,affiliate_or_store_ur
       }
 
       resultBox.className =
-        "rounded-2xl border border-[#0499FA]/30 bg-[#EAF6FE] p-5 text-sm text-[#0499FA]";
+        "rounded-xl border border-[#2491ef]/30 bg-[#eef5ff] p-5 text-sm text-[#2491ef]";
 
       const errorItems = (data.rowErrors || [])
         .map((err) => `<li>Row ${err.row}: ${err.reason}</li>`)
@@ -165,7 +165,7 @@ const sampleCsv = `title,code,discount_text,store,category,affiliate_or_store_ur
       resultBox.innerHTML = `
         <p class="font-bold">Import complete: ${data.imported} coupon(s) added, ${data.failed} skipped.</p>
         ${errorItems ? `<ul class="mt-2 list-disc pl-5 text-xs text-rose-700">${errorItems}</ul>` : ""}
-        <a href="/admin" class="mt-3 inline-block font-bold text-[#0499FA] hover:underline">Go to Admin Dashboard →</a>
+        <a href="/admin" class="mt-3 inline-block font-bold text-[#2491ef] hover:underline">Go to Admin Dashboard →</a>
       `;
     } finally {
       if (submitBtn) {

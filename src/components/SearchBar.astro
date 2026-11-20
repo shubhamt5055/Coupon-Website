@@ -8,7 +8,7 @@ interface Props {
 
 const {
   value = "",
-  placeholder = "Search brand, code or deal (e.g. Amazon, 50% OFF, Nike)...",
+  placeholder = "Search for stores, categories, or discount codes (e.g. Swiggy, Amazon, 50% OFF)…",
   action = "/coupons",
   variant = "hero",
 } = Astro.props;
@@ -21,14 +21,14 @@ const {
   class:list={[
     "flex w-full flex-col gap-2 sm:flex-row transition-all",
     variant === "hero"
-      ? "mx-auto max-w-2xl rounded-full bg-white p-2 shadow-xl shadow-slate-200/50 border-2 border-slate-200 focus-within:border-[#0499FA] focus-within:shadow-md"
-      : "rounded-full border border-slate-200 bg-white p-1.5 focus-within:border-[#0499FA] focus-within:ring-2 focus-within:ring-[#0499FA]/20",
+      ? "mx-auto max-w-2xl rounded-xl bg-white p-2 shadow-lg border border-slate-200/90 focus-within:border-[#2491ef] focus-within:ring-2 focus-within:ring-[#2491ef]/20"
+      : "rounded-lg border border-slate-300 bg-white p-1 focus-within:border-[#2491ef] focus-within:ring-2 focus-within:ring-[#2491ef]/20",
   ]}
 >
   <label class="sr-only" for={`search-input-${variant}`}>Search coupons</label>
   <div class="relative flex flex-1 items-center">
     <svg
-      class="pointer-events-none absolute left-4 h-5 w-5 text-slate-400"
+      class="pointer-events-none absolute left-3.5 h-5 w-5 text-slate-400"
       fill="none"
       stroke="currentColor"
       stroke-width="2.2"
@@ -43,12 +43,12 @@ const {
       name="q"
       value={value}
       placeholder={placeholder}
-      class="w-full rounded-full bg-transparent py-3 pr-4 pl-12 text-sm font-medium text-[#081126] placeholder-slate-400 outline-none sm:text-base"
+      class="w-full rounded-lg bg-transparent py-2.5 pr-4 pl-11 text-xs font-medium text-slate-800 placeholder-slate-400 outline-none sm:text-sm"
     />
   </div>
   <button
     type="submit"
-    class="inline-flex items-center justify-center gap-2 rounded-full bg-[#FF7A18] px-7 py-3 text-sm font-black text-white shadow-md shadow-[#FF7A18]/25 transition hover:bg-[#E6680C] active:scale-95"
+    class="inline-flex items-center justify-center gap-1.5 rounded-lg bg-[#2491ef] px-6 py-2.5 text-xs font-bold text-white uppercase tracking-wider transition hover:bg-[#129fea] active:scale-95 shrink-0 shadow-2xs"
   >
     <span>Find Deals</span>
     <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">

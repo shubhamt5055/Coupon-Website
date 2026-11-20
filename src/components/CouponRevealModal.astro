@@ -1,75 +1,134 @@
-<!-- Global Coupon Reveal Modal + Clipboard + Click Tracker + Quick Vote (Couponly Style) -->
+<!-- Global Coupon Reveal Modal + Clipboard + Click Tracker + Quick Vote (GrabOn Style) -->
 <div
   id="coupon-reveal-modal"
-  class="fixed inset-0 z-50 hidden items-center justify-center bg-[#091024]/75 p-4 backdrop-blur-xs"
+  class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-900/70 p-4 backdrop-blur-xs"
   role="dialog"
   aria-modal="true"
   aria-labelledby="modal-coupon-title"
 >
-  <div class="relative w-full max-w-md rounded-3xl border border-slate-200 bg-white p-7 shadow-2xl">
+  <div class="relative w-full max-w-lg rounded-2xl bg-white shadow-2xl border border-slate-200 overflow-hidden">
+    <!-- Modal Close Button -->
     <button
       type="button"
       id="modal-close-btn"
       aria-label="Close modal"
-      class="absolute top-4 right-4 flex h-8 w-8 items-center justify-center rounded-xl text-slate-400 hover:bg-slate-100 hover:text-[#081126] transition"
+      class="absolute right-4 top-4 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-slate-100 text-slate-500 transition hover:bg-slate-200 hover:text-slate-800"
     >
       ✕
     </button>
 
-    <div class="mb-3 flex items-center gap-2">
-      <span id="modal-coupon-discount" class="rounded-full bg-[#EAF6FE] px-3.5 py-1 text-xs font-black text-[#0499FA] border border-[#0499FA]/20"></span>
-      <span id="modal-coupon-store" class="text-xs font-bold text-slate-500"></span>
-    </div>
-
-    <h3 id="modal-coupon-title" class="pr-6 text-lg font-black tracking-tight text-[#081126]"></h3>
-
-    <div class="mt-3 flex items-center gap-2 rounded-xl bg-[#FFF9F5] border border-[#FF7A18]/30 p-2.5 text-xs font-bold text-[#FF7A18]">
-      <span>🎉</span>
-      <span id="modal-copy-status">Promo code copied to your clipboard! Paste it at checkout.</span>
-    </div>
-
-    <div class="mt-4 flex items-center justify-between gap-2 rounded-2xl border-2 border-dashed border-[#FF7A18] bg-[#FFF9F5] px-4 py-3.5 shadow-2xs">
-      <span id="modal-coupon-code" class="font-mono text-xl font-black tracking-widest text-[#081126]"></span>
-      <button
-        type="button"
-        id="modal-copy-again-btn"
-        class="rounded-xl bg-[#FF7A18] px-4 py-2 text-xs font-black text-white shadow-xs transition hover:bg-[#E6680C] active:scale-95"
-      >
-        Copy Again
-      </button>
-    </div>
-
-    <a
-      id="modal-store-link"
-      href="#"
-      target="_blank"
-      rel="noopener noreferrer"
-      class="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-[#0499FA] py-3.5 text-center text-sm font-black text-white shadow-md shadow-[#0499FA]/20 transition hover:bg-[#0377C4] active:scale-95"
-    >
-      <span>Open Store &amp; Apply Discount</span>
-      <span>↗</span>
-    </a>
-
-    <!-- Quick Worked / Didn't Work Feedback -->
-    <div class="mt-6 border-t border-slate-100 pt-4 text-center">
-      <p class="text-xs font-semibold text-slate-500">Did this coupon work for you?</p>
-      <div class="mt-2.5 flex justify-center gap-3">
-        <button
-          type="button"
-          data-modal-vote="worked"
-          class="rounded-xl border border-[#0499FA]/30 bg-[#EAF6FE] px-4 py-2 text-xs font-bold text-[#0499FA] transition hover:bg-[#0499FA] hover:text-white active:scale-95 shadow-2xs"
-        >
-          👍 Yes, Worked!
-        </button>
-        <button
-          type="button"
-          data-modal-vote="didnt_work"
-          class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-2 text-xs font-bold text-slate-600 transition hover:bg-slate-100 active:scale-95"
-        >
-          👎 Didn't work
-        </button>
+    <!-- Header Success Strip (GrabOn Style) -->
+    <div class="bg-[#f0fdf4] border-b border-emerald-100 p-5 text-center">
+      <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100 text-emerald-600 mb-2">
+        <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+        </svg>
       </div>
-      <p id="modal-vote-feedback" class="mt-2 hidden text-xs font-bold text-[#0499FA]"></p>
+      <h4 class="text-base font-extrabold text-emerald-800">
+        Code Successfully Copied!
+      </h4>
+      <p id="modal-copy-status" class="text-xs text-slate-600 mt-0.5">
+        Paste this code on checkout &amp; carry on shopping to get your discount.
+      </p>
+    </div>
+
+    <!-- Modal Body -->
+    <div class="p-6">
+      <!-- Store & Discount badge -->
+      <div class="flex items-center gap-2 mb-2">
+        <span
+          id="modal-coupon-discount"
+          class="rounded bg-[#eef5ff] px-2.5 py-0.5 text-xs font-bold text-[#2491ef] border border-[#2491ef]/30"
+        ></span>
+        <span
+          id="modal-coupon-store"
+          class="text-xs font-extrabold text-slate-700"
+        ></span>
+      </div>
+
+      <!-- Coupon Title -->
+      <h3
+        id="modal-coupon-title"
+        class="text-base font-bold text-[#191f2e] leading-snug"
+      ></h3>
+
+      <!-- GrabOn Dashed Code Box -->
+      <div class="mt-5 rounded-xl border-2 border-dashed border-[#cbd5e1] bg-[#f8fafc] p-4 text-center">
+        <p class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">
+          YOUR PROMO CODE
+        </p>
+        <div class="flex items-center justify-center gap-3">
+          <span
+            id="modal-coupon-code"
+            class="font-mono text-2xl font-black tracking-widest text-[#191f2e] select-all"
+          ></span>
+          <button
+            type="button"
+            id="modal-copy-again-btn"
+            class="inline-flex items-center gap-1 rounded-md bg-[#2491ef] px-3.5 py-1.5 text-xs font-bold text-white transition hover:bg-[#129fea] active:scale-95"
+          >
+            <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+            </svg>
+            <span>Copy Again</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Outbound Store Redirect Button -->
+      <a
+        id="modal-store-link"
+        href="#"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="mt-5 flex w-full items-center justify-center gap-2 rounded-lg bg-[#2491ef] py-3 text-center text-sm font-extrabold text-white shadow-xs transition hover:bg-[#129fea] active:scale-95"
+      >
+        <span>Go to Store &amp; Apply Coupon</span>
+        <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+        </svg>
+      </a>
+
+      <!-- Quick Trust Indicators -->
+      <div class="mt-4 flex items-center justify-center gap-4 text-xs font-medium text-slate-500">
+        <span class="flex items-center gap-1 text-[#60a600] font-bold">
+          <svg class="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+          </svg>
+          100% Verified
+        </span>
+        <span>•</span>
+        <span>Existing &amp; New Users</span>
+      </div>
+
+      <!-- Quick Feedback Voting (GrabOn Style) -->
+      <div class="mt-5 border-t border-slate-100 pt-4 text-center">
+        <p class="text-xs font-bold text-slate-600">
+          Did this coupon work for you?
+        </p>
+        <div class="mt-2.5 flex justify-center gap-3">
+          <button
+            type="button"
+            data-modal-vote="worked"
+            class="inline-flex items-center gap-1.5 rounded-lg border border-emerald-300 bg-emerald-50 px-4 py-2 text-xs font-bold text-emerald-700 shadow-2xs transition hover:bg-emerald-600 hover:text-white active:scale-95"
+          >
+            <span>👍</span>
+            <span>Yes, Worked!</span>
+          </button>
+          <button
+            type="button"
+            data-modal-vote="didnt_work"
+            class="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-slate-50 px-4 py-2 text-xs font-bold text-slate-600 shadow-2xs transition hover:bg-rose-600 hover:text-white hover:border-rose-600 active:scale-95"
+          >
+            <span>👎</span>
+            <span>No, Expired</span>
+          </button>
+        </div>
+        <p
+          id="modal-vote-feedback"
+          class="mt-2 hidden text-xs font-bold text-[#2491ef]"
+        ></p>
+      </div>
     </div>
   </div>
 </div>
@@ -96,21 +155,78 @@
         return true;
       }
     } catch {
-      // Fallback below
+      // Fallback
     }
+
+    const textarea = document.createElement("textarea");
+    textarea.value = text;
+    textarea.style.position = "fixed";
+    textarea.style.opacity = "0";
+    document.body.appendChild(textarea);
+    textarea.focus();
+    textarea.select();
     try {
-      const textarea = document.createElement("textarea");
-      textarea.value = text;
-      textarea.style.position = "fixed";
-      textarea.style.opacity = "0";
-      document.body.appendChild(textarea);
-      textarea.select();
-      const ok = document.execCommand("copy");
+      document.execCommand("copy");
       document.body.removeChild(textarea);
-      return ok;
+      return true;
     } catch {
+      document.body.removeChild(textarea);
       return false;
     }
+  }
+
+  function openModal(data: {
+    id: string;
+    code: string;
+    title: string;
+    store: string;
+    discount: string;
+    url: string;
+  }) {
+    activeCouponId = data.id;
+    activeCode = data.code;
+
+    if (titleEl) titleEl.textContent = data.title;
+    if (storeEl) storeEl.textContent = data.store ? `at ${data.store}` : "";
+    if (discountEl) discountEl.textContent = data.discount || "SPECIAL OFFER";
+    if (codeEl) codeEl.textContent = data.code;
+    if (storeLinkEl) {
+      storeLinkEl.href = data.url || "#";
+    }
+
+    if (statusEl) {
+      statusEl.textContent = "Paste this code on checkout & carry on shopping at " + (data.store || "the store") + ".";
+    }
+
+    if (voteFeedbackEl) {
+      voteFeedbackEl.classList.add("hidden");
+      voteFeedbackEl.textContent = "";
+    }
+
+    // Auto copy
+    copyToClipboard(data.code);
+
+    // Track click
+    if (data.id) {
+      fetch(`/api/coupons/${data.id}/click`, { method: "POST" })
+        .then((res) => (res.ok ? res.json() : null))
+        .then((resp: any) => {
+          if (resp?.clicks) {
+            document.querySelectorAll(`[data-coupon-clicks="${data.id}"]`).forEach((el) => {
+              el.textContent = `${resp.clicks} Uses Today`;
+            });
+          }
+        })
+        .catch(() => {});
+    }
+
+    // Open store in background/new tab
+    if (data.url && data.url !== "#") {
+      window.open(data.url, "_blank", "noopener,noreferrer");
+    }
+
+    modal?.classList.remove("hidden");
+    modal?.classList.add("flex");
   }
 
   function closeModal() {
@@ -119,113 +235,68 @@
   }
 
   closeBtn?.addEventListener("click", closeModal);
-  modal?.addEventListener("click", (event) => {
-    if (event.target === modal) closeModal();
+  modal?.addEventListener("click", (e) => {
+    if (e.target === modal) closeModal();
   });
-  document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape") closeModal();
+
+  window.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && !modal?.classList.contains("hidden")) {
+      closeModal();
+    }
   });
 
   copyAgainBtn?.addEventListener("click", async () => {
     if (!activeCode) return;
     const ok = await copyToClipboard(activeCode);
-    if (copyAgainBtn) {
-      copyAgainBtn.textContent = ok ? "Copied! ✓" : "Select & Copy";
+    if (ok && copyAgainBtn) {
+      const orig = copyAgainBtn.innerHTML;
+      copyAgainBtn.innerHTML = "<span>✓ Copied!</span>";
       setTimeout(() => {
-        copyAgainBtn.textContent = "Copy Again";
+        copyAgainBtn.innerHTML = orig;
       }, 1800);
     }
   });
 
-  document.querySelectorAll<HTMLButtonElement>("[data-modal-vote]").forEach((btn) => {
-    btn.addEventListener("click", async () => {
-      if (!activeCouponId) return;
-      const vote = btn.dataset.modalVote;
+  // Attach to reveal buttons
+  function attachRevealButtons() {
+    document.querySelectorAll(".reveal-coupon-btn").forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        e.preventDefault();
+        const target = e.currentTarget as HTMLElement;
+        openModal({
+          id: target.dataset.couponId || "",
+          code: target.dataset.couponCode || "",
+          title: target.dataset.couponTitle || "",
+          store: target.dataset.couponStore || "",
+          discount: target.dataset.couponDiscount || "",
+          url: target.dataset.couponUrl || "#",
+        });
+      });
+    });
+  }
+
+  attachRevealButtons();
+  document.addEventListener("astro:page-load", attachRevealButtons);
+
+  // Voting
+  document.querySelectorAll("[data-modal-vote]").forEach((btn) => {
+    btn.addEventListener("click", async (e) => {
+      const type = (e.currentTarget as HTMLElement).dataset.modalVote;
+      if (!activeCouponId || !type) return;
+
       try {
         const res = await fetch(`/api/coupons/${activeCouponId}/vote`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ vote }),
+          body: JSON.stringify({ vote: type }),
         });
-        if (res.ok && voteFeedbackEl) {
-          voteFeedbackEl.textContent = "Thanks! Your feedback helps other shoppers.";
-          voteFeedbackEl.classList.remove("hidden");
-        }
-      } catch {
-        // ignore
-      }
-    });
-  });
-
-  document.addEventListener("click", async (event) => {
-    const target = event.target as HTMLElement | null;
-    const button = target?.closest<HTMLButtonElement>(".reveal-coupon-btn");
-    if (!button) return;
-
-    const id = button.dataset.couponId || "";
-    const code = button.dataset.couponCode || "";
-    const title = button.dataset.couponTitle || "";
-    const store = button.dataset.couponStore || "";
-    const discount = button.dataset.couponDiscount || "";
-    const url = button.dataset.couponUrl || "#";
-
-    activeCouponId = id;
-    activeCode = code;
-
-    // 1. Reveal full code inline on the card
-    const inlineCodeEl = document.querySelector(`[data-coupon-code-text="${id}"]`);
-    if (inlineCodeEl) {
-      inlineCodeEl.textContent = code;
-    }
-
-    // 2. Copy to clipboard
-    const copied = await copyToClipboard(code);
-    const originalLabel = button.textContent;
-    button.textContent = copied ? "Copied! ✓" : "Revealed";
-    setTimeout(() => {
-      button.textContent = originalLabel || "Copy Code";
-    }, 2200);
-
-    // 3. Populate & open confirmation modal
-    if (titleEl) titleEl.textContent = title;
-    if (storeEl) storeEl.textContent = store;
-    if (discountEl) discountEl.textContent = discount;
-    if (codeEl) codeEl.textContent = code;
-    if (storeLinkEl) storeLinkEl.href = url;
-    if (statusEl) {
-      statusEl.textContent = copied
-        ? "✓ Coupon code copied to clipboard! Paste it at checkout."
-        : "Code revealed below — tap Copy Again to copy it.";
-    }
-    if (voteFeedbackEl) {
-      voteFeedbackEl.classList.add("hidden");
-      voteFeedbackEl.textContent = "";
-    }
-    modal?.classList.remove("hidden");
-    modal?.classList.add("flex");
-
-    // 4. Open store link in a new tab
-    if (url && url !== "#") {
-      window.open(url, "_blank", "noopener,noreferrer");
-    }
-
-    // 5. Track click count in Cloudflare D1
-    if (id) {
-      try {
-        const res = await fetch(`/api/coupons/${id}/click`, { method: "POST" });
         if (res.ok) {
-          const data = (await res.json()) as { click_count?: number };
-          if (typeof data.click_count === "number") {
-            document
-              .querySelectorAll(`[data-coupon-clicks="${id}"]`)
-              .forEach((el) => {
-                el.textContent = `${data.click_count} uses`;
-              });
+          if (voteFeedbackEl) {
+            voteFeedbackEl.textContent = "Thank you! Your feedback helps millions of shoppers.";
+            voteFeedbackEl.classList.remove("hidden");
           }
         }
-      } catch {
-        // non-blocking
-      }
-    }
+      } catch {}
+    });
   });
 </script>

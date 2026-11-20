@@ -23,7 +23,7 @@ function isNavActive(href: string, exact: boolean): boolean {
 }
 ---
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -42,38 +42,36 @@ function isNavActive(href: string, exact: boolean): boolean {
     </script>
   </head>
 
-  <body class="min-h-screen bg-[#F8FAFC] text-slate-900 antialiased selection:bg-[#0499FA]/20 selection:text-[#0499FA]">
-    <header class="sticky top-0 z-40 border-b border-slate-200/80 bg-white/95 backdrop-blur-md shadow-xs">
+  <body class="min-h-screen bg-[#f4f7fb] text-slate-800 antialiased selection:bg-[#2491ef] selection:text-white">
+    <header class="sticky top-0 z-40 bg-[#191f2e] text-white shadow-xs">
       <div class="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:px-8">
-        <div class="flex items-center gap-3">
-          <a href="/admin" class="group flex items-center gap-2.5">
-            <!-- Interlocking Double Ring Logo Icon -->
-            <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-[#0499FA] text-white shadow-xs group-hover:scale-105 transition-transform">
-              <div class="relative flex items-center justify-center">
-                <span class="inline-block h-3.5 w-3.5 rounded-full border-2 border-white -mr-1"></span>
-                <span class="inline-block h-3.5 w-3.5 rounded-full border-2 border-[#FF7A18] -ml-1 bg-white"></span>
-              </div>
-            </div>
-            <div class="flex items-center gap-1.5">
-              <span class="text-lg font-black tracking-tight text-[#081126]">
-                Coupon<span class="text-[#0499FA]">Hub</span>
-              </span>
-              <span class="rounded-md bg-[#0499FA] px-2 py-0.5 text-[10px] font-black text-white uppercase tracking-wider">
-                Admin
-              </span>
-            </div>
-          </a>
-        </div>
+        <!-- Logo -->
+        <a href="/admin" class="group flex items-center gap-2">
+          <div class="flex items-center text-xl font-black tracking-tight text-white">
+            <span>Coupon</span>
+            <span class="text-[#2491ef]">Hub</span>
+            <svg class="ml-1 h-3 w-5 text-[#60a600]" viewBox="0 0 24 12" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round">
+              <path d="M2 2c5 8 15 8 20 0" />
+            </svg>
+          </div>
+          <span class="rounded bg-[#60a600] px-1.5 py-0.5 text-[10px] font-extrabold uppercase text-white">
+            Admin
+          </span>
+        </a>
 
-        <nav class="flex flex-wrap items-center gap-1" aria-label="Admin Navigation">
+        <!-- Nav -->
+        <nav
+          class="flex flex-wrap items-center gap-1.5"
+          aria-label="Admin Navigation"
+        >
           {navItems.map((item) => (
             <a
               href={item.href}
               class:list={[
-                "rounded-xl px-3.5 py-1.5 text-xs font-bold transition sm:text-sm",
+                "rounded-lg px-3 py-1.5 text-xs font-bold transition",
                 isNavActive(item.href, item.exact)
-                  ? "bg-[#0499FA] text-white shadow-2xs"
-                  : "text-slate-600 hover:bg-[#EAF6FE] hover:text-[#0499FA]",
+                  ? "bg-[#2491ef] text-white shadow-2xs"
+                  : "text-slate-300 hover:bg-white/10 hover:text-white",
               ]}
             >
               {item.label}
@@ -81,21 +79,22 @@ function isNavActive(href: string, exact: boolean): boolean {
           ))}
         </nav>
 
+        <!-- Right -->
         <div class="flex items-center gap-2.5">
           <a
             href="/"
             target="_blank"
-            class="rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-xs font-bold text-slate-700 transition hover:border-[#0499FA] hover:text-[#0499FA] shadow-2xs"
+            class="rounded-lg border border-slate-700 bg-slate-800 px-3 py-1.5 text-xs font-bold text-slate-200 transition hover:bg-slate-700"
           >
             Live Site ↗
           </a>
-          <span class="hidden rounded-xl bg-[#EAF6FE] border border-[#0499FA]/20 px-2.5 py-1 text-xs font-bold text-[#0499FA] sm:inline">
+          <span class="hidden rounded-lg border border-slate-700 bg-slate-800 px-2.5 py-1.5 text-xs font-bold text-[#c2f03e] sm:inline">
             🛡️ @{adminUser}
           </span>
           <button
             type="button"
             id="admin-logout-btn"
-            class="rounded-xl bg-rose-50 px-3 py-1.5 text-xs font-bold text-rose-700 transition hover:bg-rose-100 shadow-2xs"
+            class="rounded-lg border border-rose-800/60 bg-rose-950/40 px-3 py-1.5 text-xs font-bold text-rose-300 transition hover:bg-rose-900 hover:text-white"
           >
             Logout
           </button>
@@ -103,15 +102,17 @@ function isNavActive(href: string, exact: boolean): boolean {
       </div>
     </header>
 
-    <main class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+    <main class="relative mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
       <slot />
     </main>
 
     <script>
-      document.getElementById("admin-logout-btn")?.addEventListener("click", async () => {
-        await fetch("/api/admin/logout", { method: "POST" });
-        window.location.href = "/admin/login";
-      });
+      document
+        .getElementById("admin-logout-btn")
+        ?.addEventListener("click", async () => {
+          await fetch("/api/admin/logout", { method: "POST" });
+          window.location.href = "/admin/login";
+        });
     </script>
   </body>
 </html>

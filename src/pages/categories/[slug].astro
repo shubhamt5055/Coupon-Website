@@ -26,52 +26,61 @@ const coupons = category
 
 <MainLayout
   title={category ? `${category.name} Coupons & Promo Codes — CouponHub` : "Category Not Found | CouponHub"}
-  description={category ? `Best active discount coupons and deals in ${category.name}.` : "Category not found."}
+  description={category ? `Best active discount coupons and deals in ${category.name} on CouponHub.` : "Category not found."}
 >
   {!category ? (
     <section class="mx-auto max-w-2xl px-4 py-20 text-center">
-      <h1 class="text-3xl font-black text-[#081126]">Category Not Found</h1>
-      <p class="mt-2 text-sm text-slate-500">The category you are looking for does not exist or has been moved.</p>
-      <a href="/categories" class="mt-6 inline-block rounded-full bg-[#0499FA] px-7 py-3 text-sm font-black text-white shadow-md shadow-[#0499FA]/20 transition hover:bg-[#0377C4]">
+      <h1 class="text-3xl font-extrabold text-[#191f2e]">Category Not Found</h1>
+      <p class="mt-2 text-xs sm:text-sm text-slate-500">The category you are looking for does not exist or has been moved.</p>
+      <a href="/categories" class="mt-6 inline-block rounded-lg bg-[#2491ef] px-6 py-2.5 text-xs font-bold text-white shadow-2xs hover:bg-[#129fea]">
         Browse All Categories
       </a>
     </section>
   ) : (
-    <section class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
-      <!-- Breadcrumbs -->
-      <nav class="mb-5 flex items-center gap-2 text-xs font-semibold text-slate-400">
-        <a href="/" class="hover:text-[#0499FA] transition">Home</a>
+    <section class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+      <!-- Breadcrumbs (GrabOn Style) -->
+      <nav class="mb-5 flex items-center gap-2 text-xs font-medium text-slate-400">
+        <a href="/" class="hover:text-[#2491ef] transition">Home</a>
         <span>/</span>
-        <a href="/categories" class="hover:text-[#0499FA] transition">Categories</a>
+        <a href="/categories" class="hover:text-[#2491ef] transition">Categories</a>
         <span>/</span>
-        <span class="text-[#081126] font-bold">{category.name}</span>
+        <span class="text-[#191f2e] font-bold">{category.name}</span>
       </nav>
 
-      <!-- Category Hero Banner -->
-      <div class="relative mb-10 overflow-hidden rounded-2xl border border-slate-200/90 bg-white p-6 shadow-xs sm:p-8">
-        <div class="relative z-10 flex flex-wrap items-center justify-between gap-6">
-          <div class="flex items-center gap-4 sm:gap-5">
-            <div class="flex h-16 w-16 items-center justify-center rounded-2xl bg-[#EAF6FE] text-3xl text-[#0499FA] shadow-xs sm:h-20 sm:w-20 sm:text-4xl border border-[#0499FA]/15">
-              {category.icon || "🏷️"}
+      <!-- Category Hero Banner (GrabOn Style) -->
+      <div class="relative mb-8 overflow-hidden rounded-xl border border-slate-200 bg-white p-6 shadow-2xs">
+        <div class="relative z-10 flex flex-col justify-between gap-6 sm:flex-row sm:items-center">
+          <div class="flex items-center gap-4">
+            <div class="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-[#eef5ff] text-3xl text-[#2491ef] shadow-2xs">
+              <span>{category.icon || "🏷️"}</span>
             </div>
+
             <div>
-              <span class="inline-flex items-center gap-1.5 rounded-full border border-[#0499FA]/20 bg-[#EAF6FE] px-2.5 py-0.5 text-[11px] font-black uppercase text-[#0499FA]">
-                <span class="h-1.5 w-1.5 rounded-full bg-[#0499FA] animate-soft-pulse"></span>
-                <span>Category Hub</span>
-              </span>
-              <h1 class="mt-1 text-2xl font-black tracking-tight text-[#081126] sm:text-4xl">
-                {category.name} Coupons &amp; Deals
+              <div class="flex items-center gap-2">
+                <span class="inline-flex items-center gap-1.5 rounded-full border border-[#2491ef]/20 bg-[#eef5ff] px-2.5 py-0.5 text-[11px] font-bold text-[#2491ef]">
+                  <span class="h-1.5 w-1.5 rounded-full bg-[#60a600] animate-soft-pulse"></span>
+                  <span>Verified Category Deals</span>
+                </span>
+                <span class="text-xs font-semibold text-slate-400">
+                  {coupons.length} {coupons.length === 1 ? "Offer Live" : "Offers Live"}
+                </span>
+              </div>
+
+              <h1 class="mt-1 text-2xl font-extrabold tracking-tight text-[#191f2e] sm:text-3xl">
+                {category.name} Coupons &amp; Offers
               </h1>
-              <p class="mt-1 text-xs font-medium text-slate-500 sm:text-sm">
-                Showing {coupons.length} {coupons.length === 1 ? "verified deal" : "verified deals"} for {category.name}
+
+              <p class="mt-1 text-xs sm:text-sm font-medium text-slate-500">
+                Explore hand-tested discount coupons, promotional codes, and online shopping vouchers for {category.name}.
               </p>
             </div>
           </div>
 
+          <!-- Actions -->
           <div class="flex items-center gap-3">
             <a
               href={includeExpired ? `/categories/${category.slug}` : `/categories/${category.slug}?includeExpired=1`}
-              class="rounded-full border border-slate-200 bg-white px-4 py-2 text-xs font-bold text-slate-700 shadow-2xs transition hover:border-[#0499FA] hover:text-[#0499FA]"
+              class="rounded-lg border border-slate-200 bg-white px-3.5 py-2 text-xs font-bold text-slate-600 shadow-2xs transition hover:border-[#2491ef] hover:text-[#2491ef]"
             >
               {includeExpired ? "Hide Expired Deals" : "Include Expired Deals"}
             </a>
@@ -79,26 +88,30 @@ const coupons = category
         </div>
       </div>
 
-      <!-- Coupon Grid -->
-      {coupons.length === 0 ? (
-        <div class="rounded-2xl border border-dashed border-slate-300 bg-white p-14 text-center shadow-xs">
-          <p class="text-lg font-black text-[#081126]">
-            No active coupons in {category.name} right now.
-          </p>
-          <p class="mt-1 text-xs text-slate-500">
-            Check back soon or explore other categories.
-          </p>
-          <a href="/coupons" class="mt-4 inline-block text-xs font-black text-[#0499FA] hover:text-[#FF7A18] hover:underline">
-            Browse all active deals →
-          </a>
+      <!-- Coupons Listing Grid -->
+      <div class="space-y-6">
+        <div class="flex items-center justify-between border-b border-slate-200 pb-3">
+          <h2 class="text-base font-bold text-[#191f2e]">
+            All {category.name} Offers ({coupons.length})
+          </h2>
+          <span class="text-xs font-semibold text-slate-500">Updated Daily</span>
         </div>
-      ) : (
-        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {coupons.map((coupon) => (
-            <CouponCard coupon={coupon} />
-          ))}
-        </div>
-      )}
+
+        {coupons.length === 0 ? (
+          <div class="rounded-xl border border-dashed border-slate-300 bg-white p-12 text-center">
+            <p class="font-bold text-slate-700">No active coupons in this category right now.</p>
+            <p class="mt-1 text-xs text-slate-400">
+              Check back soon or try enabling expired deals to browse previous promotions.
+            </p>
+          </div>
+        ) : (
+          <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {coupons.map((coupon) => (
+              <CouponCard coupon={coupon} />
+            ))}
+          </div>
+        )}
+      </div>
     </section>
   )}
 </MainLayout>

@@ -4,12 +4,16 @@ import MainLayout from "../layouts/MainLayout.astro";
 const user = Astro.locals.user;
 const nextParam = Astro.url.searchParams.get("next");
 const safeNext =
-  nextParam && nextParam.startsWith("/") && !nextParam.startsWith("//") && nextParam !== "/"
+  nextParam &&
+  nextParam.startsWith("/") &&
+  !nextParam.startsWith("//") &&
+  nextParam !== "/"
     ? nextParam
     : "/my-coupons";
 
 const reason = Astro.url.searchParams.get("reason");
-const initialMode = Astro.url.searchParams.get("mode") === "register" ? "register" : "login";
+const initialMode =
+  Astro.url.searchParams.get("mode") === "register" ? "register" : "login";
 
 if (user) {
   return Astro.redirect(safeNext);
@@ -17,58 +21,101 @@ if (user) {
 ---
 
 <MainLayout
-  title="Sign In / Create Account — CouponHub"
-  description="Sign in with your registered account, or create a new account to share coupons and deals."
+  title="Sign In / Create Account — CouponHub | Save On Everything"
+  description="Sign in with your registered account, or create a free account to share and manage coupons on CouponHub."
   compactFooter={true}
 >
-  <div class="mx-auto flex min-h-[calc(100vh-105px)] max-w-md items-center justify-center px-4 py-3 sm:py-5">
-    <div class="w-full rounded-3xl border border-slate-200 bg-white p-5 sm:p-6 shadow-xl shadow-slate-200/50">
-      <!-- Brand Icon & Header -->
-      <div class="text-center">
-        <!-- Interlocking Double Ring Logo Icon -->
-        <div class="mx-auto flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-tr from-[#0499FA] to-[#0377C4] text-white shadow-md shadow-[#0499FA]/25">
-          <div class="relative flex items-center justify-center">
-            <span class="inline-block h-4 w-4 rounded-full border-2 border-white -mr-1"></span>
-            <span class="inline-block h-4 w-4 rounded-full border-2 border-[#FF7A18] -ml-1 bg-white"></span>
-          </div>
+  <div class="mx-auto grid min-h-[calc(100vh-140px)] max-w-5xl items-center gap-10 px-4 py-10 sm:px-6 lg:grid-cols-2 lg:px-8">
+    <!-- Left: Pitch (Desktop only, GrabOn Style) -->
+    <div class="hidden lg:block text-[#191f2e]">
+      <div class="inline-flex items-center gap-2 rounded-full border border-[#2491ef]/20 bg-[#eef5ff] px-3.5 py-1 text-xs font-bold text-[#2491ef] shadow-2xs">
+        <span class="h-2 w-2 rounded-full bg-[#60a600] animate-soft-pulse"></span>
+        <span>100% Free For All Shoppers</span>
+      </div>
+
+      <h1 class="mt-4 text-4xl font-extrabold tracking-tight sm:text-5xl">
+        Share Deals.
+        <span class="block text-[#2491ef]">Save Together.</span>
+      </h1>
+
+      <p class="mt-3 max-w-md text-xs sm:text-sm font-medium leading-relaxed text-slate-600">
+        Create an account to submit tested promo codes, track your deals, and help millions of smart shoppers save money at checkout.
+      </p>
+
+      <div class="mt-6 space-y-3.5 text-xs font-semibold text-slate-700">
+        <div class="flex items-center gap-3">
+          <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-[#eef5ff] text-[#2491ef] font-bold">
+            🎟️
+          </span>
+          <span>Submit your own discount vouchers &amp; codes</span>
         </div>
-        <h1 id="auth-title" class="mt-2 text-xl font-black tracking-tight text-[#081126] sm:text-2xl">
+        <div class="flex items-center gap-3">
+          <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-[#f0fdf4] text-[#60a600] font-bold">
+            📊
+          </span>
+          <span>Track live redemptions and community votes</span>
+        </div>
+        <div class="flex items-center gap-3">
+          <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-orange-50 text-[#ff5722] font-bold">
+            ⚡
+          </span>
+          <span>Instant auto-approval upon editorial verification</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Auth Card (GrabOn Style) -->
+    <div class="mx-auto w-full max-w-md rounded-xl border border-slate-200 bg-white p-6 shadow-xs sm:p-8">
+      <!-- Brand & Header -->
+      <div class="text-center">
+        <a href="/" class="inline-flex flex-col items-center">
+          <div class="flex items-center text-2xl font-black tracking-tight text-[#191f2e]">
+            <span>Coupon</span>
+            <span class="text-[#2491ef]">Hub</span>
+            <svg class="ml-1 h-3.5 w-6 text-[#60a600]" viewBox="0 0 24 12" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round">
+              <path d="M2 2c5 8 15 8 20 0" />
+            </svg>
+          </div>
+          <span class="text-[9px] font-extrabold tracking-widest text-[#60a600] uppercase mt-0.5">
+            SAVE ON EVERYTHING
+          </span>
+        </a>
+
+        <h2 id="auth-title" class="mt-4 text-xl font-extrabold text-[#191f2e]">
           Sign In to CouponHub
-        </h1>
-        <p id="auth-subtitle" class="mt-0.5 text-xs font-medium text-slate-500">
-          Sign in is available for registered users only.
+        </h2>
+        <p id="auth-subtitle" class="mt-0.5 text-xs text-slate-500">
+          Enter your registered email and password to access your account.
         </p>
       </div>
 
-      <!-- Mode Toggle Switch (Sign In vs Create Account) -->
-      <div class="mt-3.5 flex rounded-xl bg-slate-100 p-1 border border-slate-200">
+      <!-- Mode Tabs (GrabOn Style) -->
+      <div class="mt-5 flex rounded-lg border border-slate-200 bg-slate-100 p-1">
         <button
           type="button"
           id="tab-login-btn"
-          class="flex-1 rounded-lg py-1.5 text-xs font-bold transition shadow-xs bg-[#0499FA] text-white"
+          class="flex-1 rounded-md bg-[#2491ef] py-2 text-xs font-bold text-white shadow-2xs transition"
         >
           Sign In
         </button>
         <button
           type="button"
           id="tab-register-btn"
-          class="flex-1 rounded-lg py-1.5 text-xs font-bold transition text-slate-700 hover:text-[#0499FA]"
+          class="flex-1 rounded-md py-2 text-xs font-bold text-slate-600 transition hover:text-[#2491ef]"
         >
           Create Account
         </button>
       </div>
 
-      <!-- Context Reason Banner (e.g. from middleware) -->
       {reason === "signin-required" && (
-        <div class="mt-2.5 rounded-xl border border-amber-200 bg-amber-50 p-2.5 text-xs font-semibold text-amber-900">
+        <div class="mt-3.5 rounded-lg border border-amber-200 bg-amber-50 p-2.5 text-xs font-semibold text-amber-900">
           🔒 <strong>Sign-in required:</strong> Please sign in or create an account to submit coupons.
         </div>
       )}
 
-      <!-- Alert / Notice Box (Account Not Found or Guidance) -->
       <div
         id="auth-alert"
-        class="mt-2.5 hidden rounded-xl border border-amber-300 bg-[#FFF9F5] p-2.5 text-xs font-semibold text-amber-900"
+        class="mt-3.5 hidden rounded-lg border border-amber-300 bg-amber-50 p-3 text-xs font-semibold text-amber-900"
       >
         <div class="flex items-start gap-2">
           <span class="text-sm">⚠️</span>
@@ -76,20 +123,15 @@ if (user) {
         </div>
       </div>
 
-      <!-- Error Box -->
       <div
         id="auth-error"
-        class="mt-2.5 hidden rounded-xl border border-rose-200 bg-rose-50 p-2.5 text-xs font-semibold text-rose-700"
+        class="mt-3.5 hidden rounded-lg border border-rose-200 bg-rose-50 p-3 text-xs font-semibold text-rose-700"
       ></div>
 
-      <!-- ==================== SIGN IN FORM ==================== -->
-      <form id="sign-in-form" class="mt-3 space-y-2.5" data-next={safeNext}>
-        <div class="rounded-xl border border-[#0499FA]/20 bg-[#EAF6FE] p-2 text-[11px] text-[#0499FA]">
-          🔑 <strong>Note:</strong> Enter your registered email &amp; password. If no account exists, we'll guide you to create one.
-        </div>
-
+      <!-- SIGN IN FORM -->
+      <form id="sign-in-form" class="mt-5 space-y-4" data-next={safeNext}>
         <div>
-          <label for="login-email" class="mb-1 block text-[11px] font-bold text-slate-700 uppercase">
+          <label for="login-email" class="mb-1 block text-xs font-bold text-[#191f2e]">
             Email Address
           </label>
           <input
@@ -99,12 +141,11 @@ if (user) {
             required
             autocomplete="email"
             placeholder="you@example.com"
-            class="w-full rounded-xl border border-slate-300 bg-slate-50 px-3.5 py-2 text-sm text-slate-900 outline-none transition focus:border-[#0499FA] focus:ring-2 focus:ring-[#0499FA]/20 focus:bg-white"
+            class="w-full rounded-lg border border-slate-300 bg-[#f8fafc] px-3.5 py-2.5 text-xs sm:text-sm text-[#191f2e] outline-none transition focus:border-[#2491ef] focus:bg-white focus:ring-2 focus:ring-[#2491ef]/20"
           />
         </div>
-
         <div>
-          <label for="login-password" class="mb-1 block text-[11px] font-bold text-slate-700 uppercase">
+          <label for="login-password" class="mb-1 block text-xs font-bold text-[#191f2e]">
             Password
           </label>
           <input
@@ -114,40 +155,39 @@ if (user) {
             required
             autocomplete="current-password"
             placeholder="••••••••"
-            class="w-full rounded-xl border border-slate-300 bg-slate-50 px-3.5 py-2 text-sm text-slate-900 outline-none transition focus:border-[#0499FA] focus:ring-2 focus:ring-[#0499FA]/20 focus:bg-white"
+            class="w-full rounded-lg border border-slate-300 bg-[#f8fafc] px-3.5 py-2.5 text-xs sm:text-sm text-[#191f2e] outline-none transition focus:border-[#2491ef] focus:bg-white focus:ring-2 focus:ring-[#2491ef]/20"
           />
         </div>
 
         <button
           type="submit"
           id="login-btn"
-          class="w-full rounded-xl bg-[#0499FA] py-2.5 text-sm font-black text-white shadow-md shadow-[#0499FA]/20 transition hover:bg-[#0377C4] active:scale-98 disabled:opacity-60"
+          class="w-full rounded-lg bg-[#2491ef] py-2.5 text-xs font-bold uppercase tracking-wider text-white shadow-2xs transition hover:bg-[#129fea] active:scale-95 disabled:opacity-60"
         >
           Sign In to Account
         </button>
 
-        <div class="pt-1.5 text-center text-xs text-slate-500">
-          Don't have an account?{" "}
+        <p class="text-center text-xs text-slate-500">
+          Don’t have an account?
           <button
             type="button"
             id="switch-to-register-link"
-            class="font-black text-[#0499FA] hover:text-[#FF7A18] hover:underline"
+            class="font-bold text-[#2491ef] hover:underline"
           >
             Create account →
           </button>
-        </div>
+        </p>
       </form>
 
-      <!-- ==================== CREATE ACCOUNT FORM ==================== -->
-      <form id="create-account-form" class="mt-3 hidden space-y-2.5" data-next={safeNext}>
-        <div class="rounded-xl border border-[#FF7A18]/30 bg-[#FFF9F5] p-2 text-[11px] text-[#FF7A18]">
-          ✨ <strong>Free Account:</strong> Create your account to upload promo codes and track deals.
-        </div>
-
-        <!-- 2-Column Responsive Grid so it never overflows desktop screen -->
-        <div class="grid grid-cols-2 gap-2.5">
+      <!-- CREATE ACCOUNT FORM -->
+      <form
+        id="create-account-form"
+        class="mt-5 hidden space-y-4"
+        data-next={safeNext}
+      >
+        <div class="grid grid-cols-2 gap-3">
           <div>
-            <label for="reg-name" class="mb-1 block text-[11px] font-bold text-slate-700 uppercase">
+            <label for="reg-name" class="mb-1 block text-xs font-bold text-[#191f2e]">
               Full Name *
             </label>
             <input
@@ -157,13 +197,12 @@ if (user) {
               required
               autocomplete="name"
               placeholder="e.g. Rahul S."
-              class="w-full rounded-xl border border-slate-300 bg-slate-50 px-3 py-2 text-sm text-slate-900 outline-none transition focus:border-[#0499FA] focus:ring-2 focus:ring-[#0499FA]/20 focus:bg-white"
+              class="w-full rounded-lg border border-slate-300 bg-[#f8fafc] px-3 py-2.5 text-xs sm:text-sm text-[#191f2e] outline-none transition focus:border-[#2491ef] focus:bg-white focus:ring-2 focus:ring-[#2491ef]/20"
             />
           </div>
-
           <div>
-            <label for="reg-email" class="mb-1 block text-[11px] font-bold text-slate-700 uppercase">
-              Email Address *
+            <label for="reg-email" class="mb-1 block text-xs font-bold text-[#191f2e]">
+              Email *
             </label>
             <input
               id="reg-email"
@@ -172,15 +211,15 @@ if (user) {
               required
               autocomplete="email"
               placeholder="you@example.com"
-              class="w-full rounded-xl border border-slate-300 bg-slate-50 px-3 py-2 text-sm text-slate-900 outline-none transition focus:border-[#0499FA] focus:ring-2 focus:ring-[#0499FA]/20 focus:bg-white"
+              class="w-full rounded-lg border border-slate-300 bg-[#f8fafc] px-3 py-2.5 text-xs sm:text-sm text-[#191f2e] outline-none transition focus:border-[#2491ef] focus:bg-white focus:ring-2 focus:ring-[#2491ef]/20"
             />
           </div>
         </div>
 
-        <div class="grid grid-cols-2 gap-2.5">
+        <div class="grid grid-cols-2 gap-3">
           <div>
-            <label for="reg-password" class="mb-1 block text-[11px] font-bold text-slate-700 uppercase">
-              Password (min 6) *
+            <label for="reg-password" class="mb-1 block text-xs font-bold text-[#191f2e]">
+              Password *
             </label>
             <input
               id="reg-password"
@@ -190,13 +229,12 @@ if (user) {
               minlength="6"
               autocomplete="new-password"
               placeholder="••••••••"
-              class="w-full rounded-xl border border-slate-300 bg-slate-50 px-3 py-2 text-sm text-slate-900 outline-none transition focus:border-[#0499FA] focus:ring-2 focus:ring-[#0499FA]/20 focus:bg-white"
+              class="w-full rounded-lg border border-slate-300 bg-[#f8fafc] px-3 py-2.5 text-xs sm:text-sm text-[#191f2e] outline-none transition focus:border-[#2491ef] focus:bg-white focus:ring-2 focus:ring-[#2491ef]/20"
             />
           </div>
-
           <div>
-            <label for="reg-confirm" class="mb-1 block text-[11px] font-bold text-slate-700 uppercase">
-              Confirm Pass *
+            <label for="reg-confirm" class="mb-1 block text-xs font-bold text-[#191f2e]">
+              Confirm Password *
             </label>
             <input
               id="reg-confirm"
@@ -206,7 +244,7 @@ if (user) {
               minlength="6"
               autocomplete="new-password"
               placeholder="••••••••"
-              class="w-full rounded-xl border border-slate-300 bg-slate-50 px-3 py-2 text-sm text-slate-900 outline-none transition focus:border-[#0499FA] focus:ring-2 focus:ring-[#0499FA]/20 focus:bg-white"
+              class="w-full rounded-lg border border-slate-300 bg-[#f8fafc] px-3 py-2.5 text-xs sm:text-sm text-[#191f2e] outline-none transition focus:border-[#2491ef] focus:bg-white focus:ring-2 focus:ring-[#2491ef]/20"
             />
           </div>
         </div>
@@ -214,27 +252,29 @@ if (user) {
         <button
           type="submit"
           id="reg-btn"
-          class="w-full rounded-xl bg-[#FF7A18] py-2.5 text-sm font-black text-white shadow-md shadow-[#FF7A18]/25 transition hover:bg-[#E6680C] active:scale-98 disabled:opacity-60"
+          class="w-full rounded-lg bg-[#2491ef] py-2.5 text-xs font-bold uppercase tracking-wider text-white shadow-2xs transition hover:bg-[#129fea] active:scale-95 disabled:opacity-60"
         >
           Create Account &amp; Continue
         </button>
 
-        <div class="pt-1.5 text-center text-xs text-slate-500">
-          Already have an account?{" "}
+        <p class="text-center text-xs text-slate-500">
+          Already have an account?
           <button
             type="button"
             id="switch-to-login-link"
-            class="font-black text-[#0499FA] hover:text-[#FF7A18] hover:underline"
+            class="font-bold text-[#2491ef] hover:underline"
           >
-            Sign In here →
+            Sign in here →
           </button>
-        </div>
+        </p>
       </form>
 
-      <!-- Admin link -->
-      <div class="mt-3 border-t border-slate-100 pt-2 text-center">
-        <a href="/admin/login" class="text-[11px] font-medium text-slate-400 hover:text-slate-600">
-          Team Member? Admin Login
+      <div class="mt-5 border-t border-slate-100 pt-3 text-center">
+        <a
+          href="/admin/login"
+          class="text-[11px] font-medium text-slate-400 hover:text-slate-600"
+        >
+          Team member? Admin login
         </a>
       </div>
     </div>
@@ -273,14 +313,16 @@ if (user) {
       signInForm?.classList.add("hidden");
       createAccountForm?.classList.remove("hidden");
 
-      tabLoginBtn?.classList.remove("bg-[#0499FA]", "text-white", "shadow-xs");
-      tabLoginBtn?.classList.add("text-slate-700");
+      tabLoginBtn?.classList.remove("bg-[#2491ef]", "text-white", "shadow-2xs");
+      tabLoginBtn?.classList.add("text-slate-600");
 
-      tabRegisterBtn?.classList.remove("text-slate-700");
-      tabRegisterBtn?.classList.add("bg-[#0499FA]", "text-white", "shadow-xs");
+      tabRegisterBtn?.classList.remove("text-slate-600");
+      tabRegisterBtn?.classList.add("bg-[#2491ef]", "text-white", "shadow-2xs");
 
       if (authTitle) authTitle.textContent = "Create an Account";
-      if (authSubtitle) authSubtitle.textContent = "Fill in your details below to create your free account.";
+      if (authSubtitle)
+        authSubtitle.textContent =
+          "Fill in your details below to create your free account.";
 
       if (prefillEmail && regEmailInput) {
         regEmailInput.value = prefillEmail;
@@ -290,14 +332,20 @@ if (user) {
       createAccountForm?.classList.add("hidden");
       signInForm?.classList.remove("hidden");
 
-      tabRegisterBtn?.classList.remove("bg-[#0499FA]", "text-white", "shadow-xs");
-      tabRegisterBtn?.classList.add("text-slate-700");
+      tabRegisterBtn?.classList.remove(
+        "bg-[#2491ef]",
+        "text-white",
+        "shadow-2xs",
+      );
+      tabRegisterBtn?.classList.add("text-slate-600");
 
-      tabLoginBtn?.classList.remove("text-slate-700");
-      tabLoginBtn?.classList.add("bg-[#0499FA]", "text-white", "shadow-xs");
+      tabLoginBtn?.classList.remove("text-slate-600");
+      tabLoginBtn?.classList.add("bg-[#2491ef]", "text-white", "shadow-2xs");
 
       if (authTitle) authTitle.textContent = "Sign In to CouponHub";
-      if (authSubtitle) authSubtitle.textContent = "Sign in is available for registered users only.";
+      if (authSubtitle)
+        authSubtitle.textContent =
+          "Sign in is available for registered users only.";
 
       if (prefillEmail && loginEmailInput) {
         loginEmailInput.value = prefillEmail;
@@ -312,8 +360,12 @@ if (user) {
 
   tabLoginBtn?.addEventListener("click", () => setMode("login"));
   tabRegisterBtn?.addEventListener("click", () => setMode("register"));
-  document.getElementById("switch-to-register-link")?.addEventListener("click", () => setMode("register"));
-  document.getElementById("switch-to-login-link")?.addEventListener("click", () => setMode("login"));
+  document
+    .getElementById("switch-to-register-link")
+    ?.addEventListener("click", () => setMode("register"));
+  document
+    .getElementById("switch-to-login-link")
+    ?.addEventListener("click", () => setMode("login"));
 
   // Handle Sign In Submit
   signInForm?.addEventListener("submit", async (e) => {
@@ -343,13 +395,15 @@ if (user) {
           setMode(
             "register",
             email,
-            `No account found! <strong>${email}</strong> is not registered yet. Please enter your name and password below to create your account.`
+            `No account found! <strong>${email}</strong> is not registered yet. Please enter your name and password below to create your account.`,
           );
           return;
         }
 
         if (authError) {
-          authError.textContent = data.error || "Incorrect password. Please verify your password and try again.";
+          authError.textContent =
+            data.error ||
+            "Incorrect password. Please verify your password and try again.";
           authError.classList.remove("hidden");
         }
         return;
@@ -382,7 +436,8 @@ if (user) {
 
     if (password !== confirmPassword) {
       if (authError) {
-        authError.textContent = "Passwords do not match. Please ensure both passwords match.";
+        authError.textContent =
+          "Passwords do not match. Please ensure both passwords match.";
         authError.classList.remove("hidden");
       }
       return;
@@ -403,7 +458,8 @@ if (user) {
 
       if (!res.ok || !data.ok) {
         if (authError) {
-          authError.textContent = data.error || "Failed to create account. Please try again.";
+          authError.textContent =
+            data.error || "Failed to create account. Please try again.";
           authError.classList.remove("hidden");
         }
         return;

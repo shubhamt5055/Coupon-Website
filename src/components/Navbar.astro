@@ -7,161 +7,155 @@ const { currentPath = "/" } = Astro.props;
 const user = Astro.locals.user;
 
 const navLinks = [
-  { href: "/", label: "Home" },
-  { href: "/coupons", label: "Browse Coupons" },
   { href: "/stores", label: "Top Stores" },
   { href: "/categories", label: "Categories" },
-  { href: "/submit-coupon", label: "+ Submit Coupon" },
+  { href: "/coupons", label: "All Coupons" },
+  { href: "/coupons?sort=popular", label: "🔥 Deals Of The Day" },
+  { href: "/submit-coupon", label: "Submit Coupon" },
 ];
 
 function isActive(href: string): boolean {
   if (href === "/") return currentPath === "/";
-  return currentPath === href || currentPath.startsWith(`${href}/`);
+  const cleanHref = href.split("?")[0];
+  return currentPath === cleanHref || currentPath.startsWith(`${cleanHref}/`);
 }
 ---
 
 <header class="sticky top-0 z-40 bg-white shadow-xs">
-  <!-- Tier 1: Couponly Top Announcement Bar -->
-  <div class="border-b border-orange-100 bg-[#FFEDE1] py-2 text-xs font-medium text-[#081126]">
-    <div class="mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-      <div class="flex items-center gap-2">
-        <span class="rounded-full bg-[#FF7A18] px-2 py-0.5 text-[10px] font-black text-white uppercase tracking-wider">
-          Deal Alert
+  <!-- Tier 1: GrabOn-style Slim Top Announcement Strip -->
+  <div class="bg-[#191f2e] text-white text-[11px] font-medium py-1.5 px-4 sm:px-6">
+    <div class="mx-auto max-w-7xl flex items-center justify-between">
+      <div class="flex items-center gap-2 truncate">
+        <span class="inline-flex items-center gap-1 rounded bg-[#60a600] px-1.5 py-0.2 text-[10px] font-bold text-white uppercase tracking-wider">
+          LIVE
         </span>
-        <span class="truncate">Save up to 70% with verified discount coupons and promo codes today!</span>
+        <span class="truncate">
+          ⚡ Save on Everything! Hand-tested &amp; 100% verified discount coupons updated today.
+        </span>
       </div>
-      <div class="hidden items-center gap-4 text-xs font-semibold sm:flex">
-        <span class="inline-flex items-center gap-1.5 text-slate-600">
-          <span class="h-2 w-2 rounded-full bg-[#0499FA] animate-soft-pulse"></span>
-          100% Free &amp; Verified
-        </span>
-        <span class="text-slate-300">|</span>
-        <span class="text-slate-600 font-bold">🇮🇳 India (INR ₹)</span>
+
+      <div class="hidden sm:flex items-center gap-4 shrink-0 text-slate-300 text-[11px]">
+        <a href="/coupons?sort=popular" class="hover:text-white transition">Trending Offers</a>
+        <span>•</span>
+        <a href="/submit-coupon" class="text-[#60a600] hover:text-[#c2f03e] font-bold transition">+ Share &amp; Earn</a>
+        <span>•</span>
+        <a href="/admin" class="hover:text-white transition" title="Admin Portal">🛡️ Admin</a>
       </div>
     </div>
   </div>
 
-  <!-- Tier 2: Main Search & User Bar (White) -->
-  <div class="border-b border-slate-100 bg-white py-3.5">
-    <div class="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
-      <!-- Brand Logo (Couponly Double Ring Style) -->
-      <a href="/" class="group flex items-center gap-2.5 text-slate-900 transition hover:opacity-95 shrink-0">
-        <div class="relative flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-tr from-[#0499FA] to-[#36ADFB] text-white shadow-md shadow-[#0499FA]/20 group-hover:scale-105 transition-transform">
-          <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/>
-            <line x1="7" y1="7" x2="7.01" y2="7"/>
-          </svg>
-          <span class="absolute -bottom-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-[#FF7A18] ring-2 ring-white">
-            <span class="h-1.5 w-1.5 rounded-full bg-white"></span>
-          </span>
-        </div>
+  <!-- Tier 2: Main Branding & Global Search -->
+  <div class="border-b border-slate-200/90 bg-white">
+    <div class="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:gap-6 lg:px-8">
+      <!-- Logo: CouponHub with GrabOn Smile Curve & Slogan -->
+      <a href="/" class="group flex shrink-0 items-center gap-2">
         <div class="flex flex-col">
-          <span class="text-xl font-black tracking-tight text-[#081126]">
-            Coupon<span class="text-[#0499FA]">Hub</span>
-          </span>
-          <span class="text-[10px] font-bold tracking-wider text-slate-400 uppercase -mt-0.5">
-            Verified Deals Hub
+          <div class="flex items-center text-2xl font-black tracking-tight text-[#191f2e]">
+            <span>Coupon</span>
+            <span class="text-[#2491ef]">Hub</span>
+            <!-- Smile Arc underneath -->
+            <svg class="ml-0.5 h-3.5 w-6 text-[#60a600]" viewBox="0 0 24 12" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round">
+              <path d="M2 2c5 8 15 8 20 0" />
+            </svg>
+          </div>
+          <span class="text-[9px] font-extrabold tracking-widest text-[#60a600] uppercase -mt-0.5">
+            SAVE ON EVERYTHING
           </span>
         </div>
       </a>
 
-      <!-- Middle: Categories Quick Button + Pill Search Bar -->
-      <div class="hidden flex-1 items-center justify-center gap-3 md:flex max-w-2xl">
-        <a
-          href="/categories"
-          class="inline-flex items-center gap-2 rounded-full bg-[#EAF6FE] px-4 py-2.5 text-xs font-black text-[#0499FA] transition hover:bg-[#CDEBFE] shrink-0"
-        >
-          <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="currentColor">
-            <rect x="3" y="3" width="7" height="7" rx="1.5" />
-            <rect x="14" y="3" width="7" height="7" rx="1.5" />
-            <rect x="3" y="14" width="7" height="7" rx="1.5" />
-            <rect x="14" y="14" width="7" height="7" rx="1.5" />
+      <!-- Global Search Bar (Center) -->
+      <form
+        action="/coupons"
+        method="GET"
+        class="hidden flex-1 max-w-2xl items-center rounded-lg border border-slate-300 bg-[#f8fafc] p-0.5 shadow-2xs transition focus-within:border-[#2491ef] focus-within:bg-white focus-within:ring-2 focus-within:ring-[#2491ef]/20 md:flex"
+      >
+        <div class="relative flex flex-1 items-center">
+          <svg class="pointer-events-none absolute left-3.5 h-4 w-4 text-slate-400" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35m1.85-5.15a7 7 0 11-14 0 7 7 0 0114 0z" />
           </svg>
-          <span>Categories</span>
-        </a>
-
-        <!-- Couponly Pill Search Bar with Orange Circle Action Button -->
-        <form
-          action="/coupons"
-          method="GET"
-          class="flex flex-1 items-center rounded-full border border-slate-200 bg-white p-1 shadow-2xs transition focus-within:border-[#0499FA] focus-within:ring-2 focus-within:ring-[#0499FA]/20"
-        >
           <input
             type="search"
             name="q"
-            placeholder="Search stores, coupons or deals (e.g. Amazon, Zomato)..."
-            class="w-full bg-transparent px-4 py-1.5 text-xs font-medium text-slate-800 placeholder-slate-400 outline-none"
+            placeholder="Search for brands, categories or coupons (e.g. Swiggy, Amazon, Myntra...)"
+            class="w-full bg-transparent py-2 pr-3 pl-10 text-xs sm:text-sm font-medium text-slate-800 placeholder-slate-400 outline-none"
           />
-          <button
-            type="submit"
-            aria-label="Search Coupons"
-            class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#FF7A18] text-white transition hover:bg-[#E6680C] active:scale-95 shadow-xs"
-          >
-            <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
-          </button>
-        </form>
-      </div>
+        </div>
+        <button
+          type="submit"
+          aria-label="Search coupons"
+          class="inline-flex items-center gap-1.5 rounded-md bg-[#2491ef] px-4 py-2 text-xs font-bold text-white transition hover:bg-[#129fea] active:scale-95 shrink-0"
+        >
+          <span>Search</span>
+        </button>
+      </form>
 
       <!-- Right User Controls -->
       <div class="flex items-center gap-2.5">
+        <a
+          href="/submit-coupon"
+          class="hidden xl:inline-flex items-center gap-1.5 rounded-lg border border-[#2491ef]/30 bg-[#eef5ff] px-3 py-1.5 text-xs font-bold text-[#2491ef] hover:bg-[#2491ef] hover:text-white transition"
+        >
+          <span>+ Submit Coupon</span>
+        </a>
+
         {user ? (
           <div class="flex items-center gap-2">
             <a
               href="/my-coupons"
-              class:list={[
-                "flex items-center gap-2 rounded-full border px-3.5 py-1.5 text-xs font-bold transition shadow-2xs",
-                isActive("/my-coupons")
-                  ? "border-[#0499FA] bg-[#EAF6FE] text-[#0499FA]"
-                  : "border-slate-200 bg-white text-slate-700 hover:border-[#0499FA] hover:bg-[#EAF6FE]/60",
-              ]}
               title="My Submitted Coupons"
+              class:list={[
+                "flex items-center gap-2 rounded-lg border py-1 pl-1.5 pr-3 text-xs font-bold transition",
+                isActive("/my-coupons")
+                  ? "border-[#2491ef] bg-[#eef5ff] text-[#2491ef]"
+                  : "border-slate-200 bg-white text-slate-700 hover:border-slate-300",
+              ]}
             >
-              <span class="flex h-6 w-6 items-center justify-center rounded-full bg-gradient-to-tr from-[#0499FA] to-[#36ADFB] text-[11px] font-black text-white shadow-2xs">
+              <span class="flex h-6 w-6 items-center justify-center rounded-full bg-[#2491ef] text-[11px] font-black text-white">
                 {user.name.charAt(0).toUpperCase()}
               </span>
-              <span class="max-w-[100px] truncate">{user.name}</span>
+              <span class="hidden max-w-24 truncate sm:inline">
+                {user.name}
+              </span>
             </a>
 
             <!-- Single Universal Logout Button -->
             <button
               type="button"
               id="navbar-logout-btn"
-              class="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-bold text-slate-600 transition hover:border-rose-300 hover:bg-rose-50 hover:text-rose-600 shadow-2xs cursor-pointer"
               title="Log Out"
+              class="inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs font-semibold text-slate-600 transition hover:border-rose-300 hover:bg-rose-50 hover:text-rose-600"
             >
-              <svg class="h-3.5 w-3.5 text-rose-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
               </svg>
-              <span class="hidden sm:inline">Log Out</span>
+              <span>Logout</span>
             </button>
           </div>
         ) : (
           <div class="flex items-center gap-2">
             <a
               href="/login"
-              class="px-3 py-1.5 text-xs font-bold text-[#081126] transition hover:text-[#0499FA]"
+              class="px-2.5 py-1.5 text-xs font-bold text-[#2491ef] hover:underline"
             >
               Sign In
             </a>
             <a
               href="/login?mode=register"
-              class="inline-flex items-center gap-1.5 rounded-full bg-[#0499FA] px-4.5 py-2 text-xs font-black text-white shadow-md shadow-[#0499FA]/20 transition hover:bg-[#0377c4] active:scale-95"
+              class="rounded-lg bg-[#2491ef] px-3.5 py-1.5 text-xs font-bold text-white shadow-xs transition hover:bg-[#129fea] active:scale-95"
             >
-              <span>Sign Up</span>
-              <span class="text-xs">→</span>
+              Sign Up
             </a>
           </div>
         )}
 
-        <!-- Mobile Menu Toggle -->
+        <!-- Mobile Drawer Toggle -->
         <button
           type="button"
           id="mobile-menu-toggle"
           aria-label="Toggle navigation menu"
           aria-expanded="false"
-          class="flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-700 shadow-2xs md:hidden"
+          class="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-700 md:hidden"
         >
           <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
@@ -171,112 +165,99 @@ function isActive(href: string): boolean {
     </div>
   </div>
 
-  <!-- Tier 3: Couponly Midnight Navy Navigation Bar (#0A1633) -->
-  <nav class="hidden bg-[#0A1633] text-white md:block shadow-md" aria-label="Main Navigation">
+  <!-- Tier 3: Category & Seasonal Nav Bar (GrabOn Style Horizontal Links + Event Capsule) -->
+  <div class="hidden border-b border-slate-200/80 bg-white lg:block">
     <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-2 sm:px-6 lg:px-8">
-      <div class="flex items-center gap-1">
+      <nav class="flex items-center gap-6 text-xs font-bold text-slate-700" aria-label="Sub Navigation">
+        <a href="/" class:list={["transition hover:text-[#2491ef]", currentPath === "/" ? "text-[#2491ef]" : ""]}>
+          Home
+        </a>
         {navLinks.map((link) => (
           <a
             href={link.href}
             class:list={[
-              "rounded-full px-4 py-1.5 text-xs font-bold transition",
-              isActive(link.href)
-                ? "bg-[#0499FA] text-white shadow-xs font-black"
-                : "text-slate-200 hover:bg-white/10 hover:text-white",
+              "transition hover:text-[#2491ef]",
+              isActive(link.href) ? "text-[#2491ef]" : "",
             ]}
           >
             {link.label}
           </a>
         ))}
-      </div>
+      </nav>
 
-      <div class="flex items-center gap-3">
-        <a
-          href="/admin"
-          class="rounded-full bg-white/10 px-3.5 py-1 text-xs font-bold text-slate-300 transition hover:bg-white/20 hover:text-white"
-        >
-          🛡️ Admin Portal
-        </a>
-      </div>
+      <!-- GrabOn signature dark navy event capsule pill -->
+      <a
+        href="/coupons?sort=popular"
+        class="inline-flex items-center gap-1.5 rounded-full bg-[#191f2e] px-3.5 py-1 text-[11px] font-bold text-white transition hover:bg-black shadow-2xs"
+      >
+        <span class="text-amber-400">⚡</span>
+        <span>Festival Mega Deals</span>
+        <span class="rounded-full bg-[#60a600] px-1.5 text-[9px] font-extrabold uppercase text-white">UP TO 80% OFF</span>
+      </a>
     </div>
-  </nav>
+  </div>
 
   <!-- Mobile Drawer -->
   <div
     id="mobile-menu"
-    class="hidden border-t border-slate-200 bg-white px-4 py-4 md:hidden shadow-lg"
+    class="hidden border-b border-slate-200 bg-white px-4 py-4 shadow-xl md:hidden"
   >
-    <!-- Mobile Search Form -->
-    <form action="/coupons" method="GET" class="mb-3 flex items-center rounded-full border border-slate-200 bg-white p-1">
+    <form
+      action="/coupons"
+      method="GET"
+      class="mb-3 flex items-center rounded-lg border border-slate-300 bg-[#f8fafc] p-1"
+    >
       <input
         type="search"
         name="q"
-        placeholder="Search deals..."
-        class="w-full bg-transparent px-3 py-1 text-xs text-slate-800 outline-none"
+        placeholder="Search brands, deals, coupons…"
+        class="w-full bg-transparent px-3 py-1.5 text-xs text-slate-800 placeholder-slate-400 outline-none"
       />
-      <button type="submit" class="flex h-7 w-7 items-center justify-center rounded-full bg-[#FF7A18] text-white">
+      <button
+        type="submit"
+        aria-label="Search"
+        class="flex h-7 w-7 items-center justify-center rounded-md bg-[#2491ef] text-white shrink-0"
+      >
         <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
         </svg>
       </button>
     </form>
 
-    <div class="flex flex-col gap-1.5">
-      {navLinks.map((link) => (
-        <a
-          href={link.href}
-          class:list={[
-            "rounded-xl px-3.5 py-2.5 text-sm font-bold",
-            isActive(link.href)
-              ? "bg-[#EAF6FE] text-[#0499FA] font-black"
-              : "text-slate-700 hover:bg-slate-50",
-          ]}
-        >
-          {link.label}
-        </a>
-      ))}
+    <div class="flex flex-col gap-1 text-sm font-semibold text-slate-700">
+      <a href="/" class="rounded-lg px-3 py-2 hover:bg-[#eef5ff] hover:text-[#2491ef]">Home</a>
+      <a href="/stores" class="rounded-lg px-3 py-2 hover:bg-[#eef5ff] hover:text-[#2491ef]">Top Stores</a>
+      <a href="/categories" class="rounded-lg px-3 py-2 hover:bg-[#eef5ff] hover:text-[#2491ef]">Categories</a>
+      <a href="/coupons" class="rounded-lg px-3 py-2 hover:bg-[#eef5ff] hover:text-[#2491ef]">All Coupons</a>
+      <a href="/coupons?sort=popular" class="rounded-lg px-3 py-2 text-[#e65100] font-bold hover:bg-orange-50">🔥 Deals of the Day</a>
+      <a href="/submit-coupon" class="rounded-lg px-3 py-2 text-[#2491ef] font-bold hover:bg-[#eef5ff]">+ Submit Coupon</a>
 
       {user ? (
-        <div class="mt-2 border-t border-slate-100 pt-3">
-          <a
-            href="/my-coupons"
-            class="flex items-center justify-between rounded-xl bg-[#EAF6FE] px-3.5 py-2.5 text-sm font-bold text-[#0499FA]"
-          >
-            <span>My Submitted Coupons</span>
-            <span class="rounded-full bg-[#0499FA] px-2.5 py-0.5 text-xs font-black text-white">
-              {user.name}
-            </span>
+        <div class="mt-2 border-t border-slate-100 pt-2">
+          <a href="/my-coupons" class="flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-[#eef5ff]">
+            <span>👤 My Submitted Coupons ({user.name})</span>
           </a>
           <button
             type="button"
             id="mobile-logout-btn"
-            class="mt-2 w-full rounded-xl bg-rose-50 px-3.5 py-2 text-left text-sm font-bold text-rose-700 transition hover:bg-rose-100"
+            class="mt-1 w-full rounded-lg bg-rose-50 px-3 py-2 text-left text-sm font-bold text-rose-600 transition hover:bg-rose-100"
           >
             Log Out
           </button>
         </div>
       ) : (
-        <div class="mt-2 border-t border-slate-100 pt-3 flex gap-2">
-          <a
-            href="/login"
-            class="flex-1 rounded-full border border-slate-200 py-2.5 text-center text-xs font-bold text-[#081126]"
-          >
+        <div class="mt-3 flex gap-2 border-t border-slate-100 pt-3">
+          <a href="/login" class="flex-1 rounded-lg border border-slate-300 py-2 text-center text-xs font-bold text-slate-700">
             Sign In
           </a>
-          <a
-            href="/login?mode=register"
-            class="flex-1 rounded-full bg-[#0499FA] py-2.5 text-center text-xs font-bold text-white shadow-xs"
-          >
+          <a href="/login?mode=register" class="flex-1 rounded-lg bg-[#2491ef] py-2 text-center text-xs font-bold text-white">
             Sign Up
           </a>
         </div>
       )}
 
-      <a
-        href="/admin"
-        class="mt-2 rounded-xl border border-dashed border-slate-300 py-2 text-center text-xs font-bold text-slate-500 hover:bg-slate-50"
-      >
-        Admin Portal →
+      <a href="/admin" class="mt-2 rounded-lg border border-dashed border-slate-200 py-2 text-center text-xs font-bold text-slate-500 hover:bg-slate-50">
+        🛡️ Admin Portal
       </a>
     </div>
   </div>

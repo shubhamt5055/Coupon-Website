@@ -1,20 +1,5 @@
 @import "tailwindcss";
 
-@theme {
-  --color-primary: #0499FA;
-  --color-primary-dark: #0377c4;
-  --color-primary-light: #EAF6FE;
-  --color-accent: #FF7A18;
-  --color-accent-dark: #E6680C;
-  --color-accent-light: #FFF2E8;
-  --color-announcement: #FFEDE1;
-  --color-heading: #081126;
-  --color-navy: #0A1633;
-  --color-navy-dark: #091024;
-  --color-body: #52606D;
-  --color-bg-base: #F8FAFC;
-}
-
 @layer base {
   html {
     scroll-behavior: smooth;
@@ -23,14 +8,14 @@
 
   body {
     margin: 0;
-    background-color: #F8FAFC;
-    color: #52606D;
+    background-color: #f4f7fb;
+    color: #334155;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 
   ::selection {
-    background-color: #0499FA;
+    background-color: #2491ef;
     color: #ffffff;
   }
 
@@ -40,9 +25,13 @@
   }
 }
 
-/* Couponly voucher promo dashed line */
+/* GrabOn ticket dashed lines */
 .ticket-dashed-line {
-  border-bottom: 2px dashed rgba(255, 122, 24, 0.35);
+  border-bottom: 2px dashed #cbd5e1;
+}
+
+.ticket-dashed-vertical {
+  border-right: 2px dashed #cbd5e1;
 }
 
 /* Subtle pulse glow for live verified badges */

@@ -2,147 +2,180 @@
 const year = new Date().getFullYear();
 ---
 
-<footer class="mt-20 bg-[#091024] text-slate-300">
-  <!-- Pre-Footer Support / Newsletter CTA Strip -->
-  <div class="border-b border-white/10 bg-[#0A1633] py-8">
+<footer class="mt-16 bg-[#191f2e] text-slate-300">
+  <!-- GrabOn Pre-Footer Newsletter Subscription Widget -->
+  <div class="border-b border-slate-700/60 bg-[#eef5ff] py-10 text-slate-800">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-      <div class="flex flex-col items-center justify-between gap-6 md:flex-row">
-        <div>
-          <span class="inline-flex items-center gap-1.5 rounded-full bg-[#FFEDE1] px-3 py-1 text-xs font-black text-[#FF7A18]">
-            <span>⚡ Never Miss a Deal</span>
-          </span>
-          <h3 class="mt-2 text-xl font-black tracking-tight text-white sm:text-2xl">
-            Get the Best Coupons Delivered to Your Inbox
-          </h3>
-          <p class="mt-1 text-xs text-slate-400">
-            Join 50,000+ smart shoppers who save an average of ₹450 per checkout with verified promo codes.
-          </p>
+      <div class="flex flex-col items-center justify-between gap-6 lg:flex-row">
+        <div class="flex items-center gap-4 text-center lg:text-left">
+          <div class="hidden sm:flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#2491ef] text-white shadow-md">
+            <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+            </svg>
+          </div>
+          <div>
+            <span class="inline-flex items-center gap-1.5 rounded-full bg-[#2491ef]/10 px-3 py-0.5 text-xs font-bold text-[#2491ef]">
+              <span class="h-1.5 w-1.5 rounded-full bg-[#60a600] animate-soft-pulse"></span>
+              Never Miss A Discount
+            </span>
+            <h3 class="mt-1 text-xl font-extrabold tracking-tight text-[#191f2e] sm:text-2xl">
+              Subscribe Now — Get Latest Coupon &amp; Promo Code Alerts
+            </h3>
+            <p class="mt-0.5 text-xs text-slate-600">
+              Join over 100,000+ smart shoppers saving money with verified offers delivered daily.
+            </p>
+          </div>
         </div>
 
-        <form class="flex w-full max-w-md items-center gap-2 sm:w-auto" onsubmit="event.preventDefault(); alert('Thank you! You have subscribed to CouponHub deal alerts.');">
+        <form
+          class="flex w-full max-w-md items-center gap-2 sm:w-auto"
+          onsubmit="event.preventDefault(); alert('Thank you! You have subscribed to CouponHub daily discount alerts.');"
+        >
           <div class="relative flex-1 sm:w-72">
             <input
               type="email"
               required
-              placeholder="Enter your email address..."
-              class="w-full rounded-full border border-white/15 bg-white/5 py-2.5 pr-4 pl-5 text-xs font-medium text-white placeholder-slate-400 outline-none transition focus:border-[#0499FA] focus:bg-white/10 focus:ring-2 focus:ring-[#0499FA]/30"
+              placeholder="Enter your email address…"
+              class="w-full rounded-lg border border-slate-300 bg-white py-2.5 pr-4 pl-4 text-xs font-medium text-slate-800 placeholder-slate-400 outline-none transition focus:border-[#2491ef] focus:ring-2 focus:ring-[#2491ef]/20"
             />
           </div>
           <button
             type="submit"
-            class="shrink-0 inline-flex items-center gap-1.5 rounded-full bg-[#FF7A18] px-6 py-2.5 text-xs font-black text-white transition hover:bg-[#E6680C] active:scale-95 shadow-md shadow-[#FF7A18]/20"
+            class="shrink-0 inline-flex items-center justify-center rounded-lg bg-[#2491ef] px-6 py-2.5 text-xs font-bold text-white uppercase tracking-wider transition hover:bg-[#129fea] active:scale-95 shadow-sm"
           >
-            <span>Subscribe</span>
-            <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-            </svg>
+            SUBSCRIBE NOW
           </button>
         </form>
       </div>
     </div>
   </div>
 
-  <!-- Main Links Grid -->
+  <!-- Main Dark Footer Directory -->
   <div class="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
     <div class="grid gap-10 sm:grid-cols-2 lg:grid-cols-5">
-      <!-- Brand & Mission Column -->
+      <!-- Column 1: Brand & Slogan -->
       <div class="lg:col-span-2">
-        <a href="/" class="group inline-flex items-center gap-2.5 text-white">
-          <div class="relative flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-tr from-[#0499FA] to-[#36ADFB] text-white shadow-md shadow-[#0499FA]/20 group-hover:scale-105 transition-transform">
-            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/>
-              <line x1="7" y1="7" x2="7.01" y2="7"/>
+        <a href="/" class="group inline-flex flex-col text-white">
+          <div class="flex items-center text-2xl font-black tracking-tight text-white">
+            <span>Coupon</span>
+            <span class="text-[#2491ef]">Hub</span>
+            <svg class="ml-1 h-3.5 w-6 text-[#60a600]" viewBox="0 0 24 12" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round">
+              <path d="M2 2c5 8 15 8 20 0" />
             </svg>
-            <span class="absolute -bottom-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-[#FF7A18] ring-2 ring-[#091024]">
-              <span class="h-1.5 w-1.5 rounded-full bg-white"></span>
-            </span>
           </div>
-          <div class="flex flex-col">
-            <span class="text-xl font-black tracking-tight text-white">
-              Coupon<span class="text-[#0499FA]">Hub</span>
-            </span>
-            <span class="text-[10px] font-bold tracking-wider text-slate-400 uppercase -mt-0.5">
-              Verified Deals Hub
-            </span>
-          </div>
+          <span class="text-[9px] font-extrabold tracking-widest text-[#60a600] uppercase mt-0.5">
+            SAVE ON EVERYTHING
+          </span>
         </a>
 
         <p class="mt-4 max-w-sm text-xs leading-relaxed text-slate-400">
-          CouponHub is India's leading community-driven verified coupons platform. We hand-test promo codes across top online stores every day so you always get maximum savings.
+          CouponHub is India’s fastest growing coupons and deals destination. We hand-verify promo codes every single day across top online shopping sites, food delivery, fashion, electronics, and travel.
         </p>
 
-        <!-- Social Media Circular Icons -->
+        <!-- Social Icons -->
         <div class="mt-6 flex items-center gap-2.5">
-          <a href="#" aria-label="Facebook" class="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-slate-300 transition hover:bg-[#0499FA] hover:text-white">
-            <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          <a
+            href="#"
+            aria-label="Facebook"
+            class="flex h-8 w-8 items-center justify-center rounded-full bg-slate-800 text-slate-400 transition hover:bg-[#2491ef] hover:text-white"
+          >
+            <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+            </svg>
           </a>
-          <a href="#" aria-label="Twitter" class="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-slate-300 transition hover:bg-[#0499FA] hover:text-white">
-            <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          <a
+            href="#"
+            aria-label="Twitter"
+            class="flex h-8 w-8 items-center justify-center rounded-full bg-slate-800 text-slate-400 transition hover:bg-[#2491ef] hover:text-white"
+          >
+            <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+            </svg>
           </a>
-          <a href="#" aria-label="Instagram" class="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-slate-300 transition hover:bg-[#FF7A18] hover:text-white">
-            <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-          </a>
-          <a href="#" aria-label="LinkedIn" class="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-slate-300 transition hover:bg-[#0499FA] hover:text-white">
-            <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+          <a
+            href="#"
+            aria-label="Instagram"
+            class="flex h-8 w-8 items-center justify-center rounded-full bg-slate-800 text-slate-400 transition hover:bg-[#2491ef] hover:text-white"
+          >
+            <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+            </svg>
           </a>
         </div>
       </div>
 
-      <!-- Column 2: Quick Links -->
+      <!-- Column 2: Popular Stores -->
       <div>
-        <h4 class="text-xs font-black tracking-wider text-white uppercase">
-          Quick Links
-        </h4>
-        <ul class="mt-4 space-y-2.5 text-xs font-medium text-slate-400">
-          <li><a href="/" class="hover:text-[#0499FA] transition">Home</a></li>
-          <li><a href="/coupons" class="hover:text-[#0499FA] transition">Browse Coupons</a></li>
-          <li><a href="/stores" class="hover:text-[#0499FA] transition">Top Stores</a></li>
-          <li><a href="/categories" class="hover:text-[#0499FA] transition">Categories</a></li>
-          <li><a href="/submit-coupon" class="hover:text-[#0499FA] transition">+ Submit a Coupon</a></li>
-          <li><a href="/my-coupons" class="hover:text-[#0499FA] transition">My Saved Deals</a></li>
+        <div class="mb-4 flex items-center gap-2">
+          <h4 class="text-xs font-black tracking-wider text-[#c2f03e] uppercase">
+            Popular Stores
+          </h4>
+          <span class="h-1 w-1 rounded-full bg-[#c2f03e]"></span>
+        </div>
+        <ul class="space-y-2 text-xs font-medium text-slate-400">
+          <li><a href="/stores/amazon" class="hover:text-white transition">Amazon Coupons</a></li>
+          <li><a href="/stores/flipkart" class="hover:text-white transition">Flipkart Offers</a></li>
+          <li><a href="/stores/swiggy" class="hover:text-white transition">Swiggy Food &amp; Instamart</a></li>
+          <li><a href="/stores/zomato" class="hover:text-white transition">Zomato Gold Promo</a></li>
+          <li><a href="/stores/myntra" class="hover:text-white transition">Myntra Fashion Coupons</a></li>
+          <li><a href="/stores" class="text-[#2491ef] font-bold hover:underline transition">All 50+ Stores →</a></li>
         </ul>
       </div>
 
-      <!-- Column 3: Popular Categories -->
+      <!-- Column 3: Top Categories -->
       <div>
-        <h4 class="text-xs font-black tracking-wider text-white uppercase">
-          Top Categories
-        </h4>
-        <ul class="mt-4 space-y-2.5 text-xs font-medium text-slate-400">
-          <li><a href="/categories/food" class="hover:text-[#FF7A18] transition">🍔 Food &amp; Dining</a></li>
-          <li><a href="/categories/fashion" class="hover:text-[#FF7A18] transition">👗 Fashion &amp; Apparel</a></li>
-          <li><a href="/categories/electronics" class="hover:text-[#FF7A18] transition">📱 Electronics &amp; Tech</a></li>
-          <li><a href="/categories/travel" class="hover:text-[#FF7A18] transition">✈️ Travel &amp; Hotels</a></li>
-          <li><a href="/categories/beauty" class="hover:text-[#FF7A18] transition">💄 Beauty &amp; Health</a></li>
-          <li><a href="/categories" class="text-[#0499FA] font-bold hover:underline">All Categories →</a></li>
+        <div class="mb-4 flex items-center gap-2">
+          <h4 class="text-xs font-black tracking-wider text-[#c2f03e] uppercase">
+            Top Categories
+          </h4>
+          <span class="h-1 w-1 rounded-full bg-[#c2f03e]"></span>
+        </div>
+        <ul class="space-y-2 text-xs font-medium text-slate-400">
+          <li><a href="/categories/food" class="hover:text-white transition">Food &amp; Dining</a></li>
+          <li><a href="/categories/fashion" class="hover:text-white transition">Fashion &amp; Apparel</a></li>
+          <li><a href="/categories/electronics" class="hover:text-white transition">Electronics &amp; Gadgets</a></li>
+          <li><a href="/categories/travel" class="hover:text-white transition">Travel &amp; Flights</a></li>
+          <li><a href="/categories/beauty" class="hover:text-white transition">Beauty &amp; Personal Care</a></li>
+          <li><a href="/categories" class="text-[#2491ef] font-bold hover:underline transition">View All Categories →</a></li>
         </ul>
       </div>
 
-      <!-- Column 4: Top Stores -->
+      <!-- Column 4: Quick Links & Help -->
       <div>
-        <h4 class="text-xs font-black tracking-wider text-white uppercase">
-          Featured Brands
-        </h4>
-        <ul class="mt-4 space-y-2.5 text-xs font-medium text-slate-400">
-          <li><a href="/stores/amazon" class="hover:text-[#0499FA] transition">Amazon India</a></li>
-          <li><a href="/stores/flipkart" class="hover:text-[#0499FA] transition">Flipkart Offers</a></li>
-          <li><a href="/stores/zomato" class="hover:text-[#0499FA] transition">Zomato Gold</a></li>
-          <li><a href="/stores/swiggy" class="hover:text-[#0499FA] transition">Swiggy Instamart</a></li>
-          <li><a href="/stores/myntra" class="hover:text-[#0499FA] transition">Myntra Fashion</a></li>
-          <li><a href="/stores" class="text-[#FF7A18] font-bold hover:underline">View All Stores →</a></li>
+        <div class="mb-4 flex items-center gap-2">
+          <h4 class="text-xs font-black tracking-wider text-[#c2f03e] uppercase">
+            Speciality Pages
+          </h4>
+          <span class="h-1 w-1 rounded-full bg-[#c2f03e]"></span>
+        </div>
+        <ul class="space-y-2 text-xs font-medium text-slate-400">
+          <li><a href="/coupons" class="hover:text-white transition">All Verified Coupons</a></li>
+          <li><a href="/coupons?sort=popular" class="hover:text-white transition">Trending Offers of the Day</a></li>
+          <li><a href="/submit-coupon" class="hover:text-white transition">+ Submit A Coupon</a></li>
+          <li><a href="/my-coupons" class="hover:text-white transition">My Submitted Coupons</a></li>
+          <li><a href="/login" class="hover:text-white transition">User Account Login</a></li>
+          <li><a href="/admin" class="text-[#60a600] font-bold hover:underline transition">🛡️ Admin Portal</a></li>
         </ul>
       </div>
     </div>
 
+    <!-- Affiliate Disclosure Strip (GrabOn Style) -->
+    <div class="mt-12 rounded-xl border border-slate-700/60 bg-slate-800/40 p-4 text-[11px] leading-relaxed text-slate-400">
+      <span class="font-bold text-slate-300">Disclaimer &amp; Affiliate Disclosure:</span>
+      CouponHub is an independent discount coupon and deal discovery platform. We may earn an affiliate commission when you click on store links and complete a purchase. This never adds any extra cost to your order and supports our team in verifying coupons daily.
+    </div>
+
     <!-- Bottom Copyright Bar -->
-    <div class="mt-12 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-8 text-xs font-medium text-slate-400 sm:flex-row">
-      <p>Copyright © {year} CouponHub. All rights reserved.</p>
-      <div class="flex items-center gap-4 text-slate-400">
-        <a href="/coupons" class="hover:text-white transition">Explore Deals</a>
+    <div class="mt-8 flex flex-col items-center justify-between gap-4 border-t border-slate-700/60 pt-6 text-xs text-slate-500 sm:flex-row">
+      <p>© {year} CouponHub — Save On Everything. All rights reserved.</p>
+      <div class="flex items-center gap-4 text-slate-400 text-xs">
+        <a href="/" class="hover:text-white transition">Home</a>
         <span>•</span>
-        <a href="/submit-coupon" class="hover:text-white transition">Share Coupon</a>
+        <a href="/coupons" class="hover:text-white transition">Coupons</a>
         <span>•</span>
-        <a href="/admin" class="font-bold text-[#FF7A18] hover:text-white transition">Admin Portal</a>
+        <a href="/stores" class="hover:text-white transition">Stores</a>
+        <span>•</span>
+        <a href="/submit-coupon" class="hover:text-white transition">Submit</a>
       </div>
     </div>
   </div>

@@ -1,6 +1,10 @@
 ---
 import type { Store } from "../lib/types";
-import { getStoreColorClass, getStoreInitials, safeImageUrl } from "../lib/format";
+import {
+  getStoreColorClass,
+  getStoreInitials,
+  safeImageUrl,
+} from "../lib/format";
 
 interface Props {
   store: Pick<Store, "name" | "slug" | "logo_url">;
@@ -23,42 +27,85 @@ const sizeClasses = {
     src={logo}
     alt={`${store.name} logo`}
     loading="lazy"
-    class:list={[
-      "object-contain bg-white p-1",
-      sizeClasses,
-    ]}
+    class:list={["object-contain bg-white p-1", sizeClasses]}
   />
 ) : key.includes("amazon") ? (
-  <div class:list={["flex items-center justify-center font-black bg-slate-900 text-amber-400 select-none shadow-xs", sizeClasses]}>
+  <div
+    class:list={[
+      "flex items-center justify-center font-black bg-slate-900 text-amber-400 select-none shadow-xs",
+      sizeClasses,
+    ]}
+  >
     <span class="tracking-tight text-[11px] leading-none">amzn</span>
   </div>
 ) : key.includes("flipkart") ? (
-  <div class:list={["flex items-center justify-center font-black bg-[#2874f0] text-yellow-300 select-none shadow-xs", sizeClasses]}>
+  <div
+    class:list={[
+      "flex items-center justify-center font-black bg-[#2874f0] text-yellow-300 select-none shadow-xs",
+      sizeClasses,
+    ]}
+  >
     <span class="tracking-tight italic text-sm leading-none">fk</span>
   </div>
 ) : key.includes("zomato") ? (
-  <div class:list={["flex items-center justify-center font-black bg-[#e23744] text-white select-none shadow-xs", sizeClasses]}>
+  <div
+    class:list={[
+      "flex items-center justify-center font-black bg-[#e23744] text-white select-none shadow-xs",
+      sizeClasses,
+    ]}
+  >
     <span class="tracking-tighter italic text-[11px] leading-none">zomato</span>
   </div>
 ) : key.includes("swiggy") ? (
-  <div class:list={["flex items-center justify-center font-black bg-[#fc8019] text-white select-none shadow-xs", sizeClasses]}>
+  <div
+    class:list={[
+      "flex items-center justify-center font-black bg-[#fc8019] text-white select-none shadow-xs",
+      sizeClasses,
+    ]}
+  >
     <span class="tracking-wider text-base leading-none">S</span>
   </div>
 ) : key.includes("myntra") ? (
-  <div class:list={["flex items-center justify-center font-black bg-gradient-to-tr from-[#ff3f6c] via-[#ff905a] to-[#f13ab1] text-white select-none shadow-xs", sizeClasses]}>
+  <div
+    class:list={[
+      "flex items-center justify-center font-black bg-linear-to-tr from-[#ff3f6c] via-[#ff905a] to-[#f13ab1] text-white select-none shadow-xs",
+      sizeClasses,
+    ]}
+  >
     <span class="tracking-tight text-sm font-black leading-none">M</span>
   </div>
 ) : key.includes("makemytrip") ? (
-  <div class:list={["flex items-center justify-center font-black bg-[#008cff] text-white select-none shadow-xs", sizeClasses]}>
-    <span class="tracking-tighter text-[11px] font-black text-rose-200 leading-none">MMT</span>
+  <div
+    class:list={[
+      "flex items-center justify-center font-black bg-[#008cff] text-white select-none shadow-xs",
+      sizeClasses,
+    ]}
+  >
+    <span class="tracking-tighter text-[11px] font-black text-rose-200 leading-none">
+      MMT
+    </span>
   </div>
 ) : key.includes("nykaa") ? (
-  <div class:list={["flex items-center justify-center font-black bg-[#fc2779] text-white select-none shadow-xs", sizeClasses]}>
-    <span class="tracking-widest text-[9px] font-extrabold uppercase leading-none">NYK</span>
+  <div
+    class:list={[
+      "flex items-center justify-center font-black bg-[#fc2779] text-white select-none shadow-xs",
+      sizeClasses,
+    ]}
+  >
+    <span class="tracking-widest text-[9px] font-extrabold uppercase leading-none">
+      NYK
+    </span>
   </div>
 ) : key.includes("croma") ? (
-  <div class:list={["flex items-center justify-center font-black bg-[#00b5b8] text-white select-none shadow-xs", sizeClasses]}>
-    <span class="tracking-tight text-[11px] font-extrabold leading-none">croma</span>
+  <div
+    class:list={[
+      "flex items-center justify-center font-black bg-[#00b5b8] text-white select-none shadow-xs",
+      sizeClasses,
+    ]}
+  >
+    <span class="tracking-tight text-[11px] font-extrabold leading-none">
+      croma
+    </span>
   </div>
 ) : (
   <div

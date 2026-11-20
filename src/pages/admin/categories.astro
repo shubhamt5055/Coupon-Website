@@ -7,47 +7,115 @@ const categories = await getCategoriesWithCounts(getDb());
 const adminUser = Astro.locals.adminUser ?? "admin";
 ---
 
-<AdminLayout title="Manage Categories — Admin | CouponHub" adminUser={adminUser}>
+<AdminLayout
+  title="Manage Categories — Admin | CouponHub"
+  adminUser={adminUser}
+>
+  <!-- Header Banner (GrabOn Style) -->
+  <div class="mb-8 flex flex-wrap items-center justify-between gap-4 rounded-xl border border-slate-200 bg-white p-6 shadow-2xs">
+    <div>
+      <h1 class="text-2xl font-extrabold text-[#191f2e]">Manage Categories</h1>
+      <p class="mt-1 text-xs text-slate-500">
+        Add new shopping categories and keep your coupons neatly organized.
+      </p>
+    </div>
+    <span class="rounded-full bg-[#eef5ff] border border-[#2491ef]/20 px-4 py-1.5 text-xs font-bold text-[#2491ef]">
+      {categories.length} Categories Live
+    </span>
+  </div>
+
   <div class="grid gap-8 lg:grid-cols-3">
+    <!-- Add form -->
     <div class="lg:col-span-1">
-      <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs">
-        <h1 class="text-lg font-black text-[#081126]">Add Category</h1>
-        <div id="cat-error" class="mt-4 hidden rounded-xl bg-rose-50 p-3 text-xs font-semibold text-rose-700"></div>
+      <div class="rounded-xl border border-slate-200 bg-white p-6 shadow-2xs lg:sticky lg:top-24">
+        <h2 class="flex items-center gap-2 text-base font-bold text-[#191f2e]">
+          <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-[#eef5ff] text-base text-[#2491ef]">
+            ＋
+          </span>
+          <span>Add New Category</span>
+        </h2>
+
+        <div
+          id="cat-error"
+          class="mt-4 hidden rounded-lg bg-rose-50 p-3 text-xs font-semibold text-rose-700"
+        ></div>
 
         <form id="add-cat-form" class="mt-4 space-y-4">
           <div>
-            <label for="cat-name" class="mb-1 block text-xs font-bold uppercase text-slate-600">Category Name *</label>
-            <input id="cat-name" name="name" type="text" required placeholder="e.g., Gaming" class="w-full rounded-xl border border-slate-300 bg-slate-50 px-3.5 py-2 text-sm outline-none transition focus:border-[#0499FA] focus:bg-white focus:ring-4 focus:ring-[#0499FA]/15" />
+            <label
+              for="cat-name"
+              class="mb-1 block text-xs font-bold text-[#191f2e]"
+            >
+              Category Name *
+            </label>
+            <input
+              id="cat-name"
+              name="name"
+              type="text"
+              required
+              placeholder="e.g., Gaming &amp; Gadgets"
+              class="w-full rounded-lg border border-slate-300 bg-[#f8fafc] px-3.5 py-2 text-xs sm:text-sm text-[#191f2e] outline-none transition focus:border-[#2491ef] focus:bg-white focus:ring-2 focus:ring-[#2491ef]/20"
+            />
           </div>
           <div>
-            <label for="cat-slug" class="mb-1 block text-xs font-bold uppercase text-slate-600">Slug (auto if blank)</label>
-            <input id="cat-slug" name="slug" type="text" placeholder="gaming" class="w-full rounded-xl border border-slate-300 bg-slate-50 px-3.5 py-2 text-sm outline-none transition focus:border-[#0499FA] focus:bg-white focus:ring-4 focus:ring-[#0499FA]/15" />
+            <label
+              for="cat-slug"
+              class="mb-1 block text-xs font-bold text-[#191f2e]"
+            >
+              Slug (auto if blank)
+            </label>
+            <input
+              id="cat-slug"
+              name="slug"
+              type="text"
+              placeholder="gaming"
+              class="w-full rounded-lg border border-slate-300 bg-[#f8fafc] px-3.5 py-2 text-xs sm:text-sm text-[#191f2e] outline-none transition focus:border-[#2491ef] focus:bg-white focus:ring-2 focus:ring-[#2491ef]/20"
+            />
           </div>
           <div>
-            <label for="cat-icon" class="mb-1 block text-xs font-bold uppercase text-slate-600">Icon Emoji</label>
-            <input id="cat-icon" name="icon" type="text" value="🏷️" class="w-full rounded-xl border border-slate-300 bg-slate-50 px-3.5 py-2 text-sm outline-none transition focus:border-[#0499FA] focus:bg-white focus:ring-4 focus:ring-[#0499FA]/15" />
+            <label
+              for="cat-icon"
+              class="mb-1 block text-xs font-bold text-[#191f2e]"
+            >
+              Icon Emoji
+            </label>
+            <input
+              id="cat-icon"
+              name="icon"
+              type="text"
+              value="🏷️"
+              class="w-full rounded-lg border border-slate-300 bg-[#f8fafc] px-3.5 py-2 text-lg text-[#191f2e] outline-none transition focus:border-[#2491ef] focus:bg-white focus:ring-2 focus:ring-[#2491ef]/20"
+            />
           </div>
-          <button type="submit" class="w-full rounded-xl bg-[#0499FA] py-2.5 text-sm font-bold text-white shadow-xs transition hover:bg-[#0377C4]">
-            Add Category
+          <button
+            type="submit"
+            class="w-full rounded-lg bg-[#2491ef] py-2.5 text-xs font-bold uppercase tracking-wider text-white shadow-2xs transition hover:bg-[#129fea] active:scale-95"
+          >
+            Create Category
           </button>
         </form>
       </div>
     </div>
 
+    <!-- Existing Categories List -->
     <div class="lg:col-span-2">
-      <h2 class="mb-4 text-lg font-black text-[#081126]">
+      <h2 class="mb-4 text-base font-bold text-[#191f2e]">
         Existing Categories ({categories.length})
       </h2>
-      <div class="grid gap-4 sm:grid-cols-2">
+
+      <div class="grid gap-3 sm:grid-cols-2">
         {categories.map((cat) => (
-          <div data-cat-card={cat.id} class="flex items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white p-4">
-            <div class="flex items-center gap-3">
-              <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-[#EAF6FE] border border-[#0499FA]/20 text-xl text-[#0499FA]">
+          <div
+            data-cat-card={cat.id}
+            class="flex items-center justify-between gap-3 rounded-xl border border-slate-200 bg-white p-4 shadow-2xs transition hover:border-[#2491ef]"
+          >
+            <div class="flex min-w-0 items-center gap-3">
+              <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#eef5ff] text-xl text-[#2491ef]">
                 {cat.icon || "🏷️"}
               </span>
-              <div>
-                <p class="font-bold text-[#081126]">{cat.name}</p>
-                <p class="text-xs text-slate-500">
+              <div class="min-w-0">
+                <p class="truncate font-bold text-sm text-[#191f2e]">{cat.name}</p>
+                <p class="truncate text-xs text-slate-500">
                   /{cat.slug} · {cat.total_coupon_count ?? 0} coupons
                 </p>
               </div>
@@ -56,7 +124,7 @@ const adminUser = Astro.locals.adminUser ?? "admin";
               type="button"
               data-delete-cat={cat.id}
               data-cat-name={cat.name}
-              class="rounded-lg border border-rose-200 px-2.5 py-1 text-xs font-semibold text-rose-600 hover:bg-rose-50"
+              class="shrink-0 rounded-md border border-rose-200 bg-rose-50 px-2.5 py-1 text-xs font-bold text-rose-600 transition hover:bg-rose-500 hover:text-white"
             >
               Delete
             </button>
@@ -102,7 +170,9 @@ const adminUser = Astro.locals.adminUser ?? "admin";
       if (!confirm(`Delete "${name}" AND all coupons under it?`)) return;
       btn.disabled = true;
       try {
-        const res = await fetch(`/api/admin/categories/${id}`, { method: "DELETE" });
+        const res = await fetch(`/api/admin/categories/${id}`, {
+          method: "DELETE",
+        });
         if (res.ok) {
           document.querySelector(`[data-cat-card="${id}"]`)?.remove();
         } else {

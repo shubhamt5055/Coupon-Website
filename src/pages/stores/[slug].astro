@@ -29,52 +29,52 @@ const websiteUrl = store ? safeExternalUrl(store.website_url) : "#";
 ---
 
 <MainLayout
-  title={store ? `${store.name} Coupon Codes & Verified Promo Codes — CouponHub` : "Store Not Found | CouponHub"}
-  description={store ? `Verified ${store.name} promo codes and discount offers.` : "Store not found."}
+  title={store ? `${store.name} Coupons & Verified Promo Codes — CouponHub` : "Store Not Found | CouponHub"}
+  description={store ? `Verified ${store.name} promo codes, discount coupons, and daily offers on CouponHub.` : "Store not found."}
 >
   {!store ? (
     <section class="mx-auto max-w-2xl px-4 py-20 text-center">
-      <h1 class="text-3xl font-black text-[#081126]">Store Not Found</h1>
-      <p class="mt-2 text-sm text-slate-500">The store you are looking for does not exist or has been removed.</p>
-      <a href="/stores" class="mt-6 inline-block rounded-full bg-[#0499FA] px-7 py-3 text-sm font-black text-white shadow-md shadow-[#0499FA]/20 transition hover:bg-[#0377C4]">
+      <h1 class="text-3xl font-extrabold text-[#191f2e]">Store Not Found</h1>
+      <p class="mt-2 text-xs sm:text-sm text-slate-500">The store you are looking for does not exist or has been removed.</p>
+      <a href="/stores" class="mt-6 inline-block rounded-lg bg-[#2491ef] px-6 py-2.5 text-xs font-bold text-white shadow-2xs hover:bg-[#129fea]">
         Browse All Stores
       </a>
     </section>
   ) : (
-    <section class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
-      <!-- Breadcrumbs -->
-      <nav class="mb-5 flex items-center gap-2 text-xs font-semibold text-slate-400">
-        <a href="/" class="hover:text-[#0499FA] transition">Home</a>
+    <section class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+      <!-- Breadcrumbs (GrabOn Style) -->
+      <nav class="mb-5 flex items-center gap-2 text-xs font-medium text-slate-400">
+        <a href="/" class="hover:text-[#2491ef] transition">Home</a>
         <span>/</span>
-        <a href="/stores" class="hover:text-[#0499FA] transition">Stores</a>
+        <a href="/stores" class="hover:text-[#2491ef] transition">Stores</a>
         <span>/</span>
-        <span class="text-[#081126] font-bold">{store.name}</span>
+        <span class="text-[#191f2e] font-bold">{store.name}</span>
       </nav>
 
-      <!-- Store Hero Banner -->
-      <div class="relative mb-10 overflow-hidden rounded-2xl border border-slate-200/90 bg-white p-6 shadow-xs sm:p-8">
+      <!-- Store Hero Banner (GrabOn Style) -->
+      <div class="relative mb-8 overflow-hidden rounded-xl border border-slate-200 bg-white p-6 shadow-2xs">
         <div class="relative z-10 flex flex-col justify-between gap-6 lg:flex-row lg:items-center">
           <div class="flex items-start gap-4 sm:gap-5">
-            <div class="h-18 w-18 shrink-0 rounded-2xl border border-slate-200/90 bg-white p-2 shadow-xs flex items-center justify-center overflow-hidden">
+            <div class="h-16 w-16 shrink-0 rounded-xl border border-slate-200 bg-white p-2 shadow-2xs flex items-center justify-center overflow-hidden">
               <StoreLogo store={store} size="lg" />
             </div>
 
             <div>
               <div class="flex flex-wrap items-center gap-2">
-                <span class="inline-flex items-center gap-1.5 rounded-full border border-[#0499FA]/20 bg-[#EAF6FE] px-2.5 py-0.5 text-[11px] font-black text-[#0499FA]">
-                  <span class="h-1.5 w-1.5 rounded-full bg-[#0499FA] animate-soft-pulse"></span>
-                  <span>Verified Partner</span>
+                <span class="inline-flex items-center gap-1.5 rounded-full border border-[#2491ef]/20 bg-[#eef5ff] px-2.5 py-0.5 text-[11px] font-bold text-[#2491ef]">
+                  <span class="h-1.5 w-1.5 rounded-full bg-[#60a600] animate-soft-pulse"></span>
+                  <span>Verified Merchant</span>
                 </span>
                 <span class="text-xs font-semibold text-slate-400">
                   {coupons.length} {coupons.length === 1 ? "Offer Live" : "Offers Live"}
                 </span>
               </div>
 
-              <h1 class="mt-1.5 text-2xl font-black tracking-tight text-[#081126] sm:text-4xl">
+              <h1 class="mt-1 text-2xl font-extrabold tracking-tight text-[#191f2e] sm:text-3xl">
                 {store.name} Coupons &amp; Promo Codes
               </h1>
 
-              <p class="mt-1.5 max-w-2xl text-xs font-medium leading-relaxed text-slate-600 sm:text-sm">
+              <p class="mt-1 max-w-2xl text-xs sm:text-sm font-medium leading-relaxed text-slate-600">
                 {store.description || "Verified Online Coupons & Promo Codes"}
               </p>
             </div>
@@ -84,7 +84,7 @@ const websiteUrl = store ? safeExternalUrl(store.website_url) : "#";
           <div class="flex flex-wrap items-center gap-3">
             <a
               href={includeExpired ? `/stores/${store.slug}` : `/stores/${store.slug}?includeExpired=1`}
-              class="rounded-full border border-slate-200 bg-white px-4 py-2.5 text-xs font-bold text-slate-700 shadow-2xs transition hover:border-[#0499FA] hover:text-[#0499FA]"
+              class="rounded-lg border border-slate-200 bg-white px-3.5 py-2 text-xs font-bold text-slate-600 shadow-2xs transition hover:border-[#2491ef] hover:text-[#2491ef]"
             >
               {includeExpired ? "Hide Expired Deals" : "Include Expired Deals"}
             </a>
@@ -93,36 +93,42 @@ const websiteUrl = store ? safeExternalUrl(store.website_url) : "#";
                 href={websiteUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                class="inline-flex items-center gap-1.5 rounded-full bg-[#FF7A18] px-5 py-2.5 text-xs font-black text-white shadow-md shadow-[#FF7A18]/25 transition hover:bg-[#E6680C] active:scale-95"
+                class="inline-flex items-center gap-1.5 rounded-lg bg-[#2491ef] px-4 py-2 text-xs font-bold text-white shadow-2xs transition hover:bg-[#129fea] active:scale-95"
               >
                 <span>Visit {store.name}</span>
-                <span>↗</span>
+                <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                </svg>
               </a>
             )}
           </div>
         </div>
       </div>
 
-      <!-- Coupon Grid -->
-      {coupons.length === 0 ? (
-        <div class="rounded-2xl border border-dashed border-slate-300 bg-white p-14 text-center shadow-xs">
-          <p class="text-lg font-black text-[#081126]">
-            No active coupons for {store.name} right now.
-          </p>
-          <p class="mt-1 text-xs text-slate-500">
-            Check back soon or explore other partner stores.
-          </p>
-          <a href="/stores" class="mt-4 inline-block text-xs font-black text-[#0499FA] hover:underline">
-            Explore other partner stores →
-          </a>
+      <!-- Coupons Listing Grid -->
+      <div class="space-y-6">
+        <div class="flex items-center justify-between border-b border-slate-200 pb-3">
+          <h2 class="text-base font-bold text-[#191f2e]">
+            All {store.name} Offers ({coupons.length})
+          </h2>
+          <span class="text-xs font-semibold text-slate-500">Updated Daily</span>
         </div>
-      ) : (
-        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {coupons.map((coupon) => (
-            <CouponCard coupon={coupon} />
-          ))}
-        </div>
-      )}
+
+        {coupons.length === 0 ? (
+          <div class="rounded-xl border border-dashed border-slate-300 bg-white p-12 text-center">
+            <p class="font-bold text-slate-700">No active coupons available right now.</p>
+            <p class="mt-1 text-xs text-slate-400">
+              Check back soon or try enabling expired coupons to browse past promotions.
+            </p>
+          </div>
+        ) : (
+          <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {coupons.map((coupon) => (
+              <CouponCard coupon={coupon} />
+            ))}
+          </div>
+        )}
+      </div>
     </section>
   )}
 </MainLayout>

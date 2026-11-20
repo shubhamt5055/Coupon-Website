@@ -45,27 +45,28 @@ const adminUser = Astro.locals.adminUser ?? "admin";
   <!-- Header -->
   <div class="mb-7 flex flex-wrap items-center justify-between gap-4">
     <div>
-      <div class="inline-flex items-center gap-1.5 text-xs font-black tracking-wider text-[#0499FA] uppercase">
-        <span class="flex h-2 w-2 rounded-full bg-[#0499FA] animate-soft-pulse"></span>
+      <div class="inline-flex items-center gap-1.5 text-xs font-black tracking-wider text-[#2491ef] uppercase">
+        <span class="flex h-2 w-2 rounded-full bg-[#2491ef] animate-soft-pulse"></span>
         <span>Live Management Gateway</span>
       </div>
-      <h1 class="mt-1 text-2xl font-black tracking-tight text-[#081126] sm:text-3xl">
+      <h1 class="mt-1 text-2xl font-black tracking-tight text-[#191f2e] sm:text-3xl">
         Coupon Management
       </h1>
       <p class="mt-1 text-xs font-medium text-slate-500">
-        Changes made here sync with Cloudflare D1 and publish live without redeployment.
+        Changes made here sync with Cloudflare D1 and publish live without
+        redeployment.
       </p>
     </div>
     <div class="flex flex-wrap items-center gap-2.5">
       <a
         href="/admin/import"
-        class="rounded-full border border-slate-200 bg-white px-4 py-2 text-xs font-bold text-slate-700 transition hover:border-[#0499FA] hover:text-[#0499FA] shadow-2xs"
+        class="rounded-full border border-slate-200 bg-white px-4 py-2 text-xs font-bold text-slate-700 transition hover:border-[#2491ef] hover:text-[#2491ef] shadow-2xs"
       >
         📄 Bulk CSV Upload
       </a>
       <a
         href="/admin/coupons/new"
-        class="rounded-full bg-[#0499FA] px-5 py-2 text-xs font-black text-white shadow-xs transition hover:bg-[#0377C4] active:scale-95"
+        class="rounded-full bg-[#2491ef] px-5 py-2 text-xs font-black text-white shadow-xs transition hover:bg-[#129fea] active:scale-95"
       >
         + Add New Coupon
       </a>
@@ -76,34 +77,46 @@ const adminUser = Astro.locals.adminUser ?? "admin";
   <div class="mb-7 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
     <div class="rounded-2xl border border-slate-200/90 bg-white p-5 shadow-2xs">
       <p class="text-xs font-bold text-slate-500 uppercase">Total Coupons</p>
-      <p class="mt-1.5 text-2xl font-black text-[#081126]">{stats.totalCoupons}</p>
+      <p class="mt-1.5 text-2xl font-black text-[#191f2e]">
+        {stats.totalCoupons}
+      </p>
     </div>
-    <div class:list={[
-      "rounded-2xl border p-5 transition shadow-2xs",
-      stats.pendingCoupons > 0
-        ? "border-[#FF7A18]/40 bg-[#FFF9F5] ring-1 ring-[#FF7A18]/30"
-        : "border-slate-200/90 bg-white"
-    ]}>
+    <div
+      class:list={[
+        "rounded-2xl border p-5 transition shadow-2xs",
+        stats.pendingCoupons > 0
+          ? "border-[#FF7A18]/40 bg-[#FFF9F5] ring-1 ring-[#FF7A18]/30"
+          : "border-slate-200/90 bg-white",
+      ]}
+    >
       <p class="text-xs font-bold text-[#FF7A18] uppercase">
         {stats.pendingCoupons > 0 ? "⚡ Pending Review" : "Pending Review"}
       </p>
-      <p class="mt-1.5 text-2xl font-black text-[#FF7A18]">{stats.pendingCoupons}</p>
+      <p class="mt-1.5 text-2xl font-black text-[#FF7A18]">
+        {stats.pendingCoupons}
+      </p>
     </div>
-    <div class="rounded-2xl border border-[#0499FA]/20 bg-[#EAF6FE] p-5 shadow-2xs">
-      <p class="text-xs font-bold text-[#0499FA] uppercase">Live Active</p>
-      <p class="mt-1.5 text-2xl font-black text-[#0499FA]">{stats.activeCoupons}</p>
+    <div class="rounded-2xl border border-[#2491ef]/20 bg-[#eef5ff] p-5 shadow-2xs">
+      <p class="text-xs font-bold text-[#2491ef] uppercase">Live Active</p>
+      <p class="mt-1.5 text-2xl font-black text-[#2491ef]">
+        {stats.activeCoupons}
+      </p>
     </div>
     <div class="rounded-2xl border border-slate-200/90 bg-white p-5 shadow-2xs">
       <p class="text-xs font-bold text-rose-600 uppercase">Expired</p>
-      <p class="mt-1.5 text-2xl font-black text-rose-600">{stats.expiredCoupons}</p>
+      <p class="mt-1.5 text-2xl font-black text-rose-600">
+        {stats.expiredCoupons}
+      </p>
     </div>
     <div class="rounded-2xl border border-slate-200/90 bg-white p-5 shadow-2xs">
       <p class="text-xs font-bold text-slate-500 uppercase">Total Clicks</p>
-      <p class="mt-1.5 text-2xl font-black text-[#081126]">{stats.totalClicks}</p>
+      <p class="mt-1.5 text-2xl font-black text-[#191f2e]">
+        {stats.totalClicks}
+      </p>
     </div>
     <div class="rounded-2xl border border-slate-200/90 bg-white p-5 shadow-2xs">
       <p class="text-xs font-bold text-slate-500 uppercase">Stores / Cats</p>
-      <p class="mt-1.5 text-2xl font-black text-[#081126]">
+      <p class="mt-1.5 text-2xl font-black text-[#191f2e]">
         {stats.totalStores} / {stats.totalCategories}
       </p>
     </div>
@@ -120,46 +133,58 @@ const adminUser = Astro.locals.adminUser ?? "admin";
       name="q"
       value={q}
       placeholder="Search title, code, store..."
-      class="rounded-xl border border-slate-300 bg-slate-50 px-3.5 py-2.5 text-sm text-[#081126] outline-none transition focus:border-[#0499FA] focus:bg-white focus:ring-4 focus:ring-[#0499FA]/15"
+      class="rounded-xl border border-slate-300 bg-slate-50 px-3.5 py-2.5 text-sm text-[#191f2e] outline-none transition focus:border-[#2491ef] focus:bg-white focus:ring-4 focus:ring-[#2491ef]/15"
     />
 
     <select
       name="status"
-      class="rounded-xl border border-slate-300 bg-slate-50 px-3 py-2.5 text-sm text-[#081126] outline-none transition focus:border-[#0499FA] focus:bg-white focus:ring-4 focus:ring-[#0499FA]/15"
+      class="rounded-xl border border-slate-300 bg-slate-50 px-3 py-2.5 text-sm text-[#191f2e] outline-none transition focus:border-[#2491ef] focus:bg-white focus:ring-4 focus:ring-[#2491ef]/15"
     >
-      <option value="all" selected={status === "all"}>All Statuses</option>
+      <option value="all" selected={status === "all"}>
+        All Statuses
+      </option>
       <option value="pending" selected={status === "pending"}>
         ⏳ Pending Review ({stats.pendingCoupons})
       </option>
-      <option value="active" selected={status === "active"}>Live Active</option>
-      <option value="inactive" selected={status === "inactive"}>Deactivated</option>
-      <option value="expired" selected={status === "expired"}>Expired</option>
+      <option value="active" selected={status === "active"}>
+        Live Active
+      </option>
+      <option value="inactive" selected={status === "inactive"}>
+        Deactivated
+      </option>
+      <option value="expired" selected={status === "expired"}>
+        Expired
+      </option>
     </select>
 
     <select
       name="storeId"
-      class="rounded-xl border border-slate-300 bg-slate-50 px-3 py-2.5 text-sm text-[#081126] outline-none transition focus:border-[#0499FA] focus:bg-white focus:ring-4 focus:ring-[#0499FA]/15"
+      class="rounded-xl border border-slate-300 bg-slate-50 px-3 py-2.5 text-sm text-[#191f2e] outline-none transition focus:border-[#2491ef] focus:bg-white focus:ring-4 focus:ring-[#2491ef]/15"
     >
       <option value="">All Stores</option>
       {stores.map((s) => (
-        <option value={s.id} selected={s.id === storeId}>{s.name}</option>
+        <option value={s.id} selected={s.id === storeId}>
+          {s.name}
+        </option>
       ))}
     </select>
 
     <select
       name="categoryId"
-      class="rounded-xl border border-slate-300 bg-slate-50 px-3 py-2.5 text-sm text-[#081126] outline-none transition focus:border-[#0499FA] focus:bg-white focus:ring-4 focus:ring-[#0499FA]/15"
+      class="rounded-xl border border-slate-300 bg-slate-50 px-3 py-2.5 text-sm text-[#191f2e] outline-none transition focus:border-[#2491ef] focus:bg-white focus:ring-4 focus:ring-[#2491ef]/15"
     >
       <option value="">All Categories</option>
       {categories.map((c) => (
-        <option value={c.id} selected={c.id === categoryId}>{c.name}</option>
+        <option value={c.id} selected={c.id === categoryId}>
+          {c.name}
+        </option>
       ))}
     </select>
 
     <div class="flex gap-2">
       <button
         type="submit"
-        class="flex-1 rounded-xl bg-[#0499FA] px-4 py-2.5 text-xs font-black text-white transition hover:bg-[#0377C4] active:scale-95 shadow-xs"
+        class="flex-1 rounded-xl bg-[#2491ef] px-4 py-2.5 text-xs font-black text-white transition hover:bg-[#129fea] active:scale-95 shadow-xs"
       >
         Filter Deals
       </button>
@@ -177,7 +202,7 @@ const adminUser = Astro.locals.adminUser ?? "admin";
   <!-- Toast Banner -->
   <div
     id="admin-toast"
-    class="mb-4 hidden rounded-xl border border-[#0499FA]/40 bg-[#EAF6FE] px-4 py-3 text-sm font-semibold text-[#0499FA]"
+    class="mb-4 hidden rounded-xl border border-[#2491ef]/40 bg-[#eef5ff] px-4 py-3 text-sm font-semibold text-[#2491ef]"
   ></div>
 
   <!-- Coupons Table -->
@@ -208,12 +233,14 @@ const adminUser = Astro.locals.adminUser ?? "admin";
               return (
                 <tr data-coupon-row={coupon.id} class="hover:bg-slate-50/70">
                   <td class="px-4 py-3.5">
-                    <p class="max-w-xs font-bold text-[#081126]">{coupon.title}</p>
+                    <p class="max-w-xs font-bold text-[#191f2e]">
+                      {coupon.title}
+                    </p>
                     <p class="mt-0.5 text-xs text-slate-500">
                       {coupon.store_name} · {coupon.category_name}
                     </p>
                     {coupon.submitted_by_name ? (
-                      <span class="mt-1 inline-flex items-center gap-1 rounded-md bg-[#EAF6FE] border border-[#0499FA]/20 px-2 py-0.5 text-[10px] font-bold text-[#0499FA]">
+                      <span class="mt-1 inline-flex items-center gap-1 rounded-md bg-[#eef5ff] border border-[#2491ef]/20 px-2 py-0.5 text-[10px] font-bold text-[#2491ef]">
                         👤 {coupon.submitted_by_name}
                       </span>
                     ) : (
@@ -223,7 +250,7 @@ const adminUser = Astro.locals.adminUser ?? "admin";
                     )}
                   </td>
                   <td class="px-4 py-3.5">
-                    <span class="inline-block rounded-md bg-[#FFF9F5] border border-[#FF7A18]/30 px-2 py-0.5 font-mono text-xs font-bold text-[#081126]">
+                    <span class="inline-block rounded-md bg-[#FFF9F5] border border-[#FF7A18]/30 px-2 py-0.5 font-mono text-xs font-bold text-[#191f2e]">
                       {coupon.code}
                     </span>
                     <p class="mt-1 text-xs font-black text-[#FF7A18]">
@@ -242,7 +269,9 @@ const adminUser = Astro.locals.adminUser ?? "admin";
                   </td>
                   <td class="px-4 py-3.5 whitespace-nowrap text-xs text-slate-600">
                     <p>⚡ {coupon.click_count} clicks</p>
-                    <p class="mt-0.5">👍 {coupon.worked_count} / 👎 {coupon.didnt_work_count}</p>
+                    <p class="mt-0.5">
+                      👍 {coupon.worked_count} / 👎 {coupon.didnt_work_count}
+                    </p>
                   </td>
                   <td class="px-4 py-3.5 whitespace-nowrap">
                     {!active && coupon.user_id ? (
@@ -257,7 +286,7 @@ const adminUser = Astro.locals.adminUser ?? "admin";
                         class:list={[
                           "rounded-full px-3 py-1 text-xs font-bold transition",
                           active
-                            ? "bg-[#EAF6FE] text-[#0499FA] border border-[#0499FA]/30 hover:bg-[#0499FA] hover:text-white"
+                            ? "bg-[#eef5ff] text-[#2491ef] border border-[#2491ef]/30 hover:bg-[#2491ef] hover:text-white"
                             : "bg-slate-200 text-slate-700 hover:bg-slate-300",
                         ]}
                       >
@@ -280,7 +309,7 @@ const adminUser = Astro.locals.adminUser ?? "admin";
                       )}
                       <a
                         href={`/admin/coupons/${coupon.id}/edit`}
-                        class="rounded-lg border border-slate-200 px-2.5 py-1.5 text-xs font-semibold text-slate-700 transition hover:border-[#0499FA] hover:text-[#0499FA]"
+                        class="rounded-lg border border-slate-200 px-2.5 py-1.5 text-xs font-semibold text-slate-700 transition hover:border-[#2491ef] hover:text-[#2491ef] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2491ef]/40"
                       >
                         Edit
                       </a>
@@ -315,77 +344,91 @@ const adminUser = Astro.locals.adminUser ?? "admin";
   }
 
   // Approve and Publish Coupon Live
-  document.querySelectorAll<HTMLButtonElement>("[data-approve-id]").forEach((btn) => {
-    btn.addEventListener("click", async () => {
-      const id = btn.dataset.approveId;
-      const title = btn.dataset.approveTitle || "this coupon";
-      btn.disabled = true;
-      btn.textContent = "Approving...";
-      try {
-        const res = await fetch(`/api/admin/coupons/${id}`, {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ is_active: 1 }),
-        });
-        if (res.ok) {
-          showToast(`✓ "${title}" approved and published live to public site!`);
-          setTimeout(() => window.location.reload(), 900);
-        } else {
-          showToast("Failed to approve coupon.");
+  document
+    .querySelectorAll<HTMLButtonElement>("[data-approve-id]")
+    .forEach((btn) => {
+      btn.addEventListener("click", async () => {
+        const id = btn.dataset.approveId;
+        const title = btn.dataset.approveTitle || "this coupon";
+        btn.disabled = true;
+        btn.textContent = "Approving...";
+        try {
+          const res = await fetch(`/api/admin/coupons/${id}`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ is_active: 1 }),
+          });
+          if (res.ok) {
+            showToast(
+              `✓ "${title}" approved and published live to public site!`,
+            );
+            setTimeout(() => window.location.reload(), 900);
+          } else {
+            showToast("Failed to approve coupon.");
+            btn.disabled = false;
+            btn.textContent = "✓ Approve & Publish";
+          }
+        } catch {
+          showToast("Network error.");
           btn.disabled = false;
           btn.textContent = "✓ Approve & Publish";
         }
-      } catch {
-        showToast("Network error.");
-        btn.disabled = false;
-        btn.textContent = "✓ Approve & Publish";
-      }
+      });
     });
-  });
 
   // Toggle Active / Inactive
-  document.querySelectorAll<HTMLButtonElement>("[data-toggle-id]").forEach((btn) => {
-    btn.addEventListener("click", async () => {
-      const id = btn.dataset.toggleId;
-      const nextActive = btn.dataset.currentActive === "1" ? 0 : 1;
-      btn.disabled = true;
-      try {
-        const res = await fetch(`/api/admin/coupons/${id}`, {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ is_active: nextActive }),
-        });
-        if (res.ok) {
-          btn.dataset.currentActive = String(nextActive);
-          btn.textContent = nextActive ? "Active" : "Inactive";
-          btn.className = nextActive
-            ? "rounded-full px-3 py-1 text-xs font-bold transition bg-[#EAF6FE] text-[#0499FA] border border-[#0499FA]/30 hover:bg-[#0499FA] hover:text-white"
-            : "rounded-full px-3 py-1 text-xs font-bold transition bg-slate-200 text-slate-700 hover:bg-slate-300";
-          showToast(nextActive ? "Coupon activated on live site." : "Coupon deactivated.");
+  document
+    .querySelectorAll<HTMLButtonElement>("[data-toggle-id]")
+    .forEach((btn) => {
+      btn.addEventListener("click", async () => {
+        const id = btn.dataset.toggleId;
+        const nextActive = btn.dataset.currentActive === "1" ? 0 : 1;
+        btn.disabled = true;
+        try {
+          const res = await fetch(`/api/admin/coupons/${id}`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ is_active: nextActive }),
+          });
+          if (res.ok) {
+            btn.dataset.currentActive = String(nextActive);
+            btn.textContent = nextActive ? "Active" : "Inactive";
+            btn.className = nextActive
+              ? "rounded-full px-3 py-1 text-xs font-bold transition bg-[#eef5ff] text-[#2491ef] border border-[#2491ef]/30 hover:bg-[#2491ef] hover:text-white"
+              : "rounded-full px-3 py-1 text-xs font-bold transition bg-slate-200 text-slate-700 hover:bg-slate-300";
+            showToast(
+              nextActive
+                ? "Coupon activated on live site."
+                : "Coupon deactivated.",
+            );
+          }
+        } finally {
+          btn.disabled = false;
         }
-      } finally {
-        btn.disabled = false;
-      }
+      });
     });
-  });
 
   // Delete Coupon
-  document.querySelectorAll<HTMLButtonElement>("[data-delete-id]").forEach((btn) => {
-    btn.addEventListener("click", async () => {
-      const id = btn.dataset.deleteId;
-      const title = btn.dataset.deleteTitle || "this coupon";
-      if (!confirm(`Delete "${title}" permanently?`)) return;
+  document
+    .querySelectorAll<HTMLButtonElement>("[data-delete-id]")
+    .forEach((btn) => {
+      btn.addEventListener("click", async () => {
+        const id = btn.dataset.deleteId;
+        const title = btn.dataset.deleteTitle || "this coupon";
+        if (!confirm(`Delete "${title}" permanently?`)) return;
 
-      btn.disabled = true;
-      try {
-        const res = await fetch(`/api/admin/coupons/${id}`, { method: "DELETE" });
-        if (res.ok) {
-          document.querySelector(`[data-coupon-row="${id}"]`)?.remove();
-          showToast("Coupon deleted permanently.");
+        btn.disabled = true;
+        try {
+          const res = await fetch(`/api/admin/coupons/${id}`, {
+            method: "DELETE",
+          });
+          if (res.ok) {
+            document.querySelector(`[data-coupon-row="${id}"]`)?.remove();
+            showToast("Coupon deleted permanently.");
+          }
+        } finally {
+          btn.disabled = false;
         }
-      } finally {
-        btn.disabled = false;
-      }
+      });
     });
-  });
 </script>

@@ -85,12 +85,12 @@ export function safeImageUrl(url: string | null | undefined): string {
 }
 
 const STORE_COLORS = [
-  "bg-[#0499FA]",
-  "bg-[#FF7A18]",
-  "bg-[#081126]",
-  "bg-[#10B981]",
-  "bg-[#3B82F6]",
-  "bg-[#F59E0B]",
+  "bg-[#2491ef]",
+  "bg-[#ff5722]",
+  "bg-[#191f2e]",
+  "bg-[#60a600]",
+  "bg-[#3b82f6]",
+  "bg-[#f59e0b]",
 ];
 
 export function getStoreColorClass(name: string): string {
