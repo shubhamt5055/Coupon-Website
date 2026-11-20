@@ -90,11 +90,13 @@ Following a deep visual and interaction inspection of **https://www.grabon.in/**
 - **1-Click Auto-Copy & Affiliate Redirect**: Clicking `SHOW CODE` automatically copies the promo code to the clipboard, tracks the click in Cloudflare D1, and redirects the shopper to the merchant's checkout page in a background tab.
 
 ### 2. Community & User Account Features
-- **Visitor Registration (`/login?mode=register` or `/register`)**: Create an account with name, email, and password.
+- **Visitor Coupon Submission (`/submit-coupon`)**: Visitors can now submit coupons **without signing in or creating an account**! Optional name and email fields allow linking deals to a Google account.
+- **Instant Live Publishing**: Admin verification requirement is removed. Coupons submitted by any visitor or user go live immediately across CouponHub (`is_active = 1`).
+- **Google Sign-In Option (`/my-coupons` & `/login`)**: If a visitor wants to view and manage their submitted coupons, they can sign in with their Google account via one-click Google Sign-In.
+- **Visitor Registration (`/login?mode=register` or `/register`)**: Create an account with name, email, and password, or use one-click Google Sign-In.
 - **Cryptographic Security**: PBKDF2 password hashing with 100,000 iterations and cryptographic random salt. Signed session cookies (`couponhub_user_session`) via WebCrypto HMAC-SHA256.
 - **Single Universal Logout**: Consolidated logout button in desktop header and mobile menu with instant session invalidation.
-- **Submit Working Coupons (`/submit-coupon`)**: Authenticated users can submit new coupons with store, category, code, discount, URL, expiry date, and terms.
-- **User Dashboard (`/my-coupons`)**: Track total coupons submitted, pending review, approved live deals, total clicks, and delete submitted coupons with one click.
+- **User Dashboard (`/my-coupons`)**: Track total coupons submitted, live active deals, total redemptions/clicks, and delete submitted coupons with one click.
 
 ### 3. Admin Panel & Editorial Operations
 - **Protected Routes (`/admin/*`)**: Middleware-enforced server-side authentication with session tokens.

@@ -22,7 +22,7 @@ if (user) {
 
 <MainLayout
   title="Sign In / Create Account — CouponHub | Save On Everything"
-  description="Sign in with your registered account, or create a free account to share and manage coupons on CouponHub."
+  description="Sign in with your Google account or email to share and manage coupons on CouponHub."
   compactFooter={true}
 >
   <div class="mx-auto grid min-h-[calc(100vh-140px)] max-w-5xl items-center gap-10 px-4 py-10 sm:px-6 lg:grid-cols-2 lg:px-8">
@@ -39,7 +39,7 @@ if (user) {
       </h1>
 
       <p class="mt-3 max-w-md text-xs sm:text-sm font-medium leading-relaxed text-slate-600">
-        Create an account to submit tested promo codes, track your deals, and help millions of smart shoppers save money at checkout.
+        Sign in to view your submitted coupons, track real-time redemptions, and help millions of smart shoppers save money at checkout.
       </p>
 
       <div class="mt-6 space-y-3.5 text-xs font-semibold text-slate-700">
@@ -47,19 +47,19 @@ if (user) {
           <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-[#eef5ff] text-[#2491ef] font-bold">
             🎟️
           </span>
-          <span>Submit your own discount vouchers &amp; codes</span>
+          <span>Submit promo codes without even signing in</span>
         </div>
         <div class="flex items-center gap-3">
           <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-[#f0fdf4] text-[#60a600] font-bold">
-            📊
-          </span>
-          <span>Track live redemptions and community votes</span>
-        </div>
-        <div class="flex items-center gap-3">
-          <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-orange-50 text-[#ff5722] font-bold">
             ⚡
           </span>
-          <span>Instant auto-approval upon editorial verification</span>
+          <span>Instant live publishing — zero admin waiting</span>
+        </div>
+        <div class="flex items-center gap-3">
+          <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-50 text-[#60a600] font-bold">
+            📊
+          </span>
+          <span>One-click Google login to manage all your submitted deals</span>
         </div>
       </div>
     </div>
@@ -85,12 +85,36 @@ if (user) {
           Sign In to CouponHub
         </h2>
         <p id="auth-subtitle" class="mt-0.5 text-xs text-slate-500">
-          Enter your registered email and password to access your account.
+          Sign in with your Google account or email to view your coupons.
         </p>
       </div>
 
+      <!-- Prominent Google Sign-In Button -->
+      <div class="mt-6">
+        <button
+          type="button"
+          id="login-google-btn"
+          class="w-full flex items-center justify-center gap-3 rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-xs sm:text-sm font-bold text-slate-700 shadow-2xs transition hover:bg-slate-50 hover:border-slate-400 active:scale-98"
+        >
+          <!-- Multi-color Google SVG -->
+          <svg class="h-4 w-4 sm:h-5 sm:w-5 shrink-0" viewBox="0 0 24 24">
+            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" />
+            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" />
+          </svg>
+          <span>Continue with Google</span>
+        </button>
+      </div>
+
+      <!-- Divider -->
+      <div class="relative my-4">
+        <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-slate-200"></div></div>
+        <div class="relative flex justify-center text-[10px] uppercase tracking-wider"><span class="bg-white px-2 text-slate-400 font-bold">Or with email &amp; password</span></div>
+      </div>
+
       <!-- Mode Tabs (GrabOn Style) -->
-      <div class="mt-5 flex rounded-lg border border-slate-200 bg-slate-100 p-1">
+      <div class="flex rounded-lg border border-slate-200 bg-slate-100 p-1">
         <button
           type="button"
           id="tab-login-btn"
@@ -109,7 +133,7 @@ if (user) {
 
       {reason === "signin-required" && (
         <div class="mt-3.5 rounded-lg border border-amber-200 bg-amber-50 p-2.5 text-xs font-semibold text-amber-900">
-          🔒 <strong>Sign-in required:</strong> Please sign in or create an account to submit coupons.
+          🔒 <strong>Sign-in required:</strong> Please sign in to view and manage your account.
         </div>
       )}
 
@@ -279,6 +303,77 @@ if (user) {
       </div>
     </div>
   </div>
+
+  <!-- GOOGLE SIGN-IN INTERACTIVE MODAL -->
+  <div id="login-google-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/60 p-4 backdrop-blur-xs">
+    <div class="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl transition">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <div class="flex items-center gap-2">
+          <!-- Google Icon -->
+          <svg class="h-5 w-5" viewBox="0 0 24 24">
+            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" />
+            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" />
+          </svg>
+          <h3 class="text-sm font-bold text-[#191f2e]">Continue with Google</h3>
+        </div>
+        <button type="button" id="close-login-google-modal" class="rounded-lg p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-600">
+          ✕
+        </button>
+      </div>
+
+      <p class="mt-3 text-xs text-slate-500">
+        Enter your Google account email to sign in instantly or access your submitted coupons.
+      </p>
+
+      <form id="login-google-form" class="mt-4 space-y-3.5" data-next={safeNext}>
+        <div>
+          <label for="modal-google-email" class="mb-1 block text-xs font-bold text-[#191f2e]">
+            Google Email Address *
+          </label>
+          <input
+            id="modal-google-email"
+            type="email"
+            required
+            placeholder="you@gmail.com"
+            class="w-full rounded-lg border border-slate-300 bg-[#f8fafc] px-3.5 py-2.5 text-xs sm:text-sm font-medium text-[#191f2e] outline-none transition focus:border-[#2491ef] focus:bg-white focus:ring-2 focus:ring-[#2491ef]/20"
+          />
+        </div>
+
+        <div>
+          <label for="modal-google-name" class="mb-1 block text-xs font-bold text-[#191f2e]">
+            Your Name (Optional)
+          </label>
+          <input
+            id="modal-google-name"
+            type="text"
+            placeholder="e.g. Rahul S."
+            class="w-full rounded-lg border border-slate-300 bg-[#f8fafc] px-3.5 py-2.5 text-xs sm:text-sm font-medium text-[#191f2e] outline-none transition focus:border-[#2491ef] focus:bg-white focus:ring-2 focus:ring-[#2491ef]/20"
+          />
+        </div>
+
+        <div id="modal-google-error" class="hidden rounded-lg bg-rose-50 p-2.5 text-xs font-semibold text-rose-700"></div>
+
+        <div class="mt-5 flex gap-2.5">
+          <button
+            type="button"
+            id="cancel-login-google-btn"
+            class="flex-1 rounded-lg border border-slate-200 py-2.5 text-xs font-bold text-slate-600 hover:bg-slate-50"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            id="confirm-login-google-btn"
+            class="flex-1 rounded-lg bg-[#2491ef] py-2.5 text-xs font-bold text-white shadow-xs hover:bg-[#129fea] active:scale-95 disabled:opacity-60"
+          >
+            Sign In with Google
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
 </MainLayout>
 
 <script define:vars={{ initialMode }}>
@@ -298,6 +393,86 @@ if (user) {
 
   const loginBtn = document.getElementById("login-btn");
   const regBtn = document.getElementById("reg-btn");
+
+  // Google Modal Controls
+  const googleBtn = document.getElementById("login-google-btn");
+  const googleModal = document.getElementById("login-google-modal");
+  const closeModalBtn = document.getElementById("close-login-google-modal");
+  const cancelModalBtn = document.getElementById("cancel-login-google-btn");
+  const googleForm = document.getElementById("login-google-form");
+  const googleEmailInput = document.getElementById("modal-google-email") as HTMLInputElement | null;
+  const googleNameInput = document.getElementById("modal-google-name") as HTMLInputElement | null;
+  const googleErrorMsg = document.getElementById("modal-google-error");
+  const confirmGoogleBtn = document.getElementById("confirm-login-google-btn") as HTMLButtonElement | null;
+
+  function openGoogleModal() {
+    if (googleModal) {
+      googleModal.classList.remove("hidden");
+      googleModal.classList.add("flex");
+      googleEmailInput?.focus();
+    }
+  }
+
+  function closeGoogleModal() {
+    if (googleModal) {
+      googleModal.classList.add("hidden");
+      googleModal.classList.remove("flex");
+    }
+    if (googleErrorMsg) googleErrorMsg.classList.add("hidden");
+  }
+
+  googleBtn?.addEventListener("click", openGoogleModal);
+  closeModalBtn?.addEventListener("click", closeGoogleModal);
+  cancelModalBtn?.addEventListener("click", closeGoogleModal);
+
+  googleForm?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    if (googleErrorMsg) googleErrorMsg.classList.add("hidden");
+    const email = googleEmailInput?.value.trim();
+    const name = googleNameInput?.value.trim();
+
+    if (!email || !email.includes("@")) {
+      if (googleErrorMsg) {
+        googleErrorMsg.textContent = "Please enter a valid Google email address.";
+        googleErrorMsg.classList.remove("hidden");
+      }
+      return;
+    }
+
+    if (confirmGoogleBtn) {
+      confirmGoogleBtn.disabled = true;
+      confirmGoogleBtn.textContent = "Connecting Google...";
+    }
+
+    try {
+      const res = await fetch("/api/auth/google", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, name }),
+      });
+      const data = await res.json();
+
+      if (!res.ok || !data.ok) {
+        if (googleErrorMsg) {
+          googleErrorMsg.textContent = data.error || "Google sign-in failed. Please try again.";
+          googleErrorMsg.classList.remove("hidden");
+        }
+        return;
+      }
+
+      window.location.href = googleForm.dataset.next || "/my-coupons";
+    } catch {
+      if (googleErrorMsg) {
+        googleErrorMsg.textContent = "Network error. Please try again.";
+        googleErrorMsg.classList.remove("hidden");
+      }
+    } finally {
+      if (confirmGoogleBtn) {
+        confirmGoogleBtn.disabled = false;
+        confirmGoogleBtn.textContent = "Sign In with Google";
+      }
+    }
+  });
 
   function setMode(mode, prefillEmail = "", alertMessage = "") {
     if (authError) authError.classList.add("hidden");
@@ -345,7 +520,7 @@ if (user) {
       if (authTitle) authTitle.textContent = "Sign In to CouponHub";
       if (authSubtitle)
         authSubtitle.textContent =
-          "Sign in is available for registered users only.";
+          "Sign in with your registered email and password.";
 
       if (prefillEmail && loginEmailInput) {
         loginEmailInput.value = prefillEmail;
