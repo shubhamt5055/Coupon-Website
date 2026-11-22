@@ -223,3 +223,33 @@ coupon-website/
 - **Categories**: **8 Curated Niches** (Food & Dining, Fashion & Apparel, Electronics, Travel & Hotels, Shopping & Groceries, Health & Beauty, Entertainment & Movies, Home & Furniture).
 - **Distribution**: 16–17 verified deals per store with authentic promo codes, high success rates (~95%+), click counts, and instant copy + store redirect URLs.
 - **Persistence**: Synced in both local Cloudflare D1 SQLite database (`.wrangler/state/v3/d1`) and version-controlled `db/seed.sql`.
+
+---
+
+## 9. Cloudflare Production Deployment Checklist
+
+To deploy CouponHub live on Cloudflare Workers / Pages:
+
+1. **Login to Cloudflare**:
+   ```bash
+   npx wrangler login
+   ```
+2. **Apply D1 Migrations to Remote Production Database**:
+   ```bash
+   npm run db:migrate:remote
+   ```
+3. **Seed 500 Verified Coupons to Remote Database**:
+   ```bash
+   npm run db:seed:remote
+   ```
+4. **Set Production Admin Credentials Secrets**:
+   ```bash
+   npx wrangler secret put ADMIN_USERNAME
+   npx wrangler secret put ADMIN_PASSWORD
+   npx wrangler secret put SESSION_SECRET
+   ```
+5. **Build and Deploy**:
+   ```bash
+   npm run deploy
+   ```
+
