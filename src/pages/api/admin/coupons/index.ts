@@ -12,7 +12,6 @@ export const GET: APIRoute = async ({ url }) => {
     const status =
       statusParam === "active" ||
       statusParam === "inactive" ||
-      statusParam === "pending" ||
       statusParam === "expired"
         ? statusParam
         : "all";

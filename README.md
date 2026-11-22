@@ -2,7 +2,7 @@
 
 A fast, mobile-first, SEO-friendly **Coupon Website** built with **Astro (SSR)**, **Tailwind CSS v4**, **TypeScript**, and **Cloudflare D1**, designed for deployment on **Cloudflare Workers / Pages**.
 
-Visitors can browse, search, filter, reveal/copy coupon codes, vote on coupon accuracy, and **sign up to upload their own working discount coupons**. Authorized admins can log in securely and add, edit, activate/deactivate, delete, or bulk-import coupons via CSV — with changes reflected live immediately without redeploying.
+Visitors can browse, search, filter, reveal/copy coupon codes, vote on coupon accuracy, and **instantly submit working discount coupons without login or registration**. Authorized admins can log in securely and add, edit, activate/deactivate, delete, or bulk-import coupons via CSV — with changes reflected live immediately without redeploying.
 
 ---
 
@@ -15,17 +15,14 @@ Visitors can browse, search, filter, reveal/copy coupon codes, vote on coupon ac
 - **Coupon Details (`/coupons/[id]`)**: Full title, store info, discount badge, code, expiry date, terms & conditions, related deals, and community voting.
 - **Reveal & Copy Flow**: Clicking **Reveal & Copy** reveals the code, copies it to clipboard, increments `click_count` in D1, opens the store/affiliate link in a new tab, and displays a quick feedback modal.
 - **Automatic Expiry Handling**: Expired coupons (`expiry_date < today`) are automatically hidden from active feeds and clearly marked with an **EXPIRED** badge when viewed in archive/detail pages.
-- **Visitor Account & Coupon Upload (`/register`, `/login`, `/submit-coupon`, `/my-coupons`)**:
-  - Visitors **must create an account / sign in** before they can upload a coupon.
-  - PBKDF2 password hashing with 100,000 iterations and cryptographic random salt.
-  - Secure signed session cookies (`couponhub_user_session`) with server-side protection in `middleware.ts`.
-  - Logged-in visitors can share working coupons via `/submit-coupon` (store, category, title, code, discount, store link, expiry, terms).
-  - Users can track their submitted coupons, click counts, and upvotes on `/my-coupons`.
+- **Zero-Barrier Visitor Coupon Upload (`/submit-coupon` or "+ Add Coupon" Modal)**:
+  - Visitors can add working coupons **without sign-in or account registration**.
+  - Direct popup modal (`AddCouponModal.astro`) available globally from navbar or dedicated page (`/submit-coupon`, alias `/add-coupon`).
+  - Submissions are **immediately live public** across CouponHub and synced to the Admin Panel.
 
 ### Admin Panel (Authorized Team)
 - **Server-Side Protected Routes (`src/middleware.ts`)**: All `/admin/*` pages and `/api/admin/*` routes verify a signed `HttpOnly` HMAC-SHA256 session cookie on the server (never UI-only).
 - **Coupon CRUD (`/admin`, `/admin/coupons/new`, `/admin/coupons/[id]/edit`)**: Create, edit, delete, search, filter by status/store/category, and toggle **Active / Inactive** live.
-- **User Submission Visibility**: Admin dashboard displays whether a coupon was added by an Admin or submitted by a community user (`👤 User: Name`).
 - **Store & Category Management (`/admin/stores`, `/admin/categories`)**: Add and delete stores and categories without touching code.
 - **Live Updates**: Every change writes directly to Cloudflare D1 and invalidates optional KV cache immediately — no redeploy required.
 
@@ -112,8 +109,7 @@ npx wrangler secret put SESSION_SECRET
    npm run dev
    ```
    - Public site: `http://localhost:4321`
-   - Submit coupon (requires sign-in): `http://localhost:4321/submit-coupon`
-   - My submitted coupons: `http://localhost:4321/my-coupons`
+   - Submit coupon (zero login needed): `http://localhost:4321/submit-coupon`
    - Admin panel: `http://localhost:4321/admin`
 
 ---

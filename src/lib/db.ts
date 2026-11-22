@@ -16,15 +16,13 @@ import {
 } from "./cloudflare";
 import { getTodayIsoDate } from "./format";
 
-// Base SELECT query joining store, category, and submitting user
+// Base SELECT query joining store and category
 const COUPON_SELECT = `
   SELECT
     c.id, c.title, c.code, c.description, c.terms, c.discount_text,
     c.store_id, c.category_id, c.affiliate_or_store_url, c.expiry_date,
     c.is_active, c.click_count, c.worked_count, c.didnt_work_count,
     c.created_at, c.updated_at, c.user_id,
-    u.name AS submitted_by_name,
-    u.email AS submitted_by_email,
     s.name AS store_name,
     s.slug AS store_slug,
     s.logo_url AS store_logo_url,
@@ -35,7 +33,6 @@ const COUPON_SELECT = `
   FROM coupons c
   INNER JOIN stores s ON s.id = c.store_id
   INNER JOIN categories cat ON cat.id = c.category_id
-  LEFT JOIN users u ON u.id = c.user_id
 `;
 
 // Generic query helpers for D1

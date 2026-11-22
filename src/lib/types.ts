@@ -48,8 +48,6 @@ export interface CouponWithRelations extends Coupon {
   category_name: string;
   category_slug: string;
   category_icon: string;
-  submitted_by_name?: string | null;
-  submitted_by_email?: string | null;
 }
 
 export interface CouponQueryFilters {

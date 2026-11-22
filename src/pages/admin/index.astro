@@ -220,15 +220,9 @@ const adminUser = Astro.locals.adminUser ?? "admin";
                     <p class="mt-0.5 text-xs text-slate-500">
                       {coupon.store_name} · {coupon.category_name}
                     </p>
-                    {coupon.submitted_by_name ? (
-                      <span class="mt-1 inline-flex items-center gap-1 rounded-md bg-[#eef5ff] border border-[#2491ef]/20 px-2 py-0.5 text-[10px] font-bold text-[#2491ef]">
-                        👤 {coupon.submitted_by_name}
-                      </span>
-                    ) : (
-                      <span class="mt-1 inline-flex items-center gap-1 rounded-md bg-slate-100 px-2 py-0.5 text-[10px] font-semibold text-slate-600">
-                        🛡️ Admin
-                      </span>
-                    )}
+                    <span class="mt-1 inline-flex items-center gap-1 rounded-md bg-slate-100 px-2 py-0.5 text-[10px] font-semibold text-slate-600">
+                      ID: #{coupon.id}
+                    </span>
                   </td>
                   <td class="px-4 py-3.5">
                     <span class="inline-block rounded-md bg-[#FFF9F5] border border-[#FF7A18]/30 px-2 py-0.5 font-mono text-xs font-bold text-[#191f2e]">

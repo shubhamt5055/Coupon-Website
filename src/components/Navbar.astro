@@ -9,7 +9,7 @@ const navLinks = [
   { href: "/stores", label: "Top Stores" },
   { href: "/categories", label: "Categories" },
   { href: "/coupons", label: "All Coupons" },
-  { href: "/coupons?sort=popular", label: "🔥 Deals Of The Day" },
+  { href: "/coupons?sort=popular", label: "Deals Of The Day" },
 ];
 
 function isActive(href: string): boolean {
@@ -24,18 +24,24 @@ function isActive(href: string): boolean {
   <div class="bg-[#191f2e] text-white text-[11px] font-medium py-1.5 px-4 sm:px-6">
     <div class="mx-auto max-w-7xl flex items-center justify-between">
       <div class="flex items-center gap-2 truncate">
-        <span class="inline-flex items-center gap-1 rounded bg-[#60a600] px-1.5 py-0.2 text-[10px] font-bold text-white uppercase tracking-wider">
-          LIVE
-        </span>
         <span class="truncate">
-          ⚡ Save on Everything! Hand-tested &amp; 100% verified discount coupons updated today.
+          Save on Everything! Hand-tested &amp; 100% verified discount coupons
+          updated today.
         </span>
       </div>
 
       <div class="hidden sm:flex items-center gap-4 shrink-0 text-slate-300 text-[11px]">
-        <a href="/coupons?sort=popular" class="hover:text-white transition">Trending Offers</a>
-        <span>•</span>
-        <a href="/admin" class="hover:text-white transition" title="Admin Portal">🛡️ Admin</a>
+        <a href="/coupons?sort=popular" class="hover:text-white transition">
+          Trending Offers
+        </a>
+
+        <a
+          href="/admin"
+          class="hover:text-white transition"
+          title="Admin Portal"
+        >
+          Admin
+        </a>
       </div>
     </div>
   </div>
@@ -50,7 +56,14 @@ function isActive(href: string): boolean {
             <span>Coupon</span>
             <span class="text-[#2491ef]">Hub</span>
             <!-- Smile Arc underneath -->
-            <svg class="ml-0.5 h-3.5 w-6 text-[#60a600]" viewBox="0 0 24 12" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round">
+            <svg
+              class="ml-0.5 h-3.5 w-6 text-[#60a600]"
+              viewBox="0 0 24 12"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="3"
+              stroke-linecap="round"
+            >
               <path d="M2 2c5 8 15 8 20 0" />
             </svg>
           </div>
@@ -67,8 +80,18 @@ function isActive(href: string): boolean {
         class="hidden flex-1 max-w-2xl items-center rounded-lg border border-slate-300 bg-[#f8fafc] p-0.5 shadow-2xs transition focus-within:border-[#2491ef] focus-within:bg-white focus-within:ring-2 focus-within:ring-[#2491ef]/20 md:flex"
       >
         <div class="relative flex flex-1 items-center">
-          <svg class="pointer-events-none absolute left-3.5 h-4 w-4 text-slate-400" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35m1.85-5.15a7 7 0 11-14 0 7 7 0 0114 0z" />
+          <svg
+            class="pointer-events-none absolute left-3.5 h-4 w-4 text-slate-400"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.2"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M21 21l-4.35-4.35m1.85-5.15a7 7 0 11-14 0 7 7 0 0114 0z"
+            />
           </svg>
           <input
             type="search"
@@ -93,8 +116,18 @@ function isActive(href: string): boolean {
           class="inline-flex items-center gap-1.5 rounded-lg bg-[#60a600] px-3.5 py-1.5 text-xs font-black text-white shadow-xs transition hover:bg-[#528f00] active:scale-95 shrink-0"
           title="Add a working coupon (No login required)"
         >
-          <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+          <svg
+            class="h-3.5 w-3.5"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="3"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M12 4v16m8-8H4"
+            />
           </svg>
           <span class="whitespace-nowrap">Add Coupon</span>
         </a>
@@ -107,8 +140,18 @@ function isActive(href: string): boolean {
           aria-expanded="false"
           class="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-700 md:hidden"
         >
-          <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+          <svg
+            class="h-5 w-5"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M4 6h16M4 12h16M4 18h16"
+            />
           </svg>
         </button>
       </div>
@@ -118,8 +161,17 @@ function isActive(href: string): boolean {
   <!-- Tier 3: Category Links & Trending Strip -->
   <div class="hidden border-b border-slate-200/80 bg-white md:block">
     <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-2 sm:px-6 lg:px-8">
-      <nav class="flex items-center gap-6 text-xs font-bold text-slate-700" aria-label="Sub Navigation">
-        <a href="/" class:list={["transition hover:text-[#2491ef]", currentPath === "/" ? "text-[#2491ef]" : ""]}>
+      <nav
+        class="flex items-center gap-6 text-xs font-bold text-slate-700"
+        aria-label="Sub Navigation"
+      >
+        <a
+          href="/"
+          class:list={[
+            "transition hover:text-[#2491ef]",
+            currentPath === "/" ? "text-[#2491ef]" : "",
+          ]}
+        >
           Home
         </a>
         {navLinks.map((link) => (
@@ -138,11 +190,9 @@ function isActive(href: string): boolean {
       <!-- GrabOn signature dark navy event capsule pill -->
       <a
         href="/coupons?sort=popular"
-        class="inline-flex items-center gap-1.5 rounded-full bg-[#191f2e] px-3.5 py-1 text-[11px] font-bold text-white transition hover:bg-black shadow-2xs"
+        class="inline-flex items-center gap-1.5 px-3.5 py-1 text-[11px] font-bold text-black transition hover:bg-[#2491ef] shadow-2xs"
       >
-        <span class="text-amber-400">⚡</span>
-        <span>Festival Mega Deals</span>
-        <span class="rounded-full bg-[#60a600] px-1.5 text-[9px] font-extrabold uppercase text-white">UP TO 80% OFF</span>
+        <span>Festival Mega Deals up to 80% OFF</span>
       </a>
     </div>
   </div>
@@ -168,25 +218,65 @@ function isActive(href: string): boolean {
         aria-label="Search"
         class="flex h-7 w-7 items-center justify-center rounded-md bg-[#2491ef] text-white shrink-0"
       >
-        <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        <svg
+          class="h-3.5 w-3.5"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+          />
         </svg>
       </button>
     </form>
 
     <div class="flex flex-col gap-1 text-sm font-semibold text-slate-700">
-      <a href="/" class="rounded-lg px-3 py-2 hover:bg-[#eef5ff] hover:text-[#2491ef]">Home</a>
-      <a href="/stores" class="rounded-lg px-3 py-2 hover:bg-[#eef5ff] hover:text-[#2491ef]">Top Stores</a>
-      <a href="/categories" class="rounded-lg px-3 py-2 hover:bg-[#eef5ff] hover:text-[#2491ef]">Categories</a>
-      <a href="/coupons" class="rounded-lg px-3 py-2 hover:bg-[#eef5ff] hover:text-[#2491ef]">All Coupons</a>
-      <a href="/coupons?sort=popular" class="rounded-lg px-3 py-2 text-[#e65100] font-bold hover:bg-orange-50">🔥 Deals of the Day</a>
-      <a href="/submit-coupon" class="flex items-center gap-2 rounded-lg bg-[#60a600] text-white px-3.5 py-2.5 font-bold hover:bg-[#528f00] shadow-xs">
-        <span class="text-base font-black">+</span>
+      <a
+        href="/"
+        class="rounded-lg px-3 py-2 hover:bg-[#eef5ff] hover:text-[#2491ef]"
+      >
+        Home
+      </a>
+      <a
+        href="/stores"
+        class="rounded-lg px-3 py-2 hover:bg-[#eef5ff] hover:text-[#2491ef]"
+      >
+        Top Stores
+      </a>
+      <a
+        href="/categories"
+        class="rounded-lg px-3 py-2 hover:bg-[#eef5ff] hover:text-[#2491ef]"
+      >
+        Categories
+      </a>
+      <a
+        href="/coupons"
+        class="rounded-lg px-3 py-2 hover:bg-[#eef5ff] hover:text-[#2491ef]"
+      >
+        All Coupons
+      </a>
+      <a
+        href="/coupons?sort=popular"
+        class="rounded-lg px-3 py-2 text-[#e65100] font-bold hover:bg-orange-50"
+      >
+        Deals of the Day
+      </a>
+      <a
+        href="/submit-coupon"
+        class="flex items-center gap-2 rounded-lg bg-[#60a600] text-white px-3.5 py-2.5 font-bold hover:bg-[#528f00] shadow-xs"
+      >
         <span>Add Coupon (No Login Needed)</span>
       </a>
 
-      <a href="/admin" class="mt-2 rounded-lg border border-dashed border-slate-200 py-2 text-center text-xs font-bold text-slate-500 hover:bg-slate-50">
-        🛡️ Admin Portal
+      <a
+        href="/admin"
+        class="mt-2 rounded-lg border border-dashed border-slate-200 py-2 text-center text-xs font-bold text-slate-500 hover:bg-slate-50"
+      >
+        Admin Portal
       </a>
     </div>
   </div>
