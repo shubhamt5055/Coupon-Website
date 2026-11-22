@@ -11,7 +11,6 @@ export const POST: APIRoute = async ({ request }) => {
 
     const validation = validateCouponInput({
       ...body,
-      user_id: null,
       is_active: 1, // Immediately public across CouponHub and visible in Admin Panel!
     });
 

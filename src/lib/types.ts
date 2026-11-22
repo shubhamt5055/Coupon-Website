@@ -37,7 +37,6 @@ export interface Coupon {
   didnt_work_count: number;
   created_at: string;
   updated_at: string;
-  user_id?: number | null;
 }
 
 export interface CouponWithRelations extends Coupon {
@@ -74,7 +73,6 @@ export interface CouponInput {
   affiliate_or_store_url: string;
   expiry_date: string;
   is_active: number;
-  user_id?: number | null;
 }
 
 export interface StoreInput {

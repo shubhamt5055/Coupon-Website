@@ -110,9 +110,6 @@ export function validateCouponInput(raw: Record<string, unknown>): ValidationRes
       ? 1
       : 0;
 
-  const user_id_raw = Number(raw.user_id);
-  const user_id = Number.isInteger(user_id_raw) && user_id_raw > 0 ? user_id_raw : null;
-
   if (errors.length > 0) {
     return { ok: false, errors };
   }
@@ -131,7 +128,6 @@ export function validateCouponInput(raw: Record<string, unknown>): ValidationRes
       affiliate_or_store_url,
       expiry_date,
       is_active,
-      user_id,
     },
   };
 }

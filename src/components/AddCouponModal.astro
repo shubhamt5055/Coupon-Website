@@ -248,7 +248,7 @@ const defaultExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
   }
 
   // Intercept all clicks to "+ Add Coupon" buttons to open the modal immediately
-  document.querySelectorAll('a[href="/submit-coupon"], a[href="/add-coupon"], [data-open-add-coupon]').forEach((el) => {
+  document.querySelectorAll('a[href="/submit-coupon"], [data-open-add-coupon]').forEach((el) => {
     el.addEventListener("click", (e) => {
       // If user is already on /submit-coupon page, let default link work, otherwise open modal directly!
       if (window.location.pathname !== "/submit-coupon") {

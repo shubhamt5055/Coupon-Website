@@ -31,15 +31,6 @@ function isNavActive(href: string, exact: boolean): boolean {
     <title>{title}</title>
     <meta name="robots" content="noindex, nofollow" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <!-- Force light mode only -->
-    <script is:inline>
-      (() => {
-        document.documentElement.classList.remove("dark");
-        try {
-          localStorage.removeItem("couponhub-theme");
-        } catch {}
-      })();
-    </script>
   </head>
 
   <body class="min-h-screen bg-[#f4f7fb] text-slate-800 antialiased selection:bg-[#2491ef] selection:text-white">

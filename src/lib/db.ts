@@ -22,7 +22,7 @@ const COUPON_SELECT = `
     c.id, c.title, c.code, c.description, c.terms, c.discount_text,
     c.store_id, c.category_id, c.affiliate_or_store_url, c.expiry_date,
     c.is_active, c.click_count, c.worked_count, c.didnt_work_count,
-    c.created_at, c.updated_at, c.user_id,
+    c.created_at, c.updated_at,
     s.name AS store_name,
     s.slug AS store_slug,
     s.logo_url AS store_logo_url,
@@ -187,8 +187,8 @@ export async function getRelatedCoupons(
 export async function createCoupon(db: D1Database, input: CouponInput): Promise<number> {
   const sql = `INSERT INTO coupons (
     title, code, description, terms, discount_text,
-    store_id, category_id, affiliate_or_store_url, expiry_date, is_active, user_id
-  ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+    store_id, category_id, affiliate_or_store_url, expiry_date, is_active
+  ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
   return runInsert(db, sql, [
     input.title,
     input.code,
@@ -200,7 +200,6 @@ export async function createCoupon(db: D1Database, input: CouponInput): Promise<
     input.affiliate_or_store_url,
     input.expiry_date,
     input.is_active,
-    input.user_id ?? null,
   ], true);
 }
 

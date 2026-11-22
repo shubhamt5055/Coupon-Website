@@ -32,15 +32,6 @@ const year = new Date().getFullYear();
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <!-- Force light mode only -->
-    <script is:inline>
-      (() => {
-        document.documentElement.classList.remove("dark");
-        try {
-          localStorage.removeItem("couponhub-theme");
-        } catch {}
-      })();
-    </script>
   </head>
 
   <body class="flex min-h-screen flex-col bg-[#f4f7fb] text-slate-800 selection:bg-[#2491ef] selection:text-white antialiased">
