@@ -259,11 +259,6 @@
         .catch(() => {});
     }
 
-    // Open store in background/new tab
-    if (data.url && data.url !== "#") {
-      window.open(data.url, "_blank", "noopener,noreferrer");
-    }
-
     modal?.classList.remove("hidden");
     modal?.classList.add("flex");
   }
