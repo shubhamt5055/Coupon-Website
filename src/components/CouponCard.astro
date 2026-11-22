@@ -104,13 +104,7 @@ const ribbonType = featuredBadge || (isFlashDeal ? "FLASH DEAL" : "RECOMMENDED")
     <!-- Title & Description -->
     <div class="mt-3.5">
       <h3 class="text-base font-bold leading-snug tracking-tight text-[#191f2e] transition group-hover:text-[#2491ef]">
-        <button
-          type="button"
-          class="toggle-details-btn text-left font-bold text-[#191f2e] transition group-hover:text-[#2491ef] cursor-pointer"
-          data-target-details={`details-${coupon.id}`}
-        >
-          {coupon.title}
-        </button>
+        <a href={`/coupons/${coupon.id}`}>{coupon.title}</a>
       </h3>
 
       {coupon.description && (
@@ -202,83 +196,18 @@ const ribbonType = featuredBadge || (isFlashDeal ? "FLASH DEAL" : "RECOMMENDED")
       </div>
     )}
 
-    <!-- Expiry info and details toggle button -->
+    <!-- Expiry info and details page link -->
     <div class="mt-2.5 flex items-center justify-between text-[11px] font-medium text-slate-500">
       <span>Expires {formatDisplayDate(coupon.expiry_date)}</span>
-      <button
-        type="button"
-        class="toggle-details-btn inline-flex items-center gap-1 font-bold text-[#2491ef] hover:underline cursor-pointer select-none"
-        data-target-details={`details-${coupon.id}`}
+      <a
+        href={`/coupons/${coupon.id}`}
+        class="font-bold text-[#2491ef] hover:underline"
       >
-        <span class="toggle-text">View Details ▾</span>
-      </button>
-    </div>
-
-    <!-- Expandable Details Section (Inline inside the card) -->
-    <div
-      id={`details-${coupon.id}`}
-      class="coupon-details-panel mt-3 hidden rounded-xl border border-slate-200/90 bg-white p-3.5 text-xs shadow-2xs space-y-2.5"
-    >
-      <div>
-        <span class="font-bold text-[#191f2e] text-[10px] uppercase tracking-wider block mb-0.5">
-          Offer Details:
-        </span>
-        <p class="text-slate-600 leading-relaxed">
-          {coupon.description || "Special verified promotional discount offer."}
-        </p>
-      </div>
-
-      {coupon.terms && (
-        <div class="border-t border-slate-100 pt-2">
-          <span class="font-bold text-[#191f2e] text-[10px] uppercase tracking-wider block mb-0.5">
-            Terms &amp; Conditions:
-          </span>
-          <p class="text-slate-500 leading-relaxed text-[11px]">
-            {coupon.terms}
-          </p>
-        </div>
-      )}
-
-      <div class="border-t border-slate-100 pt-2 flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-500">
-        <span class="font-semibold text-slate-600">
-          ⏳ Valid till: {formatDisplayDate(coupon.expiry_date)}
-        </span>
-        <span class="font-bold text-[#60a600] flex items-center gap-1">
-          ✓ Verified &amp; Tested Deal
-        </span>
-      </div>
+        View Details →
+      </a>
     </div>
 
     <!-- Injected actions -->
     <slot />
   </div>
 </article>
-
-<script>
-  function attachDetailsToggle() {
-    document.querySelectorAll(".toggle-details-btn").forEach((btn) => {
-      if (btn.hasAttribute("data-toggle-bound")) return;
-      btn.setAttribute("data-toggle-bound", "true");
-
-      btn.addEventListener("click", (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        const targetId = btn.getAttribute("data-target-details");
-        if (!targetId) return;
-        const panel = document.getElementById(targetId);
-        if (!panel) return;
-
-        const isHidden = panel.classList.contains("hidden");
-        panel.classList.toggle("hidden");
-
-        // Sync toggle text on this card
-        document.querySelectorAll(`[data-target-details="${targetId}"] .toggle-text`).forEach((span) => {
-          span.textContent = isHidden ? "Hide Details ▴" : "View Details ▾";
-        });
-      });
-    });
-  }
-
-  attachDetailsToggle();
-  document.addEventListener("astro:page-load", attachDetailsToggle);
-</script>
