@@ -104,7 +104,21 @@ const ribbonType = featuredBadge || (isFlashDeal ? "FLASH DEAL" : "RECOMMENDED")
     <!-- Title & Description -->
     <div class="mt-3.5">
       <h3 class="text-base font-bold leading-snug tracking-tight text-[#191f2e] transition group-hover:text-[#2491ef]">
-        <a href={`/coupons/${coupon.id}`}>{coupon.title}</a>
+        <button
+          type="button"
+          class="reveal-coupon-btn text-left font-bold text-[#191f2e] transition group-hover:text-[#2491ef] cursor-pointer"
+          data-coupon-id={coupon.id}
+          data-coupon-code={coupon.code}
+          data-coupon-title={coupon.title}
+          data-coupon-store={coupon.store_name}
+          data-coupon-discount={coupon.discount_text}
+          data-coupon-url={storeUrl}
+          data-coupon-description={coupon.description}
+          data-coupon-terms={coupon.terms}
+          data-coupon-expiry={formatDisplayDate(coupon.expiry_date)}
+        >
+          {coupon.title}
+        </button>
       </h3>
 
       {coupon.description && (
@@ -177,13 +191,16 @@ const ribbonType = featuredBadge || (isFlashDeal ? "FLASH DEAL" : "RECOMMENDED")
         <!-- GrabOn High-Converting CTA Button -->
         <button
           type="button"
-          class="reveal-coupon-btn inline-flex items-center gap-1.5 rounded-md bg-[#2491ef] px-4 py-2 text-xs font-extrabold uppercase tracking-wide text-white shadow-2xs transition hover:bg-[#129fea] active:scale-95 shrink-0"
+          class="reveal-coupon-btn inline-flex items-center gap-1.5 rounded-md bg-[#2491ef] px-4 py-2 text-xs font-extrabold uppercase tracking-wide text-white shadow-2xs transition hover:bg-[#129fea] active:scale-95 shrink-0 cursor-pointer"
           data-coupon-id={coupon.id}
           data-coupon-code={coupon.code}
           data-coupon-title={coupon.title}
           data-coupon-store={coupon.store_name}
           data-coupon-discount={coupon.discount_text}
           data-coupon-url={storeUrl}
+          data-coupon-description={coupon.description}
+          data-coupon-terms={coupon.terms}
+          data-coupon-expiry={formatDisplayDate(coupon.expiry_date)}
         >
           <span>SHOW CODE</span>
           <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
@@ -196,12 +213,21 @@ const ribbonType = featuredBadge || (isFlashDeal ? "FLASH DEAL" : "RECOMMENDED")
     <!-- Expiry info and details toggle link -->
     <div class="mt-2.5 flex items-center justify-between text-[11px] font-medium text-slate-500">
       <span>Expires {formatDisplayDate(coupon.expiry_date)}</span>
-      <a
-        href={`/coupons/${coupon.id}`}
-        class="font-bold text-[#2491ef] hover:underline"
+      <button
+        type="button"
+        class="reveal-coupon-btn font-bold text-[#2491ef] hover:underline cursor-pointer"
+        data-coupon-id={coupon.id}
+        data-coupon-code={coupon.code}
+        data-coupon-title={coupon.title}
+        data-coupon-store={coupon.store_name}
+        data-coupon-discount={coupon.discount_text}
+        data-coupon-url={storeUrl}
+        data-coupon-description={coupon.description}
+        data-coupon-terms={coupon.terms}
+        data-coupon-expiry={formatDisplayDate(coupon.expiry_date)}
       >
         View Details →
-      </a>
+      </button>
     </div>
 
     <!-- Injected actions (e.g. Delete button on /my-coupons) -->

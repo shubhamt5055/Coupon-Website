@@ -52,6 +52,18 @@
         class="text-base font-bold text-[#191f2e] leading-snug"
       ></h3>
 
+      <!-- Details & Terms Box -->
+      <div id="modal-coupon-details-box" class="mt-4 rounded-xl border border-slate-200/90 bg-[#f8fafc] p-3.5 text-xs text-left">
+        <p class="font-bold text-[#191f2e] text-[11px] uppercase tracking-wider mb-1">
+          Offer Details
+        </p>
+        <p id="modal-coupon-description" class="text-slate-600 leading-relaxed"></p>
+        <div id="modal-coupon-terms-container" class="mt-2.5 border-t border-slate-200/80 pt-2 text-[11px] text-slate-500">
+          <span class="font-bold text-slate-700">Terms &amp; Conditions:</span>
+          <span id="modal-coupon-terms"></span>
+        </div>
+      </div>
+
       <!-- GrabOn Dashed Code Box -->
       <div class="mt-5 rounded-xl border-2 border-dashed border-[#cbd5e1] bg-[#f8fafc] p-4 text-center">
         <p class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">
@@ -90,13 +102,15 @@
       </a>
 
       <!-- Quick Trust Indicators -->
-      <div class="mt-4 flex items-center justify-center gap-4 text-xs font-medium text-slate-500">
+      <div class="mt-4 flex flex-wrap items-center justify-center gap-3 text-xs font-medium text-slate-500">
         <span class="flex items-center gap-1 text-[#60a600] font-bold">
           <svg class="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor">
             <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
           </svg>
           100% Verified
         </span>
+        <span>•</span>
+        <span id="modal-coupon-expiry" class="font-semibold text-slate-600"></span>
         <span>•</span>
         <span>Existing &amp; New Users</span>
       </div>
@@ -140,6 +154,10 @@
   const storeEl = document.getElementById("modal-coupon-store");
   const discountEl = document.getElementById("modal-coupon-discount");
   const codeEl = document.getElementById("modal-coupon-code");
+  const descEl = document.getElementById("modal-coupon-description");
+  const termsEl = document.getElementById("modal-coupon-terms");
+  const termsContainerEl = document.getElementById("modal-coupon-terms-container");
+  const expiryEl = document.getElementById("modal-coupon-expiry");
   const statusEl = document.getElementById("modal-copy-status");
   const storeLinkEl = document.getElementById("modal-store-link") as HTMLAnchorElement | null;
   const copyAgainBtn = document.getElementById("modal-copy-again-btn");
@@ -182,6 +200,9 @@
     store: string;
     discount: string;
     url: string;
+    description?: string;
+    terms?: string;
+    expiry?: string;
   }) {
     activeCouponId = data.id;
     activeCode = data.code;
@@ -190,6 +211,24 @@
     if (storeEl) storeEl.textContent = data.store ? `at ${data.store}` : "";
     if (discountEl) discountEl.textContent = data.discount || "SPECIAL OFFER";
     if (codeEl) codeEl.textContent = data.code;
+
+    if (descEl) {
+      descEl.textContent = data.description || `Verified promotional discount for ${data.store || "online shopping"}.`;
+    }
+
+    if (termsEl && termsContainerEl) {
+      if (data.terms && data.terms.trim()) {
+        termsEl.textContent = ` ${data.terms.trim()}`;
+        termsContainerEl.classList.remove("hidden");
+      } else {
+        termsContainerEl.classList.add("hidden");
+      }
+    }
+
+    if (expiryEl) {
+      expiryEl.textContent = data.expiry ? `Expires: ${data.expiry}` : "Active Offer";
+    }
+
     if (storeLinkEl) {
       storeLinkEl.href = data.url || "#";
     }
@@ -257,7 +296,7 @@
     }
   });
 
-  // Attach to reveal buttons
+  // Attach to reveal and view details buttons
   function attachRevealButtons() {
     document.querySelectorAll(".reveal-coupon-btn").forEach((btn) => {
       btn.addEventListener("click", (e) => {
@@ -270,6 +309,9 @@
           store: target.dataset.couponStore || "",
           discount: target.dataset.couponDiscount || "",
           url: target.dataset.couponUrl || "#",
+          description: target.dataset.couponDescription || "",
+          terms: target.dataset.couponTerms || "",
+          expiry: target.dataset.couponExpiry || "",
         });
       });
     });

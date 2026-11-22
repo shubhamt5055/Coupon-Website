@@ -308,10 +308,10 @@ const defaultExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
         return;
       }
 
-      // Success! Show live message and redirect to live coupon
+      // Success! Show live message and redirect to live coupons
       if (successBox) successBox.classList.remove("hidden");
       setTimeout(() => {
-        window.location.href = `/coupons/${data.id}?created=live`;
+        window.location.href = "/coupons";
       }, 700);
     } catch {
       if (alertBox) {

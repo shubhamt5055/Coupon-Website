@@ -272,8 +272,8 @@ const defaultExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
         return;
       }
 
-      // Live immediately! Redirect directly to the live coupon page
-      window.location.href = `/coupons/${data.id}?created=live`;
+      // Live immediately! Redirect directly to live coupons
+      window.location.href = "/coupons";
     } catch {
       if (alertBox) {
         alertBox.textContent = "Network error. Please try again.";
