@@ -29,9 +29,6 @@ const adminUser = Astro.locals.adminUser ?? "admin";
     <div class="lg:col-span-1">
       <div class="rounded-xl border border-slate-200 bg-white p-6 shadow-2xs lg:sticky lg:top-24">
         <h2 class="flex items-center gap-2 text-base font-bold text-[#191f2e]">
-          <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-[#eef5ff] text-base text-[#2491ef]">
-            ＋
-          </span>
           <span>Add New Category</span>
         </h2>
 
@@ -114,7 +111,9 @@ const adminUser = Astro.locals.adminUser ?? "admin";
                 {cat.icon || "🏷️"}
               </span>
               <div class="min-w-0">
-                <p class="truncate font-bold text-sm text-[#191f2e]">{cat.name}</p>
+                <p class="truncate font-bold text-sm text-[#191f2e]">
+                  {cat.name}
+                </p>
                 <p class="truncate text-xs text-slate-500">
                   /{cat.slug} · {cat.total_coupon_count ?? 0} coupons
                 </p>
@@ -136,7 +135,9 @@ const adminUser = Astro.locals.adminUser ?? "admin";
 </AdminLayout>
 
 <script>
-  const form = document.getElementById("add-cat-form") as HTMLFormElement | null;
+  const form = document.getElementById(
+    "add-cat-form",
+  ) as HTMLFormElement | null;
   const errorBox = document.getElementById("cat-error");
 
   form?.addEventListener("submit", async (e) => {
@@ -163,26 +164,28 @@ const adminUser = Astro.locals.adminUser ?? "admin";
     window.location.reload();
   });
 
-  document.querySelectorAll<HTMLButtonElement>("[data-delete-cat]").forEach((btn) => {
-    btn.addEventListener("click", async () => {
-      const id = btn.dataset.deleteCat;
-      const name = btn.dataset.catName || "this category";
-      if (!confirm(`Delete "${name}" AND all coupons under it?`)) return;
-      btn.disabled = true;
-      try {
-        const res = await fetch(`/api/admin/categories/${id}`, {
-          method: "DELETE",
-        });
-        if (res.ok) {
-          document.querySelector(`[data-cat-card="${id}"]`)?.remove();
-        } else {
-          alert("Failed to delete category.");
+  document
+    .querySelectorAll<HTMLButtonElement>("[data-delete-cat]")
+    .forEach((btn) => {
+      btn.addEventListener("click", async () => {
+        const id = btn.dataset.deleteCat;
+        const name = btn.dataset.catName || "this category";
+        if (!confirm(`Delete "${name}" AND all coupons under it?`)) return;
+        btn.disabled = true;
+        try {
+          const res = await fetch(`/api/admin/categories/${id}`, {
+            method: "DELETE",
+          });
+          if (res.ok) {
+            document.querySelector(`[data-cat-card="${id}"]`)?.remove();
+          } else {
+            alert("Failed to delete category.");
+          }
+        } catch {
+          alert("Network error. Please try again.");
+        } finally {
+          btn.disabled = false;
         }
-      } catch {
-        alert("Network error. Please try again.");
-      } finally {
-        btn.disabled = false;
-      }
+      });
     });
-  });
 </script>

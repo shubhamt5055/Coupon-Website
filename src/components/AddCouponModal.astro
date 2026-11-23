@@ -29,11 +29,15 @@ const defaultExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
           <span class="h-1.5 w-1.5 rounded-full bg-[#60a600] animate-pulse"></span>
           No Login Required • Instant Live Publishing
         </span>
-        <h2 id="add-coupon-modal-title" class="mt-2 text-2xl font-black tracking-tight text-[#191f2e]">
+        <h2
+          id="add-coupon-modal-title"
+          class="mt-2 text-2xl font-black tracking-tight text-[#191f2e]"
+        >
           Add a Working Coupon
         </h2>
         <p class="mt-0.5 text-xs text-slate-500">
-          Share a discount code with the CouponHub community. No account or password needed!
+          Share a discount code with the CouponHub community. No account or
+          password needed!
         </p>
       </div>
       <button
@@ -42,8 +46,18 @@ const defaultExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
         class="rounded-xl border border-slate-200 p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition"
         aria-label="Close modal"
       >
-        <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        <svg
+          class="h-5 w-5"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M6 18L18 6M6 6l12 12"
+          />
         </svg>
       </button>
     </div>
@@ -59,14 +73,17 @@ const defaultExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
       id="modal-submit-success"
       class="mt-4 hidden rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-xs font-bold text-emerald-800"
     >
-      🎉 Coupon published live successfully! Redirecting you now...
+      Coupon published live successfully! Redirecting you now...
     </div>
 
     <!-- Add Coupon Form -->
     <form id="modal-coupon-form" class="mt-5 space-y-4">
       <!-- Offer Title -->
       <div>
-        <label for="modal-coupon-title" class="mb-1 block text-xs font-bold text-[#191f2e]">
+        <label
+          for="modal-coupon-title"
+          class="mb-1 block text-xs font-bold text-[#191f2e]"
+        >
           Coupon Title *
         </label>
         <input
@@ -83,7 +100,10 @@ const defaultExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
       <!-- Store & Category -->
       <div class="grid gap-3 sm:grid-cols-2">
         <div>
-          <label for="modal-coupon-store" class="mb-1 block text-xs font-bold text-[#191f2e]">
+          <label
+            for="modal-coupon-store"
+            class="mb-1 block text-xs font-bold text-[#191f2e]"
+          >
             Store / Brand *
           </label>
           <select
@@ -100,7 +120,10 @@ const defaultExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
         </div>
 
         <div>
-          <label for="modal-coupon-category" class="mb-1 block text-xs font-bold text-[#191f2e]">
+          <label
+            for="modal-coupon-category"
+            class="mb-1 block text-xs font-bold text-[#191f2e]"
+          >
             Category *
           </label>
           <select
@@ -122,7 +145,10 @@ const defaultExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
       <!-- Promo Code & Discount Badge -->
       <div class="grid gap-3 sm:grid-cols-2">
         <div>
-          <label for="modal-coupon-code" class="mb-1 block text-xs font-bold text-[#191f2e]">
+          <label
+            for="modal-coupon-code"
+            class="mb-1 block text-xs font-bold text-[#191f2e]"
+          >
             Promo Code *
           </label>
           <input
@@ -137,7 +163,10 @@ const defaultExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
         </div>
 
         <div>
-          <label for="modal-coupon-discount" class="mb-1 block text-xs font-bold text-[#191f2e]">
+          <label
+            for="modal-coupon-discount"
+            class="mb-1 block text-xs font-bold text-[#191f2e]"
+          >
             Discount Text / Badge *
           </label>
           <input
@@ -155,7 +184,10 @@ const defaultExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
       <!-- Deal Link & Expiry Date -->
       <div class="grid gap-3 sm:grid-cols-2">
         <div>
-          <label for="modal-coupon-url" class="mb-1 block text-xs font-bold text-[#191f2e]">
+          <label
+            for="modal-coupon-url"
+            class="mb-1 block text-xs font-bold text-[#191f2e]"
+          >
             Store / Deal Link *
           </label>
           <input
@@ -169,7 +201,10 @@ const defaultExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
         </div>
 
         <div>
-          <label for="modal-coupon-expiry" class="mb-1 block text-xs font-bold text-[#191f2e]">
+          <label
+            for="modal-coupon-expiry"
+            class="mb-1 block text-xs font-bold text-[#191f2e]"
+          >
             Expiry Date *
           </label>
           <input
@@ -185,7 +220,10 @@ const defaultExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
 
       <!-- Description (Optional) -->
       <div>
-        <label for="modal-coupon-desc" class="mb-1 block text-xs font-bold text-[#191f2e]">
+        <label
+          for="modal-coupon-desc"
+          class="mb-1 block text-xs font-bold text-[#191f2e]"
+        >
           Description (Optional)
         </label>
         <textarea
@@ -212,7 +250,7 @@ const defaultExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
           id="modal-submit-btn"
           class="rounded-lg bg-[#60a600] px-6 py-2.5 text-xs font-extrabold uppercase tracking-wider text-white shadow-xs transition hover:bg-[#528f00] active:scale-95 disabled:opacity-60"
         >
-          Publish Coupon Instantly 🚀
+          Publish Coupon Instantly
         </button>
       </div>
     </form>
@@ -223,10 +261,14 @@ const defaultExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
   const addModal = document.getElementById("add-coupon-modal");
   const closeModalBtn = document.getElementById("close-add-coupon-modal");
   const cancelModalBtn = document.getElementById("cancel-add-coupon-modal");
-  const form = document.getElementById("modal-coupon-form") as HTMLFormElement | null;
+  const form = document.getElementById(
+    "modal-coupon-form",
+  ) as HTMLFormElement | null;
   const alertBox = document.getElementById("modal-submit-alert");
   const successBox = document.getElementById("modal-submit-success");
-  const submitBtn = document.getElementById("modal-submit-btn") as HTMLButtonElement | null;
+  const submitBtn = document.getElementById(
+    "modal-submit-btn",
+  ) as HTMLButtonElement | null;
 
   function openAddModal() {
     if (addModal) {
@@ -248,15 +290,17 @@ const defaultExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
   }
 
   // Intercept all clicks to "+ Add Coupon" buttons to open the modal immediately
-  document.querySelectorAll('a[href="/submit-coupon"], [data-open-add-coupon]').forEach((el) => {
-    el.addEventListener("click", (e) => {
-      // If user is already on /submit-coupon page, let default link work, otherwise open modal directly!
-      if (window.location.pathname !== "/submit-coupon") {
-        e.preventDefault();
-        openAddModal();
-      }
+  document
+    .querySelectorAll('a[href="/submit-coupon"], [data-open-add-coupon]')
+    .forEach((el) => {
+      el.addEventListener("click", (e) => {
+        // If user is already on /submit-coupon page, let default link work, otherwise open modal directly!
+        if (window.location.pathname !== "/submit-coupon") {
+          e.preventDefault();
+          openAddModal();
+        }
+      });
     });
-  });
 
   closeModalBtn?.addEventListener("click", closeAddModal);
   cancelModalBtn?.addEventListener("click", closeAddModal);
@@ -285,7 +329,9 @@ const defaultExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
       discount_text: String(fd.get("discount_text") || "").trim(),
       store_id: Number(fd.get("store_id")),
       category_id: Number(fd.get("category_id")),
-      affiliate_or_store_url: String(fd.get("affiliate_or_store_url") || "").trim(),
+      affiliate_or_store_url: String(
+        fd.get("affiliate_or_store_url") || "",
+      ).trim(),
       expiry_date: String(fd.get("expiry_date") || "").trim(),
       description: String(fd.get("description") || "").trim(),
       terms: "",
@@ -298,11 +344,16 @@ const defaultExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
         body: JSON.stringify(payload),
       });
 
-      const data = (await res.json()) as { ok?: boolean; id?: number; error?: string };
+      const data = (await res.json()) as {
+        ok?: boolean;
+        id?: number;
+        error?: string;
+      };
 
       if (!res.ok || !data.ok) {
         if (alertBox) {
-          alertBox.textContent = data.error || "Please check all fields and try again.";
+          alertBox.textContent =
+            data.error || "Please check all fields and try again.";
           alertBox.classList.remove("hidden");
         }
         return;
