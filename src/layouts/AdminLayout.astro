@@ -69,7 +69,7 @@ function isNavActive(href: string, exact: boolean): boolean {
                 "rounded-lg px-3 py-1.5 text-xs font-bold transition",
                 isNavActive(item.href, item.exact)
                   ? "bg-[#2491ef] text-white shadow-2xs"
-                  : "text-slate-300 hover:bg-white/10 hover:text-white",
+                  : "text-slate-300 hover:bg-white/20 hover:text-white",
               ]}
             >
               {item.label}
@@ -84,7 +84,7 @@ function isNavActive(href: string, exact: boolean): boolean {
             target="_blank"
             class="rounded-lg border border-slate-700 bg-slate-800 px-3 py-1.5 text-xs font-bold text-slate-200 transition hover:bg-slate-700"
           >
-            Live Site ↗
+            Live Site
           </a>
           <span class="hidden rounded-lg border border-slate-700 bg-slate-800 px-2.5 py-1.5 text-xs font-bold text-[#c2f03e] sm:inline">
             &#x1F464; @{adminUser}

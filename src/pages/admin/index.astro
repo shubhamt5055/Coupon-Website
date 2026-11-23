@@ -44,10 +44,6 @@ const adminUser = Astro.locals.adminUser ?? "admin";
   <!-- Header -->
   <div class="mb-7 flex flex-wrap items-center justify-between gap-4">
     <div>
-      <div class="inline-flex items-center gap-1.5 text-xs font-black tracking-wider text-[#2491ef] uppercase">
-        <span class="flex h-2 w-2 rounded-full bg-[#2491ef] animate-soft-pulse"></span>
-        <span>Live Management Gateway</span>
-      </div>
       <h1 class="mt-1 text-2xl font-black tracking-tight text-[#191f2e] sm:text-3xl">
         Coupon Management
       </h1>
@@ -61,13 +57,13 @@ const adminUser = Astro.locals.adminUser ?? "admin";
         href="/admin/import"
         class="rounded-full border border-slate-200 bg-white px-4 py-2 text-xs font-bold text-slate-700 transition hover:border-[#2491ef] hover:text-[#2491ef] shadow-2xs"
       >
-        📄 Bulk CSV Upload
+        CSV Upload
       </a>
       <a
         href="/admin/coupons/new"
         class="rounded-full bg-[#2491ef] px-5 py-2 text-xs font-black text-white shadow-xs transition hover:bg-[#129fea] active:scale-95"
       >
-        + Add New Coupon
+        Add New Coupon
       </a>
     </div>
   </div>
@@ -243,7 +239,7 @@ const adminUser = Astro.locals.adminUser ?? "admin";
                     )}
                   </td>
                   <td class="px-4 py-3.5 whitespace-nowrap text-xs text-slate-600">
-                    <p>⚡ {coupon.click_count} clicks</p>
+                    <p>{coupon.click_count} clicks</p>
                     <p class="mt-0.5">
                       👍 {coupon.worked_count} / 👎 {coupon.didnt_work_count}
                     </p>
@@ -273,7 +269,7 @@ const adminUser = Astro.locals.adminUser ?? "admin";
                           class="rounded-lg bg-[#FF7A18] px-3 py-1.5 text-xs font-bold text-white shadow-xs transition hover:bg-[#E6680C] active:scale-95"
                           title="Verify and publish this coupon live to the public site"
                         >
-                          ✓ Approve &amp; Publish
+                          Approve &amp; Publish
                         </button>
                       )}
                       <a
@@ -328,9 +324,7 @@ const adminUser = Astro.locals.adminUser ?? "admin";
             body: JSON.stringify({ is_active: 1 }),
           });
           if (res.ok) {
-            showToast(
-              `✓ "${title}" approved and published live to public site!`,
-            );
+            showToast(`"${title}" approved and published live to public site!`);
             setTimeout(() => window.location.reload(), 900);
           } else {
             showToast("Failed to approve coupon.");

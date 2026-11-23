@@ -24,7 +24,13 @@ if (!coupon || coupon.is_active !== 1) {
 }
 
 const related = coupon
-  ? await getRelatedCoupons(db, coupon.id, coupon.category_id, coupon.store_id, 3)
+  ? await getRelatedCoupons(
+      db,
+      coupon.id,
+      coupon.category_id,
+      coupon.store_id,
+      3,
+    )
   : [];
 
 const expired = coupon ? isCouponExpired(coupon.expiry_date) : false;
@@ -32,12 +38,22 @@ const daysLeft = coupon ? getDaysUntilExpiry(coupon.expiry_date) : null;
 const storeUrl = coupon ? safeExternalUrl(coupon.affiliate_or_store_url) : "#";
 const totalVotes = coupon ? coupon.worked_count + coupon.didnt_work_count : 0;
 const successRate =
-  coupon && totalVotes > 0 ? Math.round((coupon.worked_count / totalVotes) * 100) : null;
+  coupon && totalVotes > 0
+    ? Math.round((coupon.worked_count / totalVotes) * 100)
+    : null;
 ---
 
 <MainLayout
-  title={coupon ? `${coupon.title} (${coupon.store_name}) — CouponHub` : "Coupon Not Found | CouponHub"}
-  description={coupon ? `${coupon.discount_text} at ${coupon.store_name} with verified promo code ${coupon.code}. ${coupon.description}` : "Coupon not found."}
+  title={
+    coupon
+      ? `${coupon.title} (${coupon.store_name}) — CouponHub`
+      : "Coupon Not Found | CouponHub"
+  }
+  description={
+    coupon
+      ? `${coupon.discount_text} at ${coupon.store_name} with verified promo code ${coupon.code}. ${coupon.description}`
+      : "Coupon not found."
+  }
 >
   {!coupon || coupon.is_active !== 1 ? (
     <section class="mx-auto max-w-2xl px-4 py-20 text-center">
@@ -55,12 +71,27 @@ const successRate =
   ) : (
     <section class="mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
       <!-- Breadcrumb (GrabOn Style) -->
-      <nav class="mb-5 flex flex-wrap items-center gap-2 text-xs font-medium text-slate-400" aria-label="Breadcrumb">
-        <a href="/" class="hover:text-[#2491ef] transition">Home</a>
+      <nav
+        class="mb-5 flex flex-wrap items-center gap-2 text-xs font-medium text-slate-400"
+        aria-label="Breadcrumb"
+      >
+        <a href="/" class="hover:text-[#2491ef] transition">
+          Home
+        </a>
         <span>/</span>
-        <a href={`/categories/${coupon.category_slug}`} class="hover:text-[#2491ef] transition">{coupon.category_name}</a>
+        <a
+          href={`/categories/${coupon.category_slug}`}
+          class="hover:text-[#2491ef] transition"
+        >
+          {coupon.category_name}
+        </a>
         <span>/</span>
-        <a href={`/stores/${coupon.store_slug}`} class="hover:text-[#2491ef] transition">{coupon.store_name}</a>
+        <a
+          href={`/stores/${coupon.store_slug}`}
+          class="hover:text-[#2491ef] transition"
+        >
+          {coupon.store_name}
+        </a>
         <span>/</span>
         <span class="truncate text-[#191f2e] font-bold">{coupon.title}</span>
       </nav>
@@ -69,7 +100,8 @@ const successRate =
       <div class="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-2xs">
         {expired && (
           <div class="bg-rose-600 px-6 py-2.5 text-center text-xs font-bold tracking-wide text-white uppercase">
-            This coupon expired on {formatDisplayDate(coupon.expiry_date)} — browse active {coupon.store_name} deals below.
+            This coupon expired on {formatDisplayDate(coupon.expiry_date)} —
+            browse active {coupon.store_name} deals below.
           </div>
         )}
 
@@ -78,12 +110,24 @@ const successRate =
             <!-- Left Info -->
             <div class="flex-1">
               <div class="mb-4 flex flex-wrap items-center gap-3">
-                <a href={`/stores/${coupon.store_slug}`} class="flex items-center gap-3">
+                <a
+                  href={`/stores/${coupon.store_slug}`}
+                  class="flex items-center gap-3"
+                >
                   <div class="h-12 w-12 rounded-xl border border-slate-200 bg-white p-1.5 flex items-center justify-center overflow-hidden">
-                    <StoreLogo store={{ name: coupon.store_name, slug: coupon.store_slug, logo_url: coupon.store_logo_url }} size="md" />
+                    <StoreLogo
+                      store={{
+                        name: coupon.store_name,
+                        slug: coupon.store_slug,
+                        logo_url: coupon.store_logo_url,
+                      }}
+                      size="md"
+                    />
                   </div>
                   <div>
-                    <p class="text-sm font-extrabold text-[#191f2e]">{coupon.store_name}</p>
+                    <p class="text-sm font-extrabold text-[#191f2e]">
+                      {coupon.store_name}
+                    </p>
                     <p class="text-xs text-slate-500 font-medium">
                       {coupon.category_icon || "🏷️"} {coupon.category_name}
                     </p>
@@ -115,17 +159,28 @@ const successRate =
               <div class="mt-5 flex flex-wrap items-center gap-3 text-xs text-slate-500">
                 <span class="inline-flex items-center gap-1 font-semibold text-emerald-700">
                   <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                    <path
+                      fill-rule="evenodd"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                      clip-rule="evenodd"
+                    />
                   </svg>
                   <span>100% Hand-Tested</span>
                 </span>
                 <span>•</span>
-                <span>Expires: <strong>{formatDisplayDate(coupon.expiry_date)}</strong></span>
+                <span>
+                  Expires:{" "}
+                  <strong>{formatDisplayDate(coupon.expiry_date)}</strong>
+                </span>
                 {daysLeft !== null && daysLeft >= 0 && (
                   <>
                     <span>•</span>
-                    <span class={daysLeft <= 7 ? "font-bold text-rose-600" : ""}>
-                      {daysLeft === 0 ? "Expires today" : `${daysLeft} days remaining`}
+                    <span
+                      class={daysLeft <= 7 ? "font-bold text-rose-600" : ""}
+                    >
+                      {daysLeft === 0
+                        ? "Expires today"
+                        : `${daysLeft} days remaining`}
                     </span>
                   </>
                 )}
@@ -170,8 +225,18 @@ const successRate =
                   data-coupon-terms={coupon.terms}
                   data-coupon-expiry={formatDisplayDate(coupon.expiry_date)}
                 >
-                  <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                  <svg
+                    class="h-4 w-4"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+                    />
                   </svg>
                   <span>Reveal &amp; Copy Code</span>
                 </button>
@@ -183,7 +248,7 @@ const successRate =
                 rel="noopener noreferrer"
                 class="block rounded-lg border border-slate-300 bg-white py-2 text-center text-xs font-semibold text-slate-600 transition hover:border-[#2491ef] hover:text-[#2491ef]"
               >
-                Go directly to {coupon.store_name} ↗
+                Go directly to {coupon.store_name}
               </a>
             </div>
           </div>
@@ -194,7 +259,8 @@ const successRate =
               Terms &amp; Conditions
             </h2>
             <p class="mt-2 whitespace-pre-line text-xs sm:text-sm leading-relaxed text-slate-600">
-              {coupon.terms || "Standard merchant terms apply. Enter the promo code at checkout before completing payment. Cannot usually be combined with other offers."}
+              {coupon.terms ||
+                "Standard merchant terms apply. Enter the promo code at checkout before completing payment. Cannot usually be combined with other offers."}
             </p>
           </div>
 
@@ -210,7 +276,8 @@ const successRate =
                   Did this coupon work for you?
                 </h2>
                 <p class="text-xs text-slate-500 font-medium">
-                  Your feedback helps thousands of smart shoppers find verified deals.
+                  Your feedback helps thousands of smart shoppers find verified
+                  deals.
                 </p>
               </div>
               <div class="flex items-center gap-3">
@@ -219,18 +286,23 @@ const successRate =
                   data-vote-btn="worked"
                   class="inline-flex items-center gap-1.5 rounded-lg border border-emerald-300 bg-emerald-50 px-4 py-2 text-xs font-bold text-emerald-700 transition hover:bg-emerald-600 hover:text-white shadow-2xs"
                 >
-                  👍 Worked (<span id="worked-count">{coupon.worked_count}</span>)
+                  👍 Worked (
+                  <span id="worked-count">{coupon.worked_count}</span>)
                 </button>
                 <button
                   type="button"
                   data-vote-btn="didnt_work"
                   class="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-4 py-2 text-xs font-semibold text-slate-600 transition hover:bg-slate-100"
                 >
-                  👎 Didn't Work (<span id="didnt-work-count">{coupon.didnt_work_count}</span>)
+                  👎 Didn't Work (
+                  <span id="didnt-work-count">{coupon.didnt_work_count}</span>)
                 </button>
               </div>
             </div>
-            <p id="vote-status-msg" class="mt-2.5 hidden text-xs font-bold text-[#2491ef]"></p>
+            <p
+              id="vote-status-msg"
+              class="mt-2.5 hidden text-xs font-bold text-[#2491ef]"
+            ></p>
           </div>
         </div>
       </div>
@@ -261,45 +333,50 @@ const successRate =
 
   if (widget && couponId) {
     const storageKey = `couponhub-voted-${couponId}`;
-    widget.querySelectorAll<HTMLButtonElement>("[data-vote-btn]").forEach((btn) => {
-      btn.addEventListener("click", async () => {
-        if (localStorage.getItem(storageKey)) {
-          if (statusMsg) {
-            statusMsg.textContent = "You already voted on this coupon. Thank you!";
-            statusMsg.classList.remove("hidden");
-          }
-          return;
-        }
-        const vote = btn.dataset.voteBtn;
-        btn.disabled = true;
-        try {
-          const res = await fetch(`/api/coupons/${couponId}/vote`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ vote }),
-          });
-          if (res.ok) {
-            const data = (await res.json()) as {
-              worked_count: number;
-              didnt_work_count: number;
-            };
-            if (workedEl) workedEl.textContent = String(data.worked_count);
-            if (didntWorkEl) didntWorkEl.textContent = String(data.didnt_work_count);
-            localStorage.setItem(storageKey, vote || "1");
+    widget
+      .querySelectorAll<HTMLButtonElement>("[data-vote-btn]")
+      .forEach((btn) => {
+        btn.addEventListener("click", async () => {
+          if (localStorage.getItem(storageKey)) {
             if (statusMsg) {
-              statusMsg.textContent = "Thanks for voting! Your feedback has been saved.";
+              statusMsg.textContent =
+                "You already voted on this coupon. Thank you!";
               statusMsg.classList.remove("hidden");
             }
+            return;
           }
-        } catch {
-          if (statusMsg) {
-            statusMsg.textContent = "Network error. Please try again.";
-            statusMsg.classList.remove("hidden");
+          const vote = btn.dataset.voteBtn;
+          btn.disabled = true;
+          try {
+            const res = await fetch(`/api/coupons/${couponId}/vote`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ vote }),
+            });
+            if (res.ok) {
+              const data = (await res.json()) as {
+                worked_count: number;
+                didnt_work_count: number;
+              };
+              if (workedEl) workedEl.textContent = String(data.worked_count);
+              if (didntWorkEl)
+                didntWorkEl.textContent = String(data.didnt_work_count);
+              localStorage.setItem(storageKey, vote || "1");
+              if (statusMsg) {
+                statusMsg.textContent =
+                  "Thanks for voting! Your feedback has been saved.";
+                statusMsg.classList.remove("hidden");
+              }
+            }
+          } catch {
+            if (statusMsg) {
+              statusMsg.textContent = "Network error. Please try again.";
+              statusMsg.classList.remove("hidden");
+            }
+          } finally {
+            btn.disabled = false;
           }
-        } finally {
-          btn.disabled = false;
-        }
+        });
       });
-    });
   }
 </script>

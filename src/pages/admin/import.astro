@@ -23,7 +23,8 @@ const sampleCsv = `title,code,discount_text,store,category,affiliate_or_store_ur
           Bulk Upload Coupons via CSV
         </h1>
         <p class="mt-1 text-sm text-slate-500">
-          Upload a CSV file or paste rows below to publish multiple coupons to Cloudflare D1 in one click.
+          Upload a CSV file or paste rows below to publish multiple coupons to
+          Cloudflare D1 in one click.
         </p>
       </div>
       <button
@@ -32,20 +33,24 @@ const sampleCsv = `title,code,discount_text,store,category,affiliate_or_store_ur
         data-sample={sampleCsv}
         class="rounded-lg border border-[#2491ef]/30 bg-[#eef5ff] px-4 py-2 text-xs font-bold text-[#2491ef] transition hover:bg-[#2491ef] hover:text-white shadow-2xs"
       >
-        ⬇ Download Sample CSV
+        Download Sample CSV
       </button>
     </div>
 
     <!-- Reference Slugs -->
     <div class="grid gap-4 rounded-xl border border-slate-200 bg-white p-5 text-xs sm:grid-cols-2">
       <div>
-        <p class="font-bold text-[#191f2e] uppercase">Valid Store Slugs / Names</p>
+        <p class="font-bold text-[#191f2e] uppercase">
+          Valid Store Slugs / Names
+        </p>
         <p class="mt-1.5 text-slate-600">
           {stores.map((s) => s.slug).join(", ")}
         </p>
       </div>
       <div>
-        <p class="font-bold text-[#191f2e] uppercase">Valid Category Slugs / Names</p>
+        <p class="font-bold text-[#191f2e] uppercase">
+          Valid Category Slugs / Names
+        </p>
         <p class="mt-1.5 text-slate-600">
           {categories.map((c) => c.slug).join(", ")}
         </p>
@@ -58,7 +63,10 @@ const sampleCsv = `title,code,discount_text,store,category,affiliate_or_store_ur
       class="space-y-4 rounded-xl border border-slate-200 bg-white p-6 shadow-xs"
     >
       <div>
-        <label for="csv-file" class="mb-1.5 block text-xs font-bold text-[#191f2e] uppercase">
+        <label
+          for="csv-file"
+          class="mb-1.5 block text-xs font-bold text-[#191f2e] uppercase"
+        >
           Choose .csv File
         </label>
         <input
@@ -70,7 +78,10 @@ const sampleCsv = `title,code,discount_text,store,category,affiliate_or_store_ur
       </div>
 
       <div>
-        <label for="csv-text" class="mb-1.5 block text-xs font-bold text-[#191f2e] uppercase">
+        <label
+          for="csv-text"
+          class="mb-1.5 block text-xs font-bold text-[#191f2e] uppercase"
+        >
           CSV Content (editable preview)
         </label>
         <textarea
@@ -97,11 +108,17 @@ const sampleCsv = `title,code,discount_text,store,category,affiliate_or_store_ur
 </AdminLayout>
 
 <script>
-  const fileInput = document.getElementById("csv-file") as HTMLInputElement | null;
-  const csvTextarea = document.getElementById("csv-text") as HTMLTextAreaElement | null;
+  const fileInput = document.getElementById(
+    "csv-file",
+  ) as HTMLInputElement | null;
+  const csvTextarea = document.getElementById(
+    "csv-text",
+  ) as HTMLTextAreaElement | null;
   const sampleBtn = document.getElementById("download-sample-btn");
   const form = document.getElementById("csv-import-form");
-  const submitBtn = document.getElementById("csv-submit-btn") as HTMLButtonElement | null;
+  const submitBtn = document.getElementById(
+    "csv-submit-btn",
+  ) as HTMLButtonElement | null;
   const resultBox = document.getElementById("import-result");
 
   sampleBtn?.addEventListener("click", () => {

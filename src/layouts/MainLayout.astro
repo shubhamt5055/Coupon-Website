@@ -21,7 +21,7 @@ const currentPath = Astro.url.pathname;
 const year = new Date().getFullYear();
 ---
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -50,8 +50,11 @@ const year = new Date().getFullYear();
               <span class="h-1.5 w-1.5 rounded-full bg-[#60a600] animate-soft-pulse"></span>
               Save On Everything
             </span>
-            <span>•</span>
-            <a href="/" class="font-bold text-[#2491ef] hover:underline transition">
+
+            <a
+              href="/"
+              class="font-bold text-[#2491ef] hover:underline transition"
+            >
               Back to Home
             </a>
           </div>

@@ -25,14 +25,27 @@ const coupons = category
 ---
 
 <MainLayout
-  title={category ? `${category.name} Coupons & Promo Codes — CouponHub` : "Category Not Found | CouponHub"}
-  description={category ? `Best active discount coupons and deals in ${category.name} on CouponHub.` : "Category not found."}
+  title={
+    category
+      ? `${category.name} Coupons & Promo Codes — CouponHub`
+      : "Category Not Found | CouponHub"
+  }
+  description={
+    category
+      ? `Best active discount coupons and deals in ${category.name} on CouponHub.`
+      : "Category not found."
+  }
 >
   {!category ? (
     <section class="mx-auto max-w-2xl px-4 py-20 text-center">
       <h1 class="text-3xl font-extrabold text-[#191f2e]">Category Not Found</h1>
-      <p class="mt-2 text-xs sm:text-sm text-slate-500">The category you are looking for does not exist or has been moved.</p>
-      <a href="/categories" class="mt-6 inline-block rounded-lg bg-[#2491ef] px-6 py-2.5 text-xs font-bold text-white shadow-2xs hover:bg-[#129fea]">
+      <p class="mt-2 text-xs sm:text-sm text-slate-500">
+        The category you are looking for does not exist or has been moved.
+      </p>
+      <a
+        href="/categories"
+        class="mt-6 inline-block rounded-lg bg-[#2491ef] px-6 py-2.5 text-xs font-bold text-white shadow-2xs hover:bg-[#129fea]"
+      >
         Browse All Categories
       </a>
     </section>
@@ -40,9 +53,13 @@ const coupons = category
     <section class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
       <!-- Breadcrumbs (GrabOn Style) -->
       <nav class="mb-5 flex items-center gap-2 text-xs font-medium text-slate-400">
-        <a href="/" class="hover:text-[#2491ef] transition">Home</a>
+        <a href="/" class="hover:text-[#2491ef] transition">
+          Home
+        </a>
         <span>/</span>
-        <a href="/categories" class="hover:text-[#2491ef] transition">Categories</a>
+        <a href="/categories" class="hover:text-[#2491ef] transition">
+          Categories
+        </a>
         <span>/</span>
         <span class="text-[#191f2e] font-bold">{category.name}</span>
       </nav>
@@ -58,11 +75,11 @@ const coupons = category
             <div>
               <div class="flex items-center gap-2">
                 <span class="inline-flex items-center gap-1.5 rounded-full border border-[#2491ef]/20 bg-[#eef5ff] px-2.5 py-0.5 text-[11px] font-bold text-[#2491ef]">
-                  <span class="h-1.5 w-1.5 rounded-full bg-[#60a600] animate-soft-pulse"></span>
                   <span>Verified Category Deals</span>
                 </span>
                 <span class="text-xs font-semibold text-slate-400">
-                  {coupons.length} {coupons.length === 1 ? "Offer Live" : "Offers Live"}
+                  {coupons.length}{" "}
+                  {coupons.length === 1 ? "Offer Live" : "Offers Live"}
                 </span>
               </div>
 
@@ -71,7 +88,8 @@ const coupons = category
               </h1>
 
               <p class="mt-1 text-xs sm:text-sm font-medium text-slate-500">
-                Explore hand-tested discount coupons, promotional codes, and online shopping vouchers for {category.name}.
+                Explore hand-tested discount coupons, promotional codes, and
+                online shopping vouchers for {category.name}.
               </p>
             </div>
           </div>
@@ -79,7 +97,11 @@ const coupons = category
           <!-- Actions -->
           <div class="flex items-center gap-3">
             <a
-              href={includeExpired ? `/categories/${category.slug}` : `/categories/${category.slug}?includeExpired=1`}
+              href={
+                includeExpired
+                  ? `/categories/${category.slug}`
+                  : `/categories/${category.slug}?includeExpired=1`
+              }
               class="rounded-lg border border-slate-200 bg-white px-3.5 py-2 text-xs font-bold text-slate-600 shadow-2xs transition hover:border-[#2491ef] hover:text-[#2491ef]"
             >
               {includeExpired ? "Hide Expired Deals" : "Include Expired Deals"}
@@ -94,14 +116,19 @@ const coupons = category
           <h2 class="text-base font-bold text-[#191f2e]">
             All {category.name} Offers ({coupons.length})
           </h2>
-          <span class="text-xs font-semibold text-slate-500">Updated Daily</span>
+          <span class="text-xs font-semibold text-slate-500">
+            Updated Daily
+          </span>
         </div>
 
         {coupons.length === 0 ? (
           <div class="rounded-xl border border-dashed border-slate-300 bg-white p-12 text-center">
-            <p class="font-bold text-slate-700">No active coupons in this category right now.</p>
+            <p class="font-bold text-slate-700">
+              No active coupons in this category right now.
+            </p>
             <p class="mt-1 text-xs text-slate-400">
-              Check back soon or try enabling expired deals to browse previous promotions.
+              Check back soon or try enabling expired deals to browse previous
+              promotions.
             </p>
           </div>
         ) : (

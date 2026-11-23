@@ -31,26 +31,29 @@ const [coupons, categories, stores] = await Promise.all([
   getStoresWithCounts(db),
 ]);
 
-const hasFilters = Boolean(q || categorySlug || storeSlug || includeExpired || sort !== "newest");
+const hasFilters = Boolean(
+  q || categorySlug || storeSlug || includeExpired || sort !== "newest",
+);
 ---
 
 <MainLayout
-  title={q ? `Search "${q}" — Discount Coupons | CouponHub` : "Explore All Verified Coupons & Promo Codes | CouponHub"}
+  title={
+    q
+      ? `Search "${q}" — Discount Coupons | CouponHub`
+      : "Explore All Verified Coupons & Promo Codes | CouponHub"
+  }
   description="Search and filter verified discount promo codes by store, category, or discount type on CouponHub."
 >
   <section class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
     <!-- Header (GrabOn Style) -->
     <div class="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
       <div>
-        <div class="inline-flex items-center gap-1.5 rounded-full bg-[#eef5ff] border border-[#2491ef]/20 px-3 py-1 text-xs font-bold tracking-wider text-[#2491ef] uppercase">
-          <span class="h-1.5 w-1.5 rounded-full bg-[#60a600] animate-soft-pulse"></span>
-          <span>Verified Deals Directory</span>
-        </div>
         <h1 class="mt-2 text-3xl font-extrabold tracking-tight text-[#191f2e] sm:text-4xl">
           {q ? `Search results for "${q}"` : "All Verified Coupons & Deals"}
         </h1>
         <p class="mt-1 text-xs sm:text-sm font-medium text-slate-500">
-          Filter by your favorite store, product category, or discount value to get the best deal.
+          Filter by your favorite store, product category, or discount value to
+          get the best deal.
         </p>
       </div>
 
@@ -59,11 +62,14 @@ const hasFilters = Boolean(q || categorySlug || storeSlug || includeExpired || s
           href="/submit-coupon"
           class="inline-flex items-center gap-1.5 rounded-lg bg-[#60a600] px-4 py-2 text-xs font-bold text-white shadow-2xs hover:bg-[#528f00] active:scale-95 transition"
         >
-          <span class="text-sm font-black">+</span>
-          <span>Add Coupon (No Login Needed)</span>
+          <span>Add Coupon</span>
         </a>
         <div class="rounded-lg bg-white border border-slate-200 px-4 py-2 text-xs font-bold text-slate-600 shadow-2xs">
-          Showing <strong class="text-[#2491ef] font-extrabold">{coupons.length}</strong> {coupons.length === 1 ? "coupon" : "coupons"}
+          Showing{" "}
+          <strong class="text-[#2491ef] font-extrabold">
+            {coupons.length}
+          </strong>{" "}
+          {coupons.length === 1 ? "coupon" : "coupons"}
         </div>
       </div>
     </div>
@@ -76,12 +82,25 @@ const hasFilters = Boolean(q || categorySlug || storeSlug || includeExpired || s
     >
       <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
         <div class="lg:col-span-2">
-          <label for="filter-q" class="mb-1.5 block text-xs font-bold uppercase text-[#191f2e]">
+          <label
+            for="filter-q"
+            class="mb-1.5 block text-xs font-bold uppercase text-[#191f2e]"
+          >
             Keyword Search
           </label>
           <div class="relative flex items-center">
-            <svg class="pointer-events-none absolute left-3.5 h-4 w-4 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            <svg
+              class="pointer-events-none absolute left-3.5 h-4 w-4 text-slate-400"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+              />
             </svg>
             <input
               id="filter-q"
@@ -95,7 +114,10 @@ const hasFilters = Boolean(q || categorySlug || storeSlug || includeExpired || s
         </div>
 
         <div>
-          <label for="filter-category" class="mb-1.5 block text-xs font-bold uppercase text-[#191f2e]">
+          <label
+            for="filter-category"
+            class="mb-1.5 block text-xs font-bold uppercase text-[#191f2e]"
+          >
             Category
           </label>
           <select
@@ -113,7 +135,10 @@ const hasFilters = Boolean(q || categorySlug || storeSlug || includeExpired || s
         </div>
 
         <div>
-          <label for="filter-store" class="mb-1.5 block text-xs font-bold uppercase text-[#191f2e]">
+          <label
+            for="filter-store"
+            class="mb-1.5 block text-xs font-bold uppercase text-[#191f2e]"
+          >
             Store
           </label>
           <select
@@ -131,7 +156,10 @@ const hasFilters = Boolean(q || categorySlug || storeSlug || includeExpired || s
         </div>
 
         <div>
-          <label for="filter-sort" class="mb-1.5 block text-xs font-bold uppercase text-[#191f2e]">
+          <label
+            for="filter-sort"
+            class="mb-1.5 block text-xs font-bold uppercase text-[#191f2e]"
+          >
             Sort Order
           </label>
           <select
@@ -139,9 +167,15 @@ const hasFilters = Boolean(q || categorySlug || storeSlug || includeExpired || s
             name="sort"
             class="w-full rounded-lg border border-slate-300 bg-[#f8fafc] px-3.5 py-2.5 text-xs sm:text-sm font-medium text-[#191f2e] outline-none transition focus:border-[#2491ef] focus:ring-2 focus:ring-[#2491ef]/20 focus:bg-white"
           >
-            <option value="newest" selected={sort === "newest"}>Newest First</option>
-            <option value="popular" selected={sort === "popular"}>Most Popular</option>
-            <option value="expiring" selected={sort === "expiring"}>Expiring Soon</option>
+            <option value="newest" selected={sort === "newest"}>
+              Newest First
+            </option>
+            <option value="popular" selected={sort === "popular"}>
+              Most Popular
+            </option>
+            <option value="expiring" selected={sort === "expiring"}>
+              Expiring Soon
+            </option>
           </select>
         </div>
       </div>
@@ -181,9 +215,12 @@ const hasFilters = Boolean(q || categorySlug || storeSlug || includeExpired || s
     {coupons.length === 0 ? (
       <div class="rounded-xl border border-dashed border-slate-300 bg-white p-14 text-center shadow-2xs">
         <span class="text-4xl">🔍</span>
-        <h3 class="mt-4 text-lg font-bold text-[#191f2e]">No coupons matched your search</h3>
+        <h3 class="mt-4 text-lg font-bold text-[#191f2e]">
+          No coupons matched your search
+        </h3>
         <p class="mx-auto mt-2 max-w-md text-xs text-slate-500">
-          Try adjusting your keywords, clearing selected category/store, or enabling expired coupons.
+          Try adjusting your keywords, clearing selected category/store, or
+          enabling expired coupons.
         </p>
         <a
           href="/coupons"

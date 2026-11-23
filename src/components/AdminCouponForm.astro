@@ -28,7 +28,6 @@ const defaultExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
         <h2 class="text-xl font-extrabold text-[#191f2e]">
           {mode === "create" ? "New Coupon" : "Edit Coupon"}
         </h2>
-        <p class="text-xs text-slate-500">Fields marked * are required.</p>
       </div>
     </div>
 
@@ -48,7 +47,7 @@ const defaultExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
             for="title"
             class="mb-1 block text-xs font-bold text-[#191f2e]"
           >
-            Coupon Title *
+            Coupon Title
           </label>
           <input
             id="title"
@@ -62,12 +61,13 @@ const defaultExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
             class="w-full rounded-lg border border-slate-300 bg-[#f8fafc] px-3.5 py-2.5 text-xs sm:text-sm font-medium text-[#191f2e] outline-none transition focus:border-[#2491ef] focus:bg-white focus:ring-2 focus:ring-[#2491ef]/20"
           />
           <p class="mt-1 text-[11px] text-slate-400">
-            Min 5 - Max 140 characters. Special symbols (&lt; &gt; . / ? &quot; [ ] &#123; &#125; \ | - + * @ ! ~ # $ ^ ( ) =) are not allowed.
+            Min 5 - Max 140 characters. Special symbols (&lt; &gt; . / ? &quot;
+            [ ] &#123; &#125; \ | - + * @ ! ~ # $ ^ ( ) =) are not allowed.
           </p>
         </div>
         <div>
           <label for="code" class="mb-1 block text-xs font-bold text-[#191f2e]">
-            Promo Code *
+            Promo Code
           </label>
           <input
             id="code"
@@ -89,7 +89,7 @@ const defaultExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
             for="discount_text"
             class="mb-1 block text-xs font-bold text-[#191f2e]"
           >
-            Discount Badge *
+            Discount Badge
           </label>
           <input
             id="discount_text"
@@ -119,7 +119,7 @@ const defaultExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
             for="store_id"
             class="mb-1 block text-xs font-bold text-[#191f2e]"
           >
-            Store *
+            Store
           </label>
           <select
             id="store_id"
@@ -181,7 +181,7 @@ const defaultExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
             for="expiry_date"
             class="mb-1 block text-xs font-bold text-[#191f2e]"
           >
-            Expiry Date *
+            Expiry Date
           </label>
           <input
             id="expiry_date"
@@ -296,11 +296,16 @@ const defaultExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
 
     const payload = {
       title: String(fd.get("title") || "").trim(),
-      code: String(fd.get("code") || "").trim().toUpperCase().replace(/\s+/g, ""),
+      code: String(fd.get("code") || "")
+        .trim()
+        .toUpperCase()
+        .replace(/\s+/g, ""),
       discount_text: String(fd.get("discount_text") || "").trim(),
       store_id: Number(fd.get("store_id")),
       category_id: Number(fd.get("category_id")),
-      affiliate_or_store_url: String(fd.get("affiliate_or_store_url") || "").trim(),
+      affiliate_or_store_url: String(
+        fd.get("affiliate_or_store_url") || "",
+      ).trim(),
       expiry_date: String(fd.get("expiry_date") || "").trim(),
       description: String(fd.get("description") || "").trim(),
       terms: String(fd.get("terms") || "").trim(),
@@ -310,7 +315,8 @@ const defaultExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
     // Client-side validations
     if (payload.title.length < 5) {
       if (alertBox) {
-        alertBox.textContent = "Coupon title must be at least 5 characters long.";
+        alertBox.textContent =
+          "Coupon title must be at least 5 characters long.";
         alertBox.classList.remove("hidden");
       }
       return;
@@ -327,7 +333,8 @@ const defaultExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
     const letterMatches = payload.title.match(/[\p{L}]/gu);
     if (!letterMatches || letterMatches.length < 2) {
       if (alertBox) {
-        alertBox.textContent = "Title cannot be only numbers or symbols. Please include descriptive words.";
+        alertBox.textContent =
+          "Title cannot be only numbers or symbols. Please include descriptive words.";
         alertBox.classList.remove("hidden");
       }
       return;
@@ -336,7 +343,8 @@ const defaultExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
     const disallowedTitleCharsRegex = /[<>./?"\]\[{}\\|+\-*@!~#$^()=]/;
     if (disallowedTitleCharsRegex.test(payload.title)) {
       if (alertBox) {
-        alertBox.textContent = "Special symbols (< > . / ? \" [ ] { } \\ | - + * @ ! ~ # $ ^ ( ) =) are not allowed in Title.";
+        alertBox.textContent =
+          'Special symbols (< > . / ? " [ ] { } \\ | - + * @ ! ~ # $ ^ ( ) =) are not allowed in Title.';
         alertBox.classList.remove("hidden");
       }
       return;
@@ -345,7 +353,8 @@ const defaultExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
     const titleAllowedRegex = /^[\p{L}\p{N}\s%₹&',:–—]+$/u;
     if (!titleAllowedRegex.test(payload.title)) {
       if (alertBox) {
-        alertBox.textContent = "Title contains invalid characters. Special symbols are not allowed.";
+        alertBox.textContent =
+          "Title contains invalid characters. Special symbols are not allowed.";
         alertBox.classList.remove("hidden");
       }
       return;
@@ -353,7 +362,8 @@ const defaultExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
 
     if (payload.code.length < 2 || payload.code.length > 30) {
       if (alertBox) {
-        alertBox.textContent = "Promo code must be between 2 and 30 characters.";
+        alertBox.textContent =
+          "Promo code must be between 2 and 30 characters.";
         alertBox.classList.remove("hidden");
       }
       return;
@@ -361,7 +371,8 @@ const defaultExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
 
     if (!/^[A-Z0-9_-]+$/.test(payload.code)) {
       if (alertBox) {
-        alertBox.textContent = "Promo code can only contain letters, numbers, hyphens, and underscores.";
+        alertBox.textContent =
+          "Promo code can only contain letters, numbers, hyphens, and underscores.";
         alertBox.classList.remove("hidden");
       }
       return;
@@ -372,7 +383,8 @@ const defaultExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
       const pctVal = parseFloat(pctMatch[1]);
       if (pctVal > 99) {
         if (alertBox) {
-          alertBox.textContent = "Discount percentage cannot exceed 99% (maximum allowed is 99% OFF).";
+          alertBox.textContent =
+            "Discount percentage cannot exceed 99% (maximum allowed is 99% OFF).";
           alertBox.classList.remove("hidden");
         }
         return;
@@ -396,7 +408,8 @@ const defaultExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
       }
     } catch {
       if (alertBox) {
-        alertBox.textContent = "Please enter a valid store/deal link URL (e.g. https://www.store.com/deal).";
+        alertBox.textContent =
+          "Please enter a valid store/deal link URL (e.g. https://www.store.com/deal).";
         alertBox.classList.remove("hidden");
       }
       return;
@@ -405,7 +418,8 @@ const defaultExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
     const todayStr = new Date().toISOString().slice(0, 10);
     if (payload.expiry_date < todayStr) {
       if (alertBox) {
-        alertBox.textContent = "Expiry date cannot be in the past. Please choose today or a future date.";
+        alertBox.textContent =
+          "Expiry date cannot be in the past. Please choose today or a future date.";
         alertBox.classList.remove("hidden");
       }
       return;
