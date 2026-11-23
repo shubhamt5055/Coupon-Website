@@ -32,9 +32,12 @@ export function validateHttpUrl(value: unknown, fieldName: string): { url: strin
     if (parsed.protocol !== "http:" && parsed.protocol !== "https:") {
       return { url: "", error: `${fieldName} must start with http:// or https://.` };
     }
+    if (!parsed.hostname || !parsed.hostname.includes(".")) {
+      return { url: "", error: `${fieldName} must have a valid domain (e.g. https://www.store.com/deal).` };
+    }
     return { url: parsed.href };
   } catch {
-    return { url: "", error: `${fieldName} must be a valid URL.` };
+    return { url: "", error: `${fieldName} must be a valid URL (e.g. https://www.store.com/deal).` };
   }
 }
 
@@ -56,19 +59,49 @@ export function validateOptionalLogoUrl(value: unknown): { url: string; error?: 
 export function validateCouponInput(raw: Record<string, unknown>): ValidationResult<CouponInput> {
   const errors: string[] = [];
 
+  // 1. Title validation: 5 to 140 chars, allowed characters, cannot be only symbols/numbers
   const title = sanitizeText(raw.title, 140);
-  if (title.length < 3) {
-    errors.push("Title must be at least 3 characters long.");
+  if (title.length < 5) {
+    errors.push("Title must be at least 5 characters long.");
+  } else if (title.length > 140) {
+    errors.push("Title cannot exceed 140 characters.");
+  } else {
+    // Allowed characters: letters, numbers, spaces, and standard punctuation/symbols
+    const allowedCharsRegex = /^[\p{L}\p{N}\s.,!?&/()':;+₹$%#@*–—"\\-]+$/u;
+    if (!allowedCharsRegex.test(title)) {
+      errors.push("Title contains invalid characters. Only letters, numbers, and standard punctuation are allowed.");
+    }
+    // Must contain at least 2 letters (cannot be only symbols or numbers)
+    const letterCount = (title.match(/\p{L}/gu) || []).length;
+    if (letterCount < 2) {
+      errors.push("Title cannot be only numbers or symbols. Please include descriptive words.");
+    }
   }
 
-  const code = sanitizeText(raw.code, 40).toUpperCase().replace(/\s+/g, "");
-  if (code.length < 2 || !/^[A-Z0-9_-]+$/.test(code)) {
-    errors.push("Coupon code must be 2–40 characters (letters, numbers, hyphen, underscore only).");
+  // 2. Promo Code validation: 2 to 30 characters, alphanumeric, hyphen, underscore
+  const code = sanitizeText(raw.code, 30).toUpperCase().replace(/\s+/g, "");
+  if (code.length < 2 || code.length > 30) {
+    errors.push("Promo code must be between 2 and 30 characters.");
+  } else if (!/^[A-Z0-9_-]+$/.test(code)) {
+    errors.push("Promo code can only contain letters, numbers, hyphens, and underscores.");
+  } else if (!/[A-Z0-9]/.test(code)) {
+    errors.push("Promo code must contain at least one letter or number.");
   }
 
+  // 3. Discount badge validation: <= 99% if percentage is present
   const discount_text = sanitizeText(raw.discount_text, 40);
   if (discount_text.length < 2) {
     errors.push("Discount badge text is required (e.g. '20% OFF' or '₹150 OFF').");
+  } else {
+    const pctMatch = discount_text.match(/(\d+(?:\.\d+)?)\s*%/);
+    if (pctMatch) {
+      const pctVal = parseFloat(pctMatch[1]);
+      if (pctVal > 99) {
+        errors.push("Discount percentage cannot exceed 99% (maximum allowed is 99% OFF).");
+      } else if (pctVal <= 0) {
+        errors.push("Discount percentage must be greater than 0%.");
+      }
+    }
   }
 
   const description = sanitizeMultilineText(raw.description, 1000);
@@ -84,12 +117,14 @@ export function validateCouponInput(raw: Record<string, unknown>): ValidationRes
     errors.push("Please select a valid category.");
   }
 
+  // 4. Deal / Store link validation
   const { url: affiliate_or_store_url, error: urlError } = validateHttpUrl(
     raw.affiliate_or_store_url,
-    "Store / Affiliate URL"
+    "Store / Deal link"
   );
   if (urlError) errors.push(urlError);
 
+  // 5. Expiry Date validation: YYYY-MM-DD and cannot be in the past
   const expiry_date = sanitizeText(raw.expiry_date, 20);
   if (!/^\d{4}-\d{2}-\d{2}$/.test(expiry_date)) {
     errors.push("Expiry date must be in YYYY-MM-DD format.");
@@ -97,6 +132,11 @@ export function validateCouponInput(raw: Record<string, unknown>): ValidationRes
     const parsedDate = new Date(`${expiry_date}T00:00:00Z`);
     if (Number.isNaN(parsedDate.getTime())) {
       errors.push("Expiry date is not a valid calendar date.");
+    } else {
+      const today = new Date().toISOString().slice(0, 10);
+      if (expiry_date < today) {
+        errors.push("Expiry date cannot be in the past. Please choose today or a future date.");
+      }
     }
   }
 

@@ -8,6 +8,7 @@ const [stores, categories] = await Promise.all([
   getCategoriesWithCounts(db),
 ]);
 
+const today = new Date().toISOString().slice(0, 10);
 const defaultExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
   .toISOString()
   .slice(0, 10);
@@ -25,10 +26,6 @@ const defaultExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
     <!-- Header -->
     <div class="flex items-start justify-between border-b border-slate-100 pb-4">
       <div>
-        <span class="inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-0.5 text-[11px] font-bold text-emerald-800">
-          <span class="h-1.5 w-1.5 rounded-full bg-[#60a600] animate-pulse"></span>
-          No Login Required • Instant Live Publishing
-        </span>
         <h2
           id="add-coupon-modal-title"
           class="mt-2 text-2xl font-black tracking-tight text-[#191f2e]"
@@ -91,10 +88,14 @@ const defaultExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
           name="title"
           type="text"
           required
+          minlength="5"
           maxlength="140"
           placeholder="e.g. Flat 50% Off on Food Orders"
           class="w-full rounded-lg border border-slate-300 bg-[#f8fafc] px-3.5 py-2.5 text-xs sm:text-sm font-medium text-[#191f2e] outline-none transition focus:border-[#2491ef] focus:bg-white focus:ring-2 focus:ring-[#2491ef]/20"
         />
+        <p class="mt-1 text-[11px] text-slate-400">
+          Min 5 - Max 140 characters. Must contain descriptive words (not only symbols/numbers).
+        </p>
       </div>
 
       <!-- Store & Category -->
@@ -156,10 +157,14 @@ const defaultExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
             name="code"
             type="text"
             required
-            maxlength="40"
+            minlength="2"
+            maxlength="30"
             placeholder="e.g. SWIGGY50"
             class="w-full rounded-lg border border-slate-300 bg-[#f8fafc] px-3.5 py-2.5 font-mono text-xs sm:text-sm uppercase tracking-widest text-[#191f2e] outline-none transition focus:border-[#2491ef] focus:bg-white focus:ring-2 focus:ring-[#2491ef]/20"
           />
+          <p class="mt-1 text-[11px] text-slate-400">
+            Letters, numbers, and hyphens only (2–30 chars).
+          </p>
         </div>
 
         <div>
@@ -178,6 +183,9 @@ const defaultExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
             placeholder="e.g. 50% OFF or ₹100 CASHBACK"
             class="w-full rounded-lg border border-slate-300 bg-[#f8fafc] px-3.5 py-2.5 text-xs sm:text-sm font-medium text-[#191f2e] outline-none transition focus:border-[#2491ef] focus:bg-white focus:ring-2 focus:ring-[#2491ef]/20"
           />
+          <p class="mt-1 text-[11px] text-slate-400">
+            Max 99% OFF (or flat amount, e.g. ₹150 OFF).
+          </p>
         </div>
       </div>
 
@@ -198,6 +206,9 @@ const defaultExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
             placeholder="https://www.store.com/deal"
             class="w-full rounded-lg border border-slate-300 bg-[#f8fafc] px-3.5 py-2.5 text-xs sm:text-sm font-medium text-[#191f2e] outline-none transition focus:border-[#2491ef] focus:bg-white focus:ring-2 focus:ring-[#2491ef]/20"
           />
+          <p class="mt-1 text-[11px] text-slate-400">
+            Must start with http:// or https:// with valid domain.
+          </p>
         </div>
 
         <div>
@@ -212,9 +223,13 @@ const defaultExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
             name="expiry_date"
             type="date"
             required
+            min={today}
             value={defaultExpiry}
             class="w-full rounded-lg border border-slate-300 bg-[#f8fafc] px-3.5 py-2.5 text-xs sm:text-sm font-medium text-[#191f2e] outline-none transition focus:border-[#2491ef] focus:bg-white focus:ring-2 focus:ring-[#2491ef]/20"
           />
+          <p class="mt-1 text-[11px] text-slate-400">
+            Must be today or a future date.
+          </p>
         </div>
       </div>
 
@@ -325,7 +340,7 @@ const defaultExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
     const fd = new FormData(form);
     const payload = {
       title: String(fd.get("title") || "").trim(),
-      code: String(fd.get("code") || "").trim(),
+      code: String(fd.get("code") || "").trim().toUpperCase().replace(/\s+/g, ""),
       discount_text: String(fd.get("discount_text") || "").trim(),
       store_id: Number(fd.get("store_id")),
       category_id: Number(fd.get("category_id")),
@@ -336,6 +351,145 @@ const defaultExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
       description: String(fd.get("description") || "").trim(),
       terms: "",
     };
+
+    // Client-side validation
+    if (payload.title.length < 5) {
+      if (alertBox) {
+        alertBox.textContent = "Coupon title must be at least 5 characters long.";
+        alertBox.classList.remove("hidden");
+      }
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Publish Coupon Instantly";
+      }
+      return;
+    }
+
+    if (payload.title.length > 140) {
+      if (alertBox) {
+        alertBox.textContent = "Coupon title cannot exceed 140 characters.";
+        alertBox.classList.remove("hidden");
+      }
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Publish Coupon Instantly";
+      }
+      return;
+    }
+
+    const letterMatches = payload.title.match(/[\p{L}]/gu);
+    if (!letterMatches || letterMatches.length < 2) {
+      if (alertBox) {
+        alertBox.textContent = "Title cannot be only numbers or symbols. Please include descriptive words.";
+        alertBox.classList.remove("hidden");
+      }
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Publish Coupon Instantly";
+      }
+      return;
+    }
+
+    const titleAllowedRegex = /^[\p{L}\p{N}\s.,!?&/()':;+₹$%#@*–—"\\-]+$/u;
+    if (!titleAllowedRegex.test(payload.title)) {
+      if (alertBox) {
+        alertBox.textContent = "Title contains invalid characters. Only letters, numbers, and standard punctuation are allowed.";
+        alertBox.classList.remove("hidden");
+      }
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Publish Coupon Instantly";
+      }
+      return;
+    }
+
+    // Promo code validation
+    if (payload.code.length < 2 || payload.code.length > 30) {
+      if (alertBox) {
+        alertBox.textContent = "Promo code must be between 2 and 30 characters.";
+        alertBox.classList.remove("hidden");
+      }
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Publish Coupon Instantly";
+      }
+      return;
+    }
+
+    if (!/^[A-Z0-9_-]+$/.test(payload.code)) {
+      if (alertBox) {
+        alertBox.textContent = "Promo code can only contain letters, numbers, hyphens, and underscores.";
+        alertBox.classList.remove("hidden");
+      }
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Publish Coupon Instantly";
+      }
+      return;
+    }
+
+    // Discount percentage check (<= 99%)
+    const pctMatch = payload.discount_text.match(/(\d+(?:\.\d+)?)\s*%/);
+    if (pctMatch) {
+      const pctVal = parseFloat(pctMatch[1]);
+      if (pctVal > 99) {
+        if (alertBox) {
+          alertBox.textContent = "Discount percentage cannot exceed 99% (maximum allowed is 99% OFF).";
+          alertBox.classList.remove("hidden");
+        }
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = "Publish Coupon Instantly";
+        }
+        return;
+      }
+      if (pctVal <= 0) {
+        if (alertBox) {
+          alertBox.textContent = "Discount percentage must be greater than 0%.";
+          alertBox.classList.remove("hidden");
+        }
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = "Publish Coupon Instantly";
+        }
+        return;
+      }
+    }
+
+    // Store / Deal link check
+    try {
+      const parsedUrl = new URL(payload.affiliate_or_store_url);
+      if (parsedUrl.protocol !== "http:" && parsedUrl.protocol !== "https:") {
+        throw new Error("Invalid protocol");
+      }
+      if (!parsedUrl.hostname || !parsedUrl.hostname.includes(".")) {
+        throw new Error("Invalid domain");
+      }
+    } catch {
+      if (alertBox) {
+        alertBox.textContent = "Please enter a valid store/deal link URL (e.g. https://www.store.com/deal).";
+        alertBox.classList.remove("hidden");
+      }
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Publish Coupon Instantly";
+      }
+      return;
+    }
+
+    // Expiry date check
+    const todayStr = new Date().toISOString().slice(0, 10);
+    if (payload.expiry_date < todayStr) {
+      if (alertBox) {
+        alertBox.textContent = "Expiry date cannot be in the past. Please choose today or a future date.";
+        alertBox.classList.remove("hidden");
+      }
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Publish Coupon Instantly";
+      }
+      return;
+    }
 
     try {
       const res = await fetch("/api/coupons/submit", {
