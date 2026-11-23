@@ -66,10 +66,14 @@ export function validateCouponInput(raw: Record<string, unknown>): ValidationRes
   } else if (title.length > 140) {
     errors.push("Title cannot exceed 140 characters.");
   } else {
-    // Allowed characters: letters, numbers, spaces, and standard punctuation/symbols
-    const allowedCharsRegex = /^[\p{L}\p{N}\s.,!?&/()':;+₹$%#@*–—"\\-]+$/u;
+    // Disallowed symbols check: <>./?"][{}\|-+*/@!~#$^()=
+    const disallowedTitleCharsRegex = /[<>./?"\]\[{}\\|+\-*@!~#$^()=]/;
+    if (disallowedTitleCharsRegex.test(title)) {
+      errors.push("Special symbols (< > . / ? \" [ ] { } \\ | - + * @ ! ~ # $ ^ ( ) =) are not allowed in Title.");
+    }
+    const allowedCharsRegex = /^[\p{L}\p{N}\s%₹&',:–—]+$/u;
     if (!allowedCharsRegex.test(title)) {
-      errors.push("Title contains invalid characters. Only letters, numbers, and standard punctuation are allowed.");
+      errors.push("Title contains invalid characters. Special symbols are not allowed.");
     }
     // Must contain at least 2 letters (cannot be only symbols or numbers)
     const letterCount = (title.match(/\p{L}/gu) || []).length;

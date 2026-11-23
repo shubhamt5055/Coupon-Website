@@ -62,7 +62,7 @@ const defaultExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
             class="w-full rounded-lg border border-slate-300 bg-[#f8fafc] px-3.5 py-2.5 text-xs sm:text-sm font-medium text-[#191f2e] outline-none transition focus:border-[#2491ef] focus:bg-white focus:ring-2 focus:ring-[#2491ef]/20"
           />
           <p class="mt-1 text-[11px] text-slate-400">
-            Min 5 - Max 140 characters. Must contain actual words (cannot be only symbols/numbers).
+            Min 5 - Max 140 characters. Special symbols (&lt; &gt; . / ? &quot; [ ] &#123; &#125; \ | - + * @ ! ~ # $ ^ ( ) =) are not allowed.
           </p>
         </div>
         <div>
@@ -333,10 +333,19 @@ const defaultExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
       return;
     }
 
-    const titleAllowedRegex = /^[\p{L}\p{N}\s.,!?&/()':;+₹$%#@*–—"\\-]+$/u;
+    const disallowedTitleCharsRegex = /[<>./?"\]\[{}\\|+\-*@!~#$^()=]/;
+    if (disallowedTitleCharsRegex.test(payload.title)) {
+      if (alertBox) {
+        alertBox.textContent = "Special symbols (< > . / ? \" [ ] { } \\ | - + * @ ! ~ # $ ^ ( ) =) are not allowed in Title.";
+        alertBox.classList.remove("hidden");
+      }
+      return;
+    }
+
+    const titleAllowedRegex = /^[\p{L}\p{N}\s%₹&',:–—]+$/u;
     if (!titleAllowedRegex.test(payload.title)) {
       if (alertBox) {
-        alertBox.textContent = "Title contains invalid characters. Only letters, numbers, and standard punctuation are allowed.";
+        alertBox.textContent = "Title contains invalid characters. Special symbols are not allowed.";
         alertBox.classList.remove("hidden");
       }
       return;
