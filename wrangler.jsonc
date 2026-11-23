@@ -1,36 +1,38 @@
 {
-  "$schema": "./node_modules/wrangler/config-schema.json",
-  "compatibility_date": "2026-11-16",
-  "compatibility_flags": ["global_fetch_strictly_public"],
-  "name": "coupon-website",
-  "main": "@astrojs/cloudflare/entrypoints/server",
-  "assets": {
-    "directory": "./dist",
-    "binding": "ASSETS"
-  },
-  "observability": {
-    "enabled": true
-  },
-  "d1_databases": [
-    {
-      "binding": "coupon_db",
-      "database_name": "coupon-db",
-      "database_id": "78569092-4216-4e44-8c07-1a7266064d85",
-      "migrations_dir": "db/migrations"
-    }
-  ]
-  // Optional: Uncomment after running `npx wrangler kv namespace create COUPON_CACHE`
-  // "kv_namespaces": [
-  //   {
-  //     "binding": "COUPON_CACHE",
-  //     "id": "<YOUR_KV_NAMESPACE_ID>"
-  //   }
-  // ],
-  // Optional: Uncomment after running `npx wrangler r2 bucket create coupon-store-logos`
-  // "r2_buckets": [
-  //   {
-  //     "binding": "STORE_LOGOS",
-  //     "bucket_name": "coupon-store-logos"
-  //   }
-  // ]
+	"$schema": "./node_modules/wrangler/config-schema.json",
+	"compatibility_date": "2026-11-16",
+	"compatibility_flags": [
+		"global_fetch_strictly_public"
+	],
+	"name": "couponhub",
+	"main": "@astrojs/cloudflare/entrypoints/server",
+	"assets": {
+		"directory": "./dist",
+		"binding": "ASSETS"
+	},
+	"observability": {
+		"enabled": true
+	},
+	"d1_databases": [
+		{
+			"binding": "coupon_db",
+			"database_name": "coupon-db",
+			"database_id": "6fed3909-94df-4395-821a-b1555ebfb2ac",
+			"migrations_dir": "db/migrations"
+		}
+	]
+	// Optional: Uncomment after running `npx wrangler kv namespace create COUPON_CACHE`
+	// "kv_namespaces": [
+	//   {
+	//     "binding": "COUPON_CACHE",
+	//     "id": "<YOUR_KV_NAMESPACE_ID>"
+	//   }
+	// ],
+	// Optional: Uncomment after running `npx wrangler r2 bucket create coupon-store-logos`
+	// "r2_buckets": [
+	//   {
+	//     "binding": "STORE_LOGOS",
+	//     "bucket_name": "coupon-store-logos"
+	//   }
+	// ]
 }

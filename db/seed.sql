@@ -44,6 +44,7 @@ INSERT OR REPLACE INTO stores (id, name, slug, logo_url, website_url, descriptio
 
 DELETE FROM coupons;
 
+
 INSERT INTO coupons (
   id, title, code, description, terms, discount_text,
   store_id, category_id, affiliate_or_store_url, expiry_date,
@@ -73,7 +74,13 @@ INSERT INTO coupons (
   (22, 'Flipkart: Flat ₹250 Off on Student & Business Laptops', 'FLIPLAPTOP250', 'Supercharge your productivity with Intel Core and Ryzen laptops.', 'Valid on laptops above ₹4999. Free backpack included on select models.', '₹250 OFF', 2, 3, 'https://www.flipkart.com?utm_source=couponhub&utm_medium=deal_22', '2027-08-31', 1, 956, 193, 0),
   (23, 'Flipkart: Flat 25% Off on PC Accessories, Keyboards & Mice', 'FLIPGEAR25', 'Level up your desk setup with mechanical keyboards and ergonomic mice.', 'Valid on minimum cart value of ₹999.', '25% OFF', 2, 3, 'https://www.flipkart.com?utm_source=couponhub&utm_medium=deal_23', '2027-10-31', 1, 602, 94, 1),
   (24, 'Flipkart: Flat ₹1000 Off on Baby Care Diapers & Wipes', 'FLIPBABY1000', 'Dermatologically tested gentle baby wipes, diapers, and lotions.', 'Valid on baby care purchases above ₹4999.', '₹1000 OFF', 2, 5, 'https://www.flipkart.com?utm_source=couponhub&utm_medium=deal_24', '2027-04-30', 1, 104, 27, 2),
-  (25, 'Flipkart: Flat 60% Off on Pet Food & Dog Accessories', 'FLIPPETS60', 'Nutritious dry food, wet pouches, chew treats, and toys for your pets.', 'Valid on orders above ₹799.', '60% OFF', 2, 5, 'https://www.flipkart.com?utm_source=couponhub&utm_medium=deal_25', '2027-04-30', 1, 587, 82, 4),
+  (25, 'Flipkart: Flat 60% Off on Pet Food & Dog Accessories', 'FLIPPETS60', 'Nutritious dry food, wet pouches, chew treats, and toys for your pets.', 'Valid on orders above ₹799.', '60% OFF', 2, 5, 'https://www.flipkart.com?utm_source=couponhub&utm_medium=deal_25', '2027-04-30', 1, 587, 82, 4);
+
+INSERT INTO coupons (
+  id, title, code, description, terms, discount_text,
+  store_id, category_id, affiliate_or_store_url, expiry_date,
+  is_active, click_count, worked_count, didnt_work_count
+) VALUES
   (26, 'Flipkart: Flat 25% Off on Solid Sheesham Wood Beds & Sofas', 'FLIPHOME25', 'Transform your living room and bedroom with handcrafted teak and sheesham furniture.', 'Valid on orders above ₹1499. Free doorstep installation.', '25% OFF', 2, 8, 'https://www.flipkart.com?utm_source=couponhub&utm_medium=deal_26', '2027-04-30', 1, 131, 17, 3),
   (27, 'Flipkart: Extra ₹250 Off on Men''s & Women''s Wear', 'FLIPFASHION250', 'Instant savings across top branded shirts, dresses, jeans, and ethnic wear.', 'Minimum purchase of ₹1499 required. Max discount ₹250.', '₹250 OFF', 2, 2, 'https://www.flipkart.com?utm_source=couponhub&utm_medium=deal_27', '2027-11-30', 1, 704, 195, 0),
   (28, 'Flipkart: Flat 40% Off on Organic Food & Dry Fruits', 'FLIPORGANIC40', 'Pure almonds, cashews, walnuts, organic honey, and chia seeds.', 'Min purchase ₹999. Valid across select organic brands.', '40% OFF', 2, 5, 'https://www.flipkart.com?utm_source=couponhub&utm_medium=deal_28', '2027-04-30', 1, 231, 34, 3),
@@ -98,7 +105,13 @@ INSERT INTO coupons (
   (47, 'Zomato: Extra 70% Cashback on UPI Payments', 'ZOMAUPI70', 'Pay via Google Pay, PhonePe or Paytm to unlock extra 70% cashback.', 'Cashback credited to your wallet within 24 hours of delivery.', '70% CASHBACK', 3, 1, 'https://www.zomato.com?utm_source=couponhub&utm_medium=deal_47', '2027-03-31', 1, 854, 213, 3),
   (48, 'Zomato: Flat ₹1000 Discount on Weekend Feast', 'ZOMAWEEKEND1000', 'Treat yourself and family with flat ₹1000 off on weekend orders.', 'Valid on Saturday and Sunday orders above ₹999.', '₹1000 OFF', 3, 1, 'https://www.zomato.com?utm_source=couponhub&utm_medium=deal_48', '2027-11-30', 1, 919, 218, 1),
   (49, 'Zomato: Free Dessert or Drink on Cart Value ₹399', 'ZOMASWEET2', 'Add sweet indulgence to your meal with a complimentary dessert.', 'Valid on participating dining and cloud kitchen partners.', 'FREE ITEM', 3, 1, 'https://www.zomato.com?utm_source=couponhub&utm_medium=deal_49', '2027-01-31', 1, 914, 178, 1),
-  (50, 'Zomato: Midnight Cravings Special: Flat 35% Off', 'ZOMANIGHT352', 'Late night orders between 11 PM and 4 AM enjoy instant 35% off.', 'Min cart value ₹699. Valid online only.', '35% OFF', 3, 1, 'https://www.zomato.com?utm_source=couponhub&utm_medium=deal_50', '2027-01-31', 1, 710, 107, 2),
+  (50, 'Zomato: Midnight Cravings Special: Flat 35% Off', 'ZOMANIGHT352', 'Late night orders between 11 PM and 4 AM enjoy instant 35% off.', 'Min cart value ₹699. Valid online only.', '35% OFF', 3, 1, 'https://www.zomato.com?utm_source=couponhub&utm_medium=deal_50', '2027-01-31', 1, 710, 107, 2);
+
+INSERT INTO coupons (
+  id, title, code, description, terms, discount_text,
+  store_id, category_id, affiliate_or_store_url, expiry_date,
+  is_active, click_count, worked_count, didnt_work_count
+) VALUES
   (51, 'Zomato: Flat 15% Off on Food Orders Above ₹799', 'ZOMA152', 'Order delicious meals from top restaurants and enjoy flat 15% discount.', 'Minimum cart value ₹799. Max discount ₹1500.', '15% OFF', 3, 1, 'https://www.zomato.com?utm_source=couponhub&utm_medium=deal_51', '2027-11-30', 1, 556, 102, 4),
   (52, 'Swiggy: Flat ₹75 Off on Monthly Grocery Orders', 'SWIGMART75', 'Stock up on pulses, rice, cooking oils, snacks, and household essentials.', 'Valid on cart value ₹799 or more.', '₹75 OFF', 4, 5, 'https://www.swiggy.com?utm_source=couponhub&utm_medium=deal_52', '2027-10-31', 1, 306, 38, 4),
   (53, 'Swiggy: Superfast 10-Min Delivery + Free Delivery Pass', 'SWIGFLASH', 'Get daily vegetables, milk, bread, and fruits delivered in 10 minutes.', 'Valid on first 5 instant orders above ₹999.', 'FREE DELIVERY', 4, 5, 'https://www.swiggy.com?utm_source=couponhub&utm_medium=deal_53', '2027-10-31', 1, 558, 77, 4),
@@ -123,7 +136,13 @@ INSERT INTO coupons (
   (72, 'Myntra: Flat 40% Off on Athletic Footwear & Sneakers', 'MYNTKICKS40', 'Step up your workout or street style with flat 40% off on sports shoes.', 'Valid on listed sports and sneaker collections above ₹4999.', '40% OFF', 5, 2, 'https://www.myntra.com?utm_source=couponhub&utm_medium=deal_72', '2027-12-31', 1, 204, 51, 1),
   (73, 'Myntra: Flat ₹500 Instant Discount on Prepaid Orders', 'MYNTPREPAID500', 'Save more when you pay online via Credit/Debit card or Netbanking.', 'Valid on cart value of ₹2999 or more.', '₹500 OFF', 5, 2, 'https://www.myntra.com?utm_source=couponhub&utm_medium=deal_73', '2027-02-28', 1, 693, 130, 3),
   (74, 'Myntra: Extra 10% Off on Ethnic & Festive Wear', 'MYNTETHNIC10', 'Discover trending sarees, kurtas, lehengas, and sherwanis for weddings.', 'Min order ₹1299. Maximum savings up to ₹1500.', '10% OFF', 5, 2, 'https://www.myntra.com?utm_source=couponhub&utm_medium=deal_74', '2027-04-30', 1, 500, 86, 3),
-  (75, 'Myntra: Up to 40% Off on Premium Eyewear & Sunglasses', 'MYNTVISION40', 'Upgrade your frames, polarized sunglasses, and blue-cut lenses.', 'Valid on complete frame + lens packages.', '40% OFF', 5, 2, 'https://www.myntra.com?utm_source=couponhub&utm_medium=deal_75', '2027-01-31', 1, 802, 165, 2),
+  (75, 'Myntra: Up to 40% Off on Premium Eyewear & Sunglasses', 'MYNTVISION40', 'Upgrade your frames, polarized sunglasses, and blue-cut lenses.', 'Valid on complete frame + lens packages.', '40% OFF', 5, 2, 'https://www.myntra.com?utm_source=couponhub&utm_medium=deal_75', '2027-01-31', 1, 802, 165, 2);
+
+INSERT INTO coupons (
+  id, title, code, description, terms, discount_text,
+  store_id, category_id, affiliate_or_store_url, expiry_date,
+  is_active, click_count, worked_count, didnt_work_count
+) VALUES
   (76, 'Myntra: Flat ₹1500 Off on Watches & Luxury Jewelry', 'MYNTLUXE1500', 'Timeless elegance with instant flat ₹1500 savings on premium watches.', 'Minimum cart value ₹4999. Verified partner warranty included.', '₹1500 OFF', 5, 2, 'https://www.myntra.com?utm_source=couponhub&utm_medium=deal_76', '2027-01-31', 1, 288, 43, 0),
   (77, 'Myntra: Flat 25% Off on New Season Collection', 'MYNTSTYLE25', 'Refresh your wardrobe with premium apparel, footwear, and accessories.', 'Valid on selected fresh arrivals. Min order ₹1499.', '25% OFF', 5, 2, 'https://www.myntra.com?utm_source=couponhub&utm_medium=deal_77', '2027-10-31', 1, 258, 50, 2),
   (78, 'Myntra: Extra ₹500 Off on Men''s & Women''s Wear', 'MYNTFASHION500', 'Instant savings across top branded shirts, dresses, jeans, and ethnic wear.', 'Minimum purchase of ₹2999 required. Max discount ₹500.', '₹500 OFF', 5, 2, 'https://www.myntra.com?utm_source=couponhub&utm_medium=deal_78', '2027-03-31', 1, 353, 48, 0),
@@ -148,7 +167,13 @@ INSERT INTO coupons (
   (97, 'MakeMyTrip: Instant 60% Cashback on International Holidays', 'MAKEGLOBAL60', 'Explore Europe, Dubai, Thailand, and Bali with curated tour packages.', 'Max cashback ₹3000 credited to travel wallet.', '60% CASHBACK', 6, 4, 'https://www.makemytrip.com?utm_source=couponhub&utm_medium=deal_97', '2027-05-31', 1, 915, 195, 3),
   (98, 'MakeMyTrip: Save ₹500 on First 3 City Taxi & Auto Rides', 'MAKECITY500', 'Beat traffic with hassle-free rides at discounted fares.', 'Valid on first 3 trips per registered mobile number.', '₹500 OFF', 6, 4, 'https://www.makemytrip.com?utm_source=couponhub&utm_medium=deal_98', '2027-04-30', 1, 675, 103, 5),
   (99, 'MakeMyTrip: Flat 20% Off on Weekend Homestays & Villas', 'MAKEVILLA20', 'Relax with private pool villas in Lonavala, Coorg, Udaipur, and Shimla.', 'Valid on bookings made 7 days in advance.', '20% OFF', 6, 4, 'https://www.makemytrip.com?utm_source=couponhub&utm_medium=deal_99', '2027-03-31', 1, 37, 6, 5),
-  (100, 'MakeMyTrip: Flat ₹50 Discount on Intercity Bus Tickets', 'MAKEBUS50', 'Book sleeper and Volvo bus seats with live GPS tracking.', 'Valid on minimum fare of ₹699.', '₹50 OFF', 6, 4, 'https://www.makemytrip.com?utm_source=couponhub&utm_medium=deal_100', '2027-12-31', 1, 324, 75, 3),
+  (100, 'MakeMyTrip: Flat ₹50 Discount on Intercity Bus Tickets', 'MAKEBUS50', 'Book sleeper and Volvo bus seats with live GPS tracking.', 'Valid on minimum fare of ₹699.', '₹50 OFF', 6, 4, 'https://www.makemytrip.com?utm_source=couponhub&utm_medium=deal_100', '2027-12-31', 1, 324, 75, 3);
+
+INSERT INTO coupons (
+  id, title, code, description, terms, discount_text,
+  store_id, category_id, affiliate_or_store_url, expiry_date,
+  is_active, click_count, worked_count, didnt_work_count
+) VALUES
   (101, 'MakeMyTrip: Airport Transfer Discount: Flat 25% Off', 'MAKEAIRPORT25', 'Arrive on time with priority airport pickup and drop-off cabs.', 'Valid on airport terminal rides. Tolls excluded.', '25% OFF', 6, 4, 'https://www.makemytrip.com?utm_source=couponhub&utm_medium=deal_101', '2027-07-31', 1, 152, 31, 5),
   (102, 'MakeMyTrip: Up to ₹2000 Off on Domestic Round-Trip Flights', 'MAKEFLY2000', 'Fly across Delhi, Mumbai, Bengaluru, Goa, and more for less.', 'Valid on minimum booking value of ₹499. Standard airline rules apply.', 'UP TO ₹2000 OFF', 6, 4, 'https://www.makemytrip.com?utm_source=couponhub&utm_medium=deal_102', '2027-01-31', 1, 204, 50, 4),
   (103, 'Nykaa: Flat 50% Off on Bestselling Face Serums & Sunscreens', 'NYKAGLOW50', 'Radiant skin with Vitamin C, Niacinamide, Hyaluronic Acid, and SPF 50.', 'Valid on minimum order of ₹1499. Dermatologically tested.', '50% OFF', 7, 6, 'https://www.nykaa.com?utm_source=couponhub&utm_medium=deal_103', '2027-12-31', 1, 447, 121, 4),
@@ -173,7 +198,13 @@ INSERT INTO coupons (
   (122, 'Croma: Extra ₹1000 Discount on Flagship Smartphones', 'CROMPHONE1000', 'Get instant price drop on 5G smartphones and gaming devices.', 'Valid on major credit cards with no-cost EMI options.', '₹1000 OFF', 8, 3, 'https://www.croma.com?utm_source=couponhub&utm_medium=deal_122', '2027-06-30', 1, 907, 206, 4),
   (123, 'Croma: Flat 35% Off on Smartwatches & Fitness Bands', 'CROMFIT35', 'Track your steps, heart rate, sleep, and workouts with smart wearables.', 'Min order ₹1499. Max discount ₹200.', '35% OFF', 8, 3, 'https://www.croma.com?utm_source=couponhub&utm_medium=deal_123', '2027-10-31', 1, 105, 16, 5),
   (124, 'Croma: Flat ₹1000 Off on Student & Business Laptops', 'CROMLAPTOP1000', 'Supercharge your productivity with Intel Core and Ryzen laptops.', 'Valid on laptops above ₹399. Free backpack included on select models.', '₹1000 OFF', 8, 3, 'https://www.croma.com?utm_source=couponhub&utm_medium=deal_124', '2027-02-28', 1, 813, 179, 0),
-  (125, 'Croma: Flat 20% Off on PC Accessories, Keyboards & Mice', 'CROMGEAR20', 'Level up your desk setup with mechanical keyboards and ergonomic mice.', 'Valid on minimum cart value of ₹799.', '20% OFF', 8, 3, 'https://www.croma.com?utm_source=couponhub&utm_medium=deal_125', '2027-01-31', 1, 367, 90, 2),
+  (125, 'Croma: Flat 20% Off on PC Accessories, Keyboards & Mice', 'CROMGEAR20', 'Level up your desk setup with mechanical keyboards and ergonomic mice.', 'Valid on minimum cart value of ₹799.', '20% OFF', 8, 3, 'https://www.croma.com?utm_source=couponhub&utm_medium=deal_125', '2027-01-31', 1, 367, 90, 2);
+
+INSERT INTO coupons (
+  id, title, code, description, terms, discount_text,
+  store_id, category_id, affiliate_or_store_url, expiry_date,
+  is_active, click_count, worked_count, didnt_work_count
+) VALUES
   (126, 'Croma: Save ₹250 on Tablet & iPad Purchases', 'CROMTAB250', 'Ideal for reading, digital art, note-taking, and streaming movies.', 'Applicable on select Wi-Fi and LTE cellular tablets.', '₹250 OFF', 8, 3, 'https://www.croma.com?utm_source=couponhub&utm_medium=deal_126', '2027-09-30', 1, 456, 96, 1),
   (127, 'Croma: Flat 20% Off on Power Banks & Fast Wall Chargers', 'CROMCHARGE20', 'Keep all your portable devices fully powered on the move.', 'Valid on GaN fast chargers and 20,000mAh power banks.', '20% OFF', 8, 3, 'https://www.croma.com?utm_source=couponhub&utm_medium=deal_127', '2027-10-31', 1, 734, 116, 4),
   (128, 'Croma: Flat 25% Off on Noise-Cancelling Headphones & Earbuds', 'CROMAUDIO25', 'Immerse in crystal-clear wireless sound with deep bass and ANC.', 'Valid on select wireless audio and soundbars. Min cart ₹4999.', '25% OFF', 8, 3, 'https://www.croma.com?utm_source=couponhub&utm_medium=deal_128', '2027-08-31', 1, 296, 67, 3),
@@ -198,7 +229,13 @@ INSERT INTO coupons (
   (147, 'Ajio: Buy 2 Get 1 Free on Top Branded T-Shirts', 'AJIOB2G12', 'Select any 3 eligible items and pay only for 2 at checkout.', 'Cheapest item will be marked free automatically.', 'BUY 2 GET 1', 9, 2, 'https://www.ajio.com?utm_source=couponhub&utm_medium=deal_147', '2027-10-31', 1, 256, 64, 1),
   (148, 'Ajio: Flat 20% Off on Athletic Footwear & Sneakers', 'AJIOKICKS20', 'Step up your workout or street style with flat 20% off on sports shoes.', 'Valid on listed sports and sneaker collections above ₹2999.', '20% OFF', 9, 2, 'https://www.ajio.com?utm_source=couponhub&utm_medium=deal_148', '2027-05-31', 1, 914, 253, 1),
   (149, 'Ajio: Flat ₹75 Instant Discount on Prepaid Orders', 'AJIOPREPAID752', 'Save more when you pay online via Credit/Debit card or Netbanking.', 'Valid on cart value of ₹4999 or more.', '₹75 OFF', 9, 2, 'https://www.ajio.com?utm_source=couponhub&utm_medium=deal_149', '2027-03-31', 1, 50, 8, 1),
-  (150, 'Ajio: Extra 10% Off on Ethnic & Festive Wear', 'AJIOETHNIC10', 'Discover trending sarees, kurtas, lehengas, and sherwanis for weddings.', 'Min order ₹799. Maximum savings up to ₹200.', '10% OFF', 9, 2, 'https://www.ajio.com?utm_source=couponhub&utm_medium=deal_150', '2027-03-31', 1, 794, 148, 0),
+  (150, 'Ajio: Extra 10% Off on Ethnic & Festive Wear', 'AJIOETHNIC10', 'Discover trending sarees, kurtas, lehengas, and sherwanis for weddings.', 'Min order ₹799. Maximum savings up to ₹200.', '10% OFF', 9, 2, 'https://www.ajio.com?utm_source=couponhub&utm_medium=deal_150', '2027-03-31', 1, 794, 148, 0);
+
+INSERT INTO coupons (
+  id, title, code, description, terms, discount_text,
+  store_id, category_id, affiliate_or_store_url, expiry_date,
+  is_active, click_count, worked_count, didnt_work_count
+) VALUES
   (151, 'Ajio: Up to 50% Off on Premium Eyewear & Sunglasses', 'AJIOVISION50', 'Upgrade your frames, polarized sunglasses, and blue-cut lenses.', 'Valid on complete frame + lens packages.', '50% OFF', 9, 2, 'https://www.ajio.com?utm_source=couponhub&utm_medium=deal_151', '2027-08-31', 1, 550, 85, 4),
   (152, 'Ajio: Flat ₹150 Off on Watches & Luxury Jewelry', 'AJIOLUXE150', 'Timeless elegance with instant flat ₹150 savings on premium watches.', 'Minimum cart value ₹1499. Verified partner warranty included.', '₹150 OFF', 9, 2, 'https://www.ajio.com?utm_source=couponhub&utm_medium=deal_152', '2027-01-31', 1, 525, 134, 3),
   (153, 'Ajio: Flat 50% Off on New Season Collection', 'AJIOSTYLE50', 'Refresh your wardrobe with premium apparel, footwear, and accessories.', 'Valid on selected fresh arrivals. Min order ₹1499.', '50% OFF', 9, 2, 'https://www.ajio.com?utm_source=couponhub&utm_medium=deal_153', '2027-02-28', 1, 364, 79, 0),
@@ -223,7 +260,13 @@ INSERT INTO coupons (
   (172, 'Flat ₹250 Off on First McDonald''s Order', 'MCDOFIRST250', 'Special introductory offer for new shoppers on orders above ₹4999.', 'Applicable on your first order. Cannot be clubbed with other promos.', '₹250 OFF', 11, 1, 'https://mcdonaldsindia.com?utm_source=couponhub&utm_medium=deal_172', '2027-05-31', 1, 152, 28, 2),
   (173, 'McDonald''s: Free Delivery on Orders Above ₹999', 'MCDOFREEDEL', 'Get zero delivery fee on all orders across selected outlets.', 'Valid on prepaid and UPI orders above ₹999.', 'FREE DELIVERY', 11, 1, 'https://mcdonaldsindia.com?utm_source=couponhub&utm_medium=deal_173', '2027-07-31', 1, 899, 123, 3),
   (174, 'McDonald''s: Buy 1 Get 1 Free on Select Dishes & Combos', 'MCDOBOGO', 'Order any eligible combo and receive an identical item complimentary.', 'Valid on select restaurants and outlets during lunch and dinner.', 'BUY 1 GET 1', 11, 1, 'https://mcdonaldsindia.com?utm_source=couponhub&utm_medium=deal_174', '2027-12-31', 1, 382, 59, 1),
-  (175, 'McDonald''s: Extra 60% Cashback on UPI Payments', 'MCDOUPI60', 'Pay via Google Pay, PhonePe or Paytm to unlock extra 60% cashback.', 'Cashback credited to your wallet within 24 hours of delivery.', '60% CASHBACK', 11, 1, 'https://mcdonaldsindia.com?utm_source=couponhub&utm_medium=deal_175', '2027-06-30', 1, 394, 93, 5),
+  (175, 'McDonald''s: Extra 60% Cashback on UPI Payments', 'MCDOUPI60', 'Pay via Google Pay, PhonePe or Paytm to unlock extra 60% cashback.', 'Cashback credited to your wallet within 24 hours of delivery.', '60% CASHBACK', 11, 1, 'https://mcdonaldsindia.com?utm_source=couponhub&utm_medium=deal_175', '2027-06-30', 1, 394, 93, 5);
+
+INSERT INTO coupons (
+  id, title, code, description, terms, discount_text,
+  store_id, category_id, affiliate_or_store_url, expiry_date,
+  is_active, click_count, worked_count, didnt_work_count
+) VALUES
   (176, 'McDonald''s: Flat ₹75 Discount on Weekend Feast', 'MCDOWEEKEND75', 'Treat yourself and family with flat ₹75 off on weekend orders.', 'Valid on Saturday and Sunday orders above ₹499.', '₹75 OFF', 11, 1, 'https://mcdonaldsindia.com?utm_source=couponhub&utm_medium=deal_176', '2027-04-30', 1, 212, 45, 5),
   (177, 'McDonald''s: Free Dessert or Drink on Cart Value ₹4999', 'MCDOSWEET', 'Add sweet indulgence to your meal with a complimentary dessert.', 'Valid on participating dining and cloud kitchen partners.', 'FREE ITEM', 11, 1, 'https://mcdonaldsindia.com?utm_source=couponhub&utm_medium=deal_177', '2027-08-31', 1, 807, 169, 4),
   (178, 'McDonald''s: Midnight Cravings Special: Flat 70% Off', 'MCDONIGHT70', 'Late night orders between 11 PM and 4 AM enjoy instant 70% off.', 'Min cart value ₹4999. Valid online only.', '70% OFF', 11, 1, 'https://mcdonaldsindia.com?utm_source=couponhub&utm_medium=deal_178', '2027-11-30', 1, 358, 51, 0),
@@ -248,7 +291,13 @@ INSERT INTO coupons (
   (197, 'Flat ₹2000 Off on First KFC Order', 'KFCFIRST2000', 'Special introductory offer for new shoppers on orders above ₹399.', 'Applicable on your first order. Cannot be clubbed with other promos.', '₹2000 OFF', 12, 1, 'https://online.kfc.co.in?utm_source=couponhub&utm_medium=deal_197', '2027-02-28', 1, 816, 118, 3),
   (198, 'KFC: Free Delivery on Orders Above ₹699', 'KFCFREEDEL2', 'Get zero delivery fee on all orders across selected outlets.', 'Valid on prepaid and UPI orders above ₹699.', 'FREE DELIVERY', 12, 1, 'https://online.kfc.co.in?utm_source=couponhub&utm_medium=deal_198', '2027-06-30', 1, 62, 11, 3),
   (199, 'KFC: Buy 1 Get 1 Free on Select Dishes & Combos', 'KFCBOGO2', 'Order any eligible combo and receive an identical item complimentary.', 'Valid on select restaurants and outlets during lunch and dinner.', 'BUY 1 GET 1', 12, 1, 'https://online.kfc.co.in?utm_source=couponhub&utm_medium=deal_199', '2027-04-30', 1, 63, 10, 0),
-  (200, 'KFC: Extra 20% Cashback on UPI Payments', 'KFCUPI20', 'Pay via Google Pay, PhonePe or Paytm to unlock extra 20% cashback.', 'Cashback credited to your wallet within 24 hours of delivery.', '20% CASHBACK', 12, 1, 'https://online.kfc.co.in?utm_source=couponhub&utm_medium=deal_200', '2027-08-31', 1, 747, 188, 5),
+  (200, 'KFC: Extra 20% Cashback on UPI Payments', 'KFCUPI20', 'Pay via Google Pay, PhonePe or Paytm to unlock extra 20% cashback.', 'Cashback credited to your wallet within 24 hours of delivery.', '20% CASHBACK', 12, 1, 'https://online.kfc.co.in?utm_source=couponhub&utm_medium=deal_200', '2027-08-31', 1, 747, 188, 5);
+
+INSERT INTO coupons (
+  id, title, code, description, terms, discount_text,
+  store_id, category_id, affiliate_or_store_url, expiry_date,
+  is_active, click_count, worked_count, didnt_work_count
+) VALUES
   (201, 'KFC: Flat ₹500 Discount on Weekend Feast', 'KFCWEEKEND500', 'Treat yourself and family with flat ₹500 off on weekend orders.', 'Valid on Saturday and Sunday orders above ₹299.', '₹500 OFF', 12, 1, 'https://online.kfc.co.in?utm_source=couponhub&utm_medium=deal_201', '2027-01-31', 1, 297, 45, 1),
   (202, 'KFC: Free Dessert or Drink on Cart Value ₹799', 'KFCSWEET2', 'Add sweet indulgence to your meal with a complimentary dessert.', 'Valid on participating dining and cloud kitchen partners.', 'FREE ITEM', 12, 1, 'https://online.kfc.co.in?utm_source=couponhub&utm_medium=deal_202', '2027-05-31', 1, 159, 20, 3),
   (203, 'KFC: Midnight Cravings Special: Flat 15% Off', 'KFCNIGHT15', 'Late night orders between 11 PM and 4 AM enjoy instant 15% off.', 'Min cart value ₹1499. Valid online only.', '15% OFF', 12, 1, 'https://online.kfc.co.in?utm_source=couponhub&utm_medium=deal_203', '2027-11-30', 1, 562, 119, 5),
@@ -273,7 +322,13 @@ INSERT INTO coupons (
   (222, 'Nike: Flat 20% Off on New Season Collection', 'NIKESTYLE20', 'Refresh your wardrobe with premium apparel, footwear, and accessories.', 'Valid on selected fresh arrivals. Min order ₹1499.', '20% OFF', 14, 2, 'https://www.nike.com/in?utm_source=couponhub&utm_medium=deal_222', '2027-11-30', 1, 900, 250, 5),
   (223, 'Nike: Extra ₹400 Off on Men''s & Women''s Wear', 'NIKEFASHION400', 'Instant savings across top branded shirts, dresses, jeans, and ethnic wear.', 'Minimum purchase of ₹1999 required. Max discount ₹400.', '₹400 OFF', 14, 2, 'https://www.nike.com/in?utm_source=couponhub&utm_medium=deal_223', '2027-05-31', 1, 906, 131, 5),
   (224, 'Nike: Buy 2 Get 1 Free on Top Branded T-Shirts', 'NIKEB2G1', 'Select any 3 eligible items and pay only for 2 at checkout.', 'Cheapest item will be marked free automatically.', 'BUY 2 GET 1', 14, 2, 'https://www.nike.com/in?utm_source=couponhub&utm_medium=deal_224', '2027-04-30', 1, 846, 120, 3),
-  (225, 'Nike: Flat 35% Off on Athletic Footwear & Sneakers', 'NIKEKICKS35', 'Step up your workout or street style with flat 35% off on sports shoes.', 'Valid on listed sports and sneaker collections above ₹2999.', '35% OFF', 14, 2, 'https://www.nike.com/in?utm_source=couponhub&utm_medium=deal_225', '2027-08-31', 1, 857, 237, 1),
+  (225, 'Nike: Flat 35% Off on Athletic Footwear & Sneakers', 'NIKEKICKS35', 'Step up your workout or street style with flat 35% off on sports shoes.', 'Valid on listed sports and sneaker collections above ₹2999.', '35% OFF', 14, 2, 'https://www.nike.com/in?utm_source=couponhub&utm_medium=deal_225', '2027-08-31', 1, 857, 237, 1);
+
+INSERT INTO coupons (
+  id, title, code, description, terms, discount_text,
+  store_id, category_id, affiliate_or_store_url, expiry_date,
+  is_active, click_count, worked_count, didnt_work_count
+) VALUES
   (226, 'Nike: Flat ₹150 Instant Discount on Prepaid Orders', 'NIKEPREPAID150', 'Save more when you pay online via Credit/Debit card or Netbanking.', 'Valid on cart value of ₹1299 or more.', '₹150 OFF', 14, 2, 'https://www.nike.com/in?utm_source=couponhub&utm_medium=deal_226', '2027-09-30', 1, 455, 110, 4),
   (227, 'Nike: Extra 20% Off on Ethnic & Festive Wear', 'NIKEETHNIC20', 'Discover trending sarees, kurtas, lehengas, and sherwanis for weddings.', 'Min order ₹4999. Maximum savings up to ₹300.', '20% OFF', 14, 2, 'https://www.nike.com/in?utm_source=couponhub&utm_medium=deal_227', '2027-08-31', 1, 512, 117, 2),
   (228, 'Nike: Up to 60% Off on Premium Eyewear & Sunglasses', 'NIKEVISION60', 'Upgrade your frames, polarized sunglasses, and blue-cut lenses.', 'Valid on complete frame + lens packages.', '60% OFF', 14, 2, 'https://www.nike.com/in?utm_source=couponhub&utm_medium=deal_228', '2027-03-31', 1, 478, 95, 0),
@@ -298,7 +353,13 @@ INSERT INTO coupons (
   (247, 'Mamaearth: Flat 60% Off on Bestselling Face Serums & Sunscreens', 'MAMAGLOW60', 'Radiant skin with Vitamin C, Niacinamide, Hyaluronic Acid, and SPF 50.', 'Valid on minimum order of ₹499. Dermatologically tested.', '60% OFF', 15, 6, 'https://mamaearth.in?utm_source=couponhub&utm_medium=deal_247', '2027-06-30', 1, 662, 113, 3),
   (248, 'Mamaearth: Extra ₹200 Off on Authentic Cosmetics & Makeup', 'MAMABEAUTY200', 'Long-lasting matte lipsticks, foundations, eyeliners, and blushes.', 'Valid on cart value of ₹1999 or more.', '₹200 OFF', 15, 6, 'https://mamaearth.in?utm_source=couponhub&utm_medium=deal_248', '2027-12-31', 1, 611, 102, 0),
   (249, 'Mamaearth: Flat 35% Off on Anti-Hairfall Shampoos & Hair Oils', 'MAMAHAIR35', 'Onion hair oil, biotin hair masks, and scalp revitalization shampoos.', 'Min order ₹399. Free sample sachet included.', '35% OFF', 15, 6, 'https://mamaearth.in?utm_source=couponhub&utm_medium=deal_249', '2027-10-31', 1, 350, 86, 5),
-  (250, 'Mamaearth: Save ₹300 on Prescription Medicines & Wellness', 'MAMAMED300', 'Upload doctor prescription and get medicines delivered right to your door.', 'Valid on medicine orders above ₹799.', '₹300 OFF', 15, 6, 'https://mamaearth.in?utm_source=couponhub&utm_medium=deal_250', '2027-12-31', 1, 87, 18, 1),
+  (250, 'Mamaearth: Save ₹300 on Prescription Medicines & Wellness', 'MAMAMED300', 'Upload doctor prescription and get medicines delivered right to your door.', 'Valid on medicine orders above ₹799.', '₹300 OFF', 15, 6, 'https://mamaearth.in?utm_source=couponhub&utm_medium=deal_250', '2027-12-31', 1, 87, 18, 1);
+
+INSERT INTO coupons (
+  id, title, code, description, terms, discount_text,
+  store_id, category_id, affiliate_or_store_url, expiry_date,
+  is_active, click_count, worked_count, didnt_work_count
+) VALUES
   (251, 'Mamaearth: Flat 20% Off on Full Body Health Checkup Packages', 'MAMAHEALTH20', 'Complete blood count, thyroid, lipid profile, and vitamin D testing at home.', 'Free home sample collection by certified phlebotomists.', '20% OFF', 15, 6, 'https://mamaearth.in?utm_source=couponhub&utm_medium=deal_251', '2027-01-31', 1, 621, 168, 0),
   (252, 'Mamaearth: Buy 2 Get 1 Free on Natural Herbal Face Masks', 'MAMAHERBAL2', 'Clay face masks, multani mitti, charcoal scrubs, and aloe vera gels.', 'Valid on listed natural wellness lines.', 'BUY 2 GET 1', 15, 6, 'https://mamaearth.in?utm_source=couponhub&utm_medium=deal_252', '2027-03-31', 1, 457, 105, 3),
   (253, 'Mamaearth: Flat ₹1000 Off on Luxury Men''s Grooming Kits', 'MAMABEARD1000', 'Beard trimmers, shaving creams, aftershave balms, and cologne.', 'Min cart value ₹499.', '₹1000 OFF', 15, 6, 'https://mamaearth.in?utm_source=couponhub&utm_medium=deal_253', '2027-09-30', 1, 367, 102, 3),
@@ -323,7 +384,13 @@ INSERT INTO coupons (
   (272, 'boAt: Flat 15% Off on Noise-Cancelling Headphones & Earbuds', 'BOATAUDIO15', 'Immerse in crystal-clear wireless sound with deep bass and ANC.', 'Valid on select wireless audio and soundbars. Min cart ₹799.', '15% OFF', 16, 3, 'https://www.boat-lifestyle.com?utm_source=couponhub&utm_medium=deal_272', '2027-10-31', 1, 261, 40, 1),
   (273, 'OnePlus: Flat 20% Off on Noise-Cancelling Headphones & Earbuds', 'ONEPAUDIO20', 'Immerse in crystal-clear wireless sound with deep bass and ANC.', 'Valid on select wireless audio and soundbars. Min cart ₹2999.', '20% OFF', 17, 3, 'https://www.oneplus.in?utm_source=couponhub&utm_medium=deal_273', '2027-07-31', 1, 753, 156, 3),
   (274, 'OnePlus: Instant ₹750 Off on 4K Smart TVs & Monitors', 'ONEPVIEW750', 'Upgrade your home entertainment with ultra HD smart displays.', 'Valid on screen sizes 43 inch and above. Min order ₹2999.', '₹750 OFF', 17, 3, 'https://www.oneplus.in?utm_source=couponhub&utm_medium=deal_274', '2027-09-30', 1, 492, 100, 2),
-  (275, 'OnePlus: Extra ₹75 Discount on Flagship Smartphones', 'ONEPPHONE75', 'Get instant price drop on 5G smartphones and gaming devices.', 'Valid on major credit cards with no-cost EMI options.', '₹75 OFF', 17, 3, 'https://www.oneplus.in?utm_source=couponhub&utm_medium=deal_275', '2027-10-31', 1, 584, 84, 2),
+  (275, 'OnePlus: Extra ₹75 Discount on Flagship Smartphones', 'ONEPPHONE75', 'Get instant price drop on 5G smartphones and gaming devices.', 'Valid on major credit cards with no-cost EMI options.', '₹75 OFF', 17, 3, 'https://www.oneplus.in?utm_source=couponhub&utm_medium=deal_275', '2027-10-31', 1, 584, 84, 2);
+
+INSERT INTO coupons (
+  id, title, code, description, terms, discount_text,
+  store_id, category_id, affiliate_or_store_url, expiry_date,
+  is_active, click_count, worked_count, didnt_work_count
+) VALUES
   (276, 'OnePlus: Flat 15% Off on Smartwatches & Fitness Bands', 'ONEPFIT15', 'Track your steps, heart rate, sleep, and workouts with smart wearables.', 'Min order ₹699. Max discount ₹3000.', '15% OFF', 17, 3, 'https://www.oneplus.in?utm_source=couponhub&utm_medium=deal_276', '2027-02-28', 1, 955, 192, 0),
   (277, 'OnePlus: Flat ₹400 Off on Student & Business Laptops', 'ONEPLAPTOP400', 'Supercharge your productivity with Intel Core and Ryzen laptops.', 'Valid on laptops above ₹1299. Free backpack included on select models.', '₹400 OFF', 17, 3, 'https://www.oneplus.in?utm_source=couponhub&utm_medium=deal_277', '2027-10-31', 1, 94, 19, 5),
   (278, 'OnePlus: Flat 10% Off on PC Accessories, Keyboards & Mice', 'ONEPGEAR10', 'Level up your desk setup with mechanical keyboards and ergonomic mice.', 'Valid on minimum cart value of ₹799.', '10% OFF', 17, 3, 'https://www.oneplus.in?utm_source=couponhub&utm_medium=deal_278', '2027-12-31', 1, 258, 54, 0),
@@ -348,7 +415,13 @@ INSERT INTO coupons (
   (297, 'Samsung: Flat 30% Off on Power Banks & Fast Wall Chargers', 'SAMSCHARGE30', 'Keep all your portable devices fully powered on the move.', 'Valid on GaN fast chargers and 20,000mAh power banks.', '30% OFF', 18, 3, 'https://www.samsung.com/in?utm_source=couponhub&utm_medium=deal_297', '2027-08-31', 1, 135, 33, 5),
   (298, 'Samsung: Flat 35% Off on Noise-Cancelling Headphones & Earbuds', 'SAMSAUDIO35', 'Immerse in crystal-clear wireless sound with deep bass and ANC.', 'Valid on select wireless audio and soundbars. Min cart ₹699.', '35% OFF', 18, 3, 'https://www.samsung.com/in?utm_source=couponhub&utm_medium=deal_298', '2027-06-30', 1, 458, 58, 1),
   (299, 'Samsung: Instant ₹150 Off on 4K Smart TVs & Monitors', 'SAMSVIEW1502', 'Upgrade your home entertainment with ultra HD smart displays.', 'Valid on screen sizes 43 inch and above. Min order ₹1999.', '₹150 OFF', 18, 3, 'https://www.samsung.com/in?utm_source=couponhub&utm_medium=deal_299', '2027-05-31', 1, 191, 28, 1),
-  (300, 'Samsung: Extra ₹2000 Discount on Flagship Smartphones', 'SAMSPHONE2000', 'Get instant price drop on 5G smartphones and gaming devices.', 'Valid on major credit cards with no-cost EMI options.', '₹2000 OFF', 18, 3, 'https://www.samsung.com/in?utm_source=couponhub&utm_medium=deal_300', '2027-09-30', 1, 705, 191, 2),
+  (300, 'Samsung: Extra ₹2000 Discount on Flagship Smartphones', 'SAMSPHONE2000', 'Get instant price drop on 5G smartphones and gaming devices.', 'Valid on major credit cards with no-cost EMI options.', '₹2000 OFF', 18, 3, 'https://www.samsung.com/in?utm_source=couponhub&utm_medium=deal_300', '2027-09-30', 1, 705, 191, 2);
+
+INSERT INTO coupons (
+  id, title, code, description, terms, discount_text,
+  store_id, category_id, affiliate_or_store_url, expiry_date,
+  is_active, click_count, worked_count, didnt_work_count
+) VALUES
   (301, 'Samsung: Flat 50% Off on Smartwatches & Fitness Bands', 'SAMSFIT50', 'Track your steps, heart rate, sleep, and workouts with smart wearables.', 'Min order ₹4999. Max discount ₹3000.', '50% OFF', 18, 3, 'https://www.samsung.com/in?utm_source=couponhub&utm_medium=deal_301', '2027-08-31', 1, 207, 49, 2),
   (302, 'Samsung: Flat ₹1000 Off on Student & Business Laptops', 'SAMSLAPTOP1000', 'Supercharge your productivity with Intel Core and Ryzen laptops.', 'Valid on laptops above ₹1999. Free backpack included on select models.', '₹1000 OFF', 18, 3, 'https://www.samsung.com/in?utm_source=couponhub&utm_medium=deal_302', '2027-03-31', 1, 973, 255, 5),
   (303, 'Samsung: Flat 60% Off on PC Accessories, Keyboards & Mice', 'SAMSGEAR60', 'Level up your desk setup with mechanical keyboards and ergonomic mice.', 'Valid on minimum cart value of ₹399.', '60% OFF', 18, 3, 'https://www.samsung.com/in?utm_source=couponhub&utm_medium=deal_303', '2027-01-31', 1, 457, 64, 5),
@@ -373,7 +446,13 @@ INSERT INTO coupons (
   (322, 'Cleartrip: Airport Transfer Discount: Flat 30% Off', 'CLEAAIRPORT30', 'Arrive on time with priority airport pickup and drop-off cabs.', 'Valid on airport terminal rides. Tolls excluded.', '30% OFF', 19, 4, 'https://www.cleartrip.com?utm_source=couponhub&utm_medium=deal_322', '2027-12-31', 1, 957, 200, 1),
   (323, 'Cleartrip: Up to ₹100 Off on Domestic Round-Trip Flights', 'CLEAFLY100', 'Fly across Delhi, Mumbai, Bengaluru, Goa, and more for less.', 'Valid on minimum booking value of ₹499. Standard airline rules apply.', 'UP TO ₹100 OFF', 19, 4, 'https://www.cleartrip.com?utm_source=couponhub&utm_medium=deal_323', '2027-05-31', 1, 309, 61, 0),
   (324, 'Uber: Up to ₹150 Off on Domestic Round-Trip Flights', 'UBERFLY150', 'Fly across Delhi, Mumbai, Bengaluru, Goa, and more for less.', 'Valid on minimum booking value of ₹1299. Standard airline rules apply.', 'UP TO ₹150 OFF', 20, 4, 'https://www.uber.com/in?utm_source=couponhub&utm_medium=deal_324', '2027-08-31', 1, 836, 110, 2),
-  (325, 'Uber: Flat 50% Off on Luxury Hotels & Boutique Resorts', 'UBERHOTEL50', 'Experience 5-star hospitality, infinity pools, and complimentary breakfast.', 'Valid on minimum 2-night stays. Prepayment required.', '50% OFF', 20, 4, 'https://www.uber.com/in?utm_source=couponhub&utm_medium=deal_325', '2027-08-31', 1, 144, 20, 0),
+  (325, 'Uber: Flat 50% Off on Luxury Hotels & Boutique Resorts', 'UBERHOTEL50', 'Experience 5-star hospitality, infinity pools, and complimentary breakfast.', 'Valid on minimum 2-night stays. Prepayment required.', '50% OFF', 20, 4, 'https://www.uber.com/in?utm_source=couponhub&utm_medium=deal_325', '2027-08-31', 1, 144, 20, 0);
+
+INSERT INTO coupons (
+  id, title, code, description, terms, discount_text,
+  store_id, category_id, affiliate_or_store_url, expiry_date,
+  is_active, click_count, worked_count, didnt_work_count
+) VALUES
   (326, 'Uber: Flat ₹2000 Off on Outstation Cab Bookings', 'UBERRIDE2000', 'Comfortable door-to-door AC cabs with verified drivers for road trips.', 'Valid on one-way and round-trip outstation rides above ₹2999.', '₹2000 OFF', 20, 4, 'https://www.uber.com/in?utm_source=couponhub&utm_medium=deal_326', '2027-06-30', 1, 485, 84, 5),
   (327, 'Uber: Instant 30% Cashback on International Holidays', 'UBERGLOBAL30', 'Explore Europe, Dubai, Thailand, and Bali with curated tour packages.', 'Max cashback ₹750 credited to travel wallet.', '30% CASHBACK', 20, 4, 'https://www.uber.com/in?utm_source=couponhub&utm_medium=deal_327', '2027-08-31', 1, 356, 52, 3),
   (328, 'Uber: Save ₹1000 on First 3 City Taxi & Auto Rides', 'UBERCITY1000', 'Beat traffic with hassle-free rides at discounted fares.', 'Valid on first 3 trips per registered mobile number.', '₹1000 OFF', 20, 4, 'https://www.uber.com/in?utm_source=couponhub&utm_medium=deal_328', '2027-10-31', 1, 835, 132, 3),
@@ -398,7 +477,13 @@ INSERT INTO coupons (
   (347, 'Ola: Flat ₹200 Discount on Intercity Bus Tickets', 'OLABUS200', 'Book sleeper and Volvo bus seats with live GPS tracking.', 'Valid on minimum fare of ₹399.', '₹200 OFF', 21, 4, 'https://www.olacabs.com?utm_source=couponhub&utm_medium=deal_347', '2027-05-31', 1, 154, 22, 5),
   (348, 'Ola: Airport Transfer Discount: Flat 60% Off', 'OLAAIRPORT60', 'Arrive on time with priority airport pickup and drop-off cabs.', 'Valid on airport terminal rides. Tolls excluded.', '60% OFF', 21, 4, 'https://www.olacabs.com?utm_source=couponhub&utm_medium=deal_348', '2027-10-31', 1, 427, 80, 3),
   (349, 'Ola: Up to ₹100 Off on Domestic Round-Trip Flights', 'OLAFLY1002', 'Fly across Delhi, Mumbai, Bengaluru, Goa, and more for less.', 'Valid on minimum booking value of ₹1499. Standard airline rules apply.', 'UP TO ₹100 OFF', 21, 4, 'https://www.olacabs.com?utm_source=couponhub&utm_medium=deal_349', '2027-03-31', 1, 226, 38, 3),
-  (350, 'Ola: Flat 35% Off on Luxury Hotels & Boutique Resorts', 'OLAHOTEL35', 'Experience 5-star hospitality, infinity pools, and complimentary breakfast.', 'Valid on minimum 2-night stays. Prepayment required.', '35% OFF', 21, 4, 'https://www.olacabs.com?utm_source=couponhub&utm_medium=deal_350', '2027-04-30', 1, 869, 157, 4),
+  (350, 'Ola: Flat 35% Off on Luxury Hotels & Boutique Resorts', 'OLAHOTEL35', 'Experience 5-star hospitality, infinity pools, and complimentary breakfast.', 'Valid on minimum 2-night stays. Prepayment required.', '35% OFF', 21, 4, 'https://www.olacabs.com?utm_source=couponhub&utm_medium=deal_350', '2027-04-30', 1, 869, 157, 4);
+
+INSERT INTO coupons (
+  id, title, code, description, terms, discount_text,
+  store_id, category_id, affiliate_or_store_url, expiry_date,
+  is_active, click_count, worked_count, didnt_work_count
+) VALUES
   (351, 'Ola: Flat ₹750 Off on Outstation Cab Bookings', 'OLARIDE750', 'Comfortable door-to-door AC cabs with verified drivers for road trips.', 'Valid on one-way and round-trip outstation rides above ₹1499.', '₹750 OFF', 21, 4, 'https://www.olacabs.com?utm_source=couponhub&utm_medium=deal_351', '2027-12-31', 1, 895, 170, 1),
   (352, 'Ola: Instant 70% Cashback on International Holidays', 'OLAGLOBAL702', 'Explore Europe, Dubai, Thailand, and Bali with curated tour packages.', 'Max cashback ₹1000 credited to travel wallet.', '70% CASHBACK', 21, 4, 'https://www.olacabs.com?utm_source=couponhub&utm_medium=deal_352', '2027-01-31', 1, 316, 49, 2),
   (353, 'Ola: Save ₹500 on First 3 City Taxi & Auto Rides', 'OLACITY500', 'Beat traffic with hassle-free rides at discounted fares.', 'Valid on first 3 trips per registered mobile number.', '₹500 OFF', 21, 4, 'https://www.olacabs.com?utm_source=couponhub&utm_medium=deal_353', '2027-10-31', 1, 151, 24, 4),
@@ -423,7 +508,13 @@ INSERT INTO coupons (
   (372, 'Blinkit: Flat 15% Off on Pet Food & Dog Accessories', 'BLINPETS15', 'Nutritious dry food, wet pouches, chew treats, and toys for your pets.', 'Valid on orders above ₹999.', '15% OFF', 22, 5, 'https://blinkit.com?utm_source=couponhub&utm_medium=deal_372', '2027-03-31', 1, 426, 103, 1),
   (373, 'Zepto: Flat ₹400 Off on Monthly Grocery Orders', 'ZEPTMART400', 'Stock up on pulses, rice, cooking oils, snacks, and household essentials.', 'Valid on cart value ₹2999 or more.', '₹400 OFF', 23, 5, 'https://www.zeptonow.com?utm_source=couponhub&utm_medium=deal_373', '2027-10-31', 1, 700, 102, 2),
   (374, 'Zepto: Superfast 10-Min Delivery + Free Delivery Pass', 'ZEPTFLASH', 'Get daily vegetables, milk, bread, and fruits delivered in 10 minutes.', 'Valid on first 5 instant orders above ₹1299.', 'FREE DELIVERY', 23, 5, 'https://www.zeptonow.com?utm_source=couponhub&utm_medium=deal_374', '2027-04-30', 1, 123, 32, 1),
-  (375, 'Zepto: Flat 70% Off on Organic Food & Dry Fruits', 'ZEPTORGANIC70', 'Pure almonds, cashews, walnuts, organic honey, and chia seeds.', 'Min purchase ₹1299. Valid across select organic brands.', '70% OFF', 23, 5, 'https://www.zeptonow.com?utm_source=couponhub&utm_medium=deal_375', '2027-07-31', 1, 357, 88, 1),
+  (375, 'Zepto: Flat 70% Off on Organic Food & Dry Fruits', 'ZEPTORGANIC70', 'Pure almonds, cashews, walnuts, organic honey, and chia seeds.', 'Min purchase ₹1299. Valid across select organic brands.', '70% OFF', 23, 5, 'https://www.zeptonow.com?utm_source=couponhub&utm_medium=deal_375', '2027-07-31', 1, 357, 88, 1);
+
+INSERT INTO coupons (
+  id, title, code, description, terms, discount_text,
+  store_id, category_id, affiliate_or_store_url, expiry_date,
+  is_active, click_count, worked_count, didnt_work_count
+) VALUES
   (376, 'Zepto: Extra ₹125 Off on Kitchen Cookware & Appliances', 'ZEPTKITCHEN125', 'Non-stick pans, pressure cookers, air fryers, and mixer grinders.', 'Valid on home & kitchen category above ₹1999.', '₹125 OFF', 23, 5, 'https://www.zeptonow.com?utm_source=couponhub&utm_medium=deal_376', '2027-12-31', 1, 62, 15, 5),
   (377, 'Zepto: Flat 25% Cashback on Supermarket Shopping', 'ZEPTSAVE25', 'Save more on top household cleaning brands and personal hygiene items.', 'Max cashback ₹750 credited within 48 hours.', '25% CASHBACK', 23, 5, 'https://www.zeptonow.com?utm_source=couponhub&utm_medium=deal_377', '2027-12-31', 1, 436, 72, 0),
   (378, 'Zepto: Buy 1 Get 1 on Gourmet Chocolates & Imported Snacks', 'ZEPTTREAT', 'Enjoy luxury artisanal chocolates, chips, cookies, and spreads.', 'Add 2 items from the festival promo aisle to qualify.', 'BUY 1 GET 1', 23, 5, 'https://www.zeptonow.com?utm_source=couponhub&utm_medium=deal_378', '2027-08-31', 1, 688, 147, 4),
@@ -448,7 +539,13 @@ INSERT INTO coupons (
   (397, 'BigBasket: Flat ₹200 Off on Monthly Grocery Orders', 'BIGBMART200', 'Stock up on pulses, rice, cooking oils, snacks, and household essentials.', 'Valid on cart value ₹4999 or more.', '₹200 OFF', 24, 5, 'https://www.bigbasket.com?utm_source=couponhub&utm_medium=deal_397', '2027-06-30', 1, 36, 8, 3),
   (398, 'BigBasket: Superfast 10-Min Delivery + Free Delivery Pass', 'BIGBFLASH2', 'Get daily vegetables, milk, bread, and fruits delivered in 10 minutes.', 'Valid on first 5 instant orders above ₹1999.', 'FREE DELIVERY', 24, 5, 'https://www.bigbasket.com?utm_source=couponhub&utm_medium=deal_398', '2027-07-31', 1, 538, 147, 1),
   (399, 'BigBasket: Flat 15% Off on Organic Food & Dry Fruits', 'BIGBORGANIC15', 'Pure almonds, cashews, walnuts, organic honey, and chia seeds.', 'Min purchase ₹699. Valid across select organic brands.', '15% OFF', 24, 5, 'https://www.bigbasket.com?utm_source=couponhub&utm_medium=deal_399', '2027-12-31', 1, 952, 170, 5),
-  (400, 'BigBasket: Extra ₹75 Off on Kitchen Cookware & Appliances', 'BIGBKITCHEN75', 'Non-stick pans, pressure cookers, air fryers, and mixer grinders.', 'Valid on home & kitchen category above ₹1999.', '₹75 OFF', 24, 5, 'https://www.bigbasket.com?utm_source=couponhub&utm_medium=deal_400', '2027-11-30', 1, 874, 160, 4),
+  (400, 'BigBasket: Extra ₹75 Off on Kitchen Cookware & Appliances', 'BIGBKITCHEN75', 'Non-stick pans, pressure cookers, air fryers, and mixer grinders.', 'Valid on home & kitchen category above ₹1999.', '₹75 OFF', 24, 5, 'https://www.bigbasket.com?utm_source=couponhub&utm_medium=deal_400', '2027-11-30', 1, 874, 160, 4);
+
+INSERT INTO coupons (
+  id, title, code, description, terms, discount_text,
+  store_id, category_id, affiliate_or_store_url, expiry_date,
+  is_active, click_count, worked_count, didnt_work_count
+) VALUES
   (401, 'BigBasket: Flat 40% Cashback on Supermarket Shopping', 'BIGBSAVE40', 'Save more on top household cleaning brands and personal hygiene items.', 'Max cashback ₹750 credited within 48 hours.', '40% CASHBACK', 24, 5, 'https://www.bigbasket.com?utm_source=couponhub&utm_medium=deal_401', '2027-05-31', 1, 302, 77, 3),
   (402, 'BigBasket: Buy 1 Get 1 on Gourmet Chocolates & Imported Snacks', 'BIGBTREAT2', 'Enjoy luxury artisanal chocolates, chips, cookies, and spreads.', 'Add 2 items from the festival promo aisle to qualify.', 'BUY 1 GET 1', 24, 5, 'https://www.bigbasket.com?utm_source=couponhub&utm_medium=deal_402', '2027-02-28', 1, 242, 34, 4),
   (403, 'BigBasket: Flat ₹75 Off on Baby Care Diapers & Wipes', 'BIGBBABY75', 'Dermatologically tested gentle baby wipes, diapers, and lotions.', 'Valid on baby care purchases above ₹499.', '₹75 OFF', 24, 5, 'https://www.bigbasket.com?utm_source=couponhub&utm_medium=deal_403', '2027-08-31', 1, 356, 65, 4),
@@ -473,7 +570,13 @@ INSERT INTO coupons (
   (422, 'Lenskart: Extra ₹200 Off on Men''s & Women''s Wear', 'LENSFASHION200', 'Instant savings across top branded shirts, dresses, jeans, and ethnic wear.', 'Minimum purchase of ₹2999 required. Max discount ₹200.', '₹200 OFF', 26, 2, 'https://www.lenskart.com?utm_source=couponhub&utm_medium=deal_422', '2027-03-31', 1, 383, 89, 2),
   (423, 'Lenskart: Buy 2 Get 1 Free on Top Branded T-Shirts', 'LENSB2G1', 'Select any 3 eligible items and pay only for 2 at checkout.', 'Cheapest item will be marked free automatically.', 'BUY 2 GET 1', 26, 2, 'https://www.lenskart.com?utm_source=couponhub&utm_medium=deal_423', '2027-02-28', 1, 901, 183, 2),
   (424, 'Lenskart: Flat 35% Off on Athletic Footwear & Sneakers', 'LENSKICKS35', 'Step up your workout or street style with flat 35% off on sports shoes.', 'Valid on listed sports and sneaker collections above ₹4999.', '35% OFF', 26, 2, 'https://www.lenskart.com?utm_source=couponhub&utm_medium=deal_424', '2027-10-31', 1, 138, 23, 2),
-  (425, 'Lenskart: Flat ₹1000 Instant Discount on Prepaid Orders', 'LENSPREPAID1000', 'Save more when you pay online via Credit/Debit card or Netbanking.', 'Valid on cart value of ₹1299 or more.', '₹1000 OFF', 26, 2, 'https://www.lenskart.com?utm_source=couponhub&utm_medium=deal_425', '2027-11-30', 1, 359, 53, 4),
+  (425, 'Lenskart: Flat ₹1000 Instant Discount on Prepaid Orders', 'LENSPREPAID1000', 'Save more when you pay online via Credit/Debit card or Netbanking.', 'Valid on cart value of ₹1299 or more.', '₹1000 OFF', 26, 2, 'https://www.lenskart.com?utm_source=couponhub&utm_medium=deal_425', '2027-11-30', 1, 359, 53, 4);
+
+INSERT INTO coupons (
+  id, title, code, description, terms, discount_text,
+  store_id, category_id, affiliate_or_store_url, expiry_date,
+  is_active, click_count, worked_count, didnt_work_count
+) VALUES
   (426, 'Lenskart: Extra 25% Off on Ethnic & Festive Wear', 'LENSETHNIC25', 'Discover trending sarees, kurtas, lehengas, and sherwanis for weddings.', 'Min order ₹2999. Maximum savings up to ₹500.', '25% OFF', 26, 2, 'https://www.lenskart.com?utm_source=couponhub&utm_medium=deal_426', '2027-07-31', 1, 349, 82, 2),
   (427, 'Lenskart: Up to 20% Off on Premium Eyewear & Sunglasses', 'LENSVISION20', 'Upgrade your frames, polarized sunglasses, and blue-cut lenses.', 'Valid on complete frame + lens packages.', '20% OFF', 26, 2, 'https://www.lenskart.com?utm_source=couponhub&utm_medium=deal_427', '2027-10-31', 1, 68, 10, 2),
   (428, 'Lenskart: Flat ₹75 Off on Watches & Luxury Jewelry', 'LENSLUXE75', 'Timeless elegance with instant flat ₹75 savings on premium watches.', 'Minimum cart value ₹1499. Verified partner warranty included.', '₹75 OFF', 26, 2, 'https://www.lenskart.com?utm_source=couponhub&utm_medium=deal_428', '2027-06-30', 1, 798, 105, 2),
@@ -498,7 +601,13 @@ INSERT INTO coupons (
   (447, 'Pepperfry: Flat 30% Off on Mattresses, Pillows & Bed Linens', 'PEPPSLEEP30', 'Memory foam orthopaedic mattresses with 10-year warranty and 100-night trial.', 'Min cart value ₹1499.', '30% OFF', 27, 8, 'https://www.pepperfry.com?utm_source=couponhub&utm_medium=deal_447', '2027-12-31', 1, 673, 144, 3),
   (448, 'Pepperfry: Save ₹100 on Designer Ceiling Lamps & Chandeliers', 'PEPPLIGHT100', 'Illuminate your home with modern pendant lights, LED panels, and lamps.', 'Valid on lighting category above ₹499.', '₹100 OFF', 27, 8, 'https://www.pepperfry.com?utm_source=couponhub&utm_medium=deal_448', '2027-02-28', 1, 611, 149, 2),
   (449, 'Pepperfry: Flat 40% Off on Handwoven Carpets, Rugs & Curtains', 'PEPPDECOR40', 'Add warmth and texture with plush wool rugs, floor runners, and blackout curtains.', 'Min order value ₹1299.', '40% OFF', 27, 8, 'https://www.pepperfry.com?utm_source=couponhub&utm_medium=deal_449', '2027-10-31', 1, 658, 128, 1),
-  (450, 'Pepperfry: Flat ₹100 Off on 4-Seater & 6-Seater Dining Sets', 'PEPPDINE100', 'Gather around elegant solid wood dining tables with upholstered chairs.', 'Valid on dining sets above ₹2999.', '₹100 OFF', 27, 8, 'https://www.pepperfry.com?utm_source=couponhub&utm_medium=deal_450', '2027-01-31', 1, 440, 115, 2),
+  (450, 'Pepperfry: Flat ₹100 Off on 4-Seater & 6-Seater Dining Sets', 'PEPPDINE100', 'Gather around elegant solid wood dining tables with upholstered chairs.', 'Valid on dining sets above ₹2999.', '₹100 OFF', 27, 8, 'https://www.pepperfry.com?utm_source=couponhub&utm_medium=deal_450', '2027-01-31', 1, 440, 115, 2);
+
+INSERT INTO coupons (
+  id, title, code, description, terms, discount_text,
+  store_id, category_id, affiliate_or_store_url, expiry_date,
+  is_active, click_count, worked_count, didnt_work_count
+) VALUES
   (451, 'Pepperfry: Buy 1 Get 1 on Ceramic Wall Art & Decorative Planters', 'PEPPPLANTS2', 'Bring nature indoors with handpainted ceramic pots and indoor botanical art.', 'Valid on garden and home accent decor.', 'BUY 1 GET 1', 27, 8, 'https://www.pepperfry.com?utm_source=couponhub&utm_medium=deal_451', '2027-06-30', 1, 55, 9, 2),
   (452, 'Pepperfry: Flat 30% Off on Engineered Wood Wardrobes & Shoe Racks', 'PEPPSPACE30', 'Spacious 3-door wardrobes and shoe cabinets with mirror finishes.', 'Free installation by certified carpenters.', '30% OFF', 27, 8, 'https://www.pepperfry.com?utm_source=couponhub&utm_medium=deal_452', '2027-04-30', 1, 172, 28, 5),
   (453, 'Tata CLiQ: Flat 35% Off on Noise-Cancelling Headphones & Earbuds', 'TATAAUDIO35', 'Immerse in crystal-clear wireless sound with deep bass and ANC.', 'Valid on select wireless audio and soundbars. Min cart ₹1299.', '35% OFF', 28, 3, 'https://www.tatacliq.com?utm_source=couponhub&utm_medium=deal_453', '2027-04-30', 1, 487, 74, 3),
@@ -523,7 +632,13 @@ INSERT INTO coupons (
   (472, 'Pharmeasy: Save ₹150 on Prescription Medicines & Wellness', 'PHARMED150', 'Upload doctor prescription and get medicines delivered right to your door.', 'Valid on medicine orders above ₹1299.', '₹150 OFF', 29, 6, 'https://pharmeasy.in?utm_source=couponhub&utm_medium=deal_472', '2027-03-31', 1, 175, 48, 2),
   (473, 'Pharmeasy: Flat 70% Off on Full Body Health Checkup Packages', 'PHARHEALTH70', 'Complete blood count, thyroid, lipid profile, and vitamin D testing at home.', 'Free home sample collection by certified phlebotomists.', '70% OFF', 29, 6, 'https://pharmeasy.in?utm_source=couponhub&utm_medium=deal_473', '2027-06-30', 1, 918, 215, 0),
   (474, 'Pharmeasy: Buy 2 Get 1 Free on Natural Herbal Face Masks', 'PHARHERBAL', 'Clay face masks, multani mitti, charcoal scrubs, and aloe vera gels.', 'Valid on listed natural wellness lines.', 'BUY 2 GET 1', 29, 6, 'https://pharmeasy.in?utm_source=couponhub&utm_medium=deal_474', '2027-11-30', 1, 94, 11, 2),
-  (475, 'Pharmeasy: Flat ₹500 Off on Luxury Men''s Grooming Kits', 'PHARBEARD500', 'Beard trimmers, shaving creams, aftershave balms, and cologne.', 'Min cart value ₹499.', '₹500 OFF', 29, 6, 'https://pharmeasy.in?utm_source=couponhub&utm_medium=deal_475', '2027-02-28', 1, 167, 36, 5),
+  (475, 'Pharmeasy: Flat ₹500 Off on Luxury Men''s Grooming Kits', 'PHARBEARD500', 'Beard trimmers, shaving creams, aftershave balms, and cologne.', 'Min cart value ₹499.', '₹500 OFF', 29, 6, 'https://pharmeasy.in?utm_source=couponhub&utm_medium=deal_475', '2027-02-28', 1, 167, 36, 5);
+
+INSERT INTO coupons (
+  id, title, code, description, terms, discount_text,
+  store_id, category_id, affiliate_or_store_url, expiry_date,
+  is_active, click_count, worked_count, didnt_work_count
+) VALUES
   (476, 'Pharmeasy: Flat 40% Off on French Perfumes & Body Mists', 'PHARSCENT40', 'Long-lasting eau de parfum, luxury deodorants, and pocket perfumes.', 'Valid on minimum purchase of ₹1499.', '40% OFF', 29, 6, 'https://pharmeasy.in?utm_source=couponhub&utm_medium=deal_476', '2027-01-31', 1, 73, 14, 5),
   (477, 'Pharmeasy: Flat 10% Off on Bestselling Face Serums & Sunscreens', 'PHARGLOW10', 'Radiant skin with Vitamin C, Niacinamide, Hyaluronic Acid, and SPF 50.', 'Valid on minimum order of ₹999. Dermatologically tested.', '10% OFF', 29, 6, 'https://pharmeasy.in?utm_source=couponhub&utm_medium=deal_477', '2027-01-31', 1, 727, 87, 5),
   (478, 'Pharmeasy: Extra ₹1000 Off on Authentic Cosmetics & Makeup', 'PHARBEAUTY1000', 'Long-lasting matte lipsticks, foundations, eyeliners, and blushes.', 'Valid on cart value of ₹999 or more.', '₹1000 OFF', 29, 6, 'https://pharmeasy.in?utm_source=couponhub&utm_medium=deal_478', '2027-03-31', 1, 140, 25, 4),
